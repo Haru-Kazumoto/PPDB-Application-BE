@@ -1,6 +1,7 @@
 package dev.pack.modules.token;
 
 import dev.pack.modules.user.User;
+import dev.pack.utils.Timestamps;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -20,7 +21,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class Token {
+public class Token extends Timestamps {
 
   @Id
   @GeneratedValue

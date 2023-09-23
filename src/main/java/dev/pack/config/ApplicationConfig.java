@@ -2,6 +2,7 @@ package dev.pack.config;
 
 import dev.pack.modules.user.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -48,4 +49,6 @@ public class ApplicationConfig {
     return new BCryptPasswordEncoder();
   }
 
+  @Bean
+  public ModelMapper modelMapper() {return new ModelMapper();}
 }
