@@ -16,17 +16,17 @@ import java.util.Date;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(path = "/api/v${application.version}/user")
-@PreAuthorize("hasRole('USER')")
+@PreAuthorize("hasAnyRole('USER','ADMIN')")
 public class UserController {
 
     private final UserService userService;
     private final ModelMapper model;
 
-    @GetMapping(path = "/get/{size}/{page}")
-    @PreAuthorize("hasAuthority('user:read')")
-    public ResponseEntity<Iterable<?>> getAll(
-            @PathVariable("size") int size,
-            @PathVariable("page") int page){
+    @GetMapping(path = "/index")
+    @PreAuthorize("hasAnyAuthority('user:read','admin:read')")
+    public ResponseEntity<Iterable<?>> index(
+            @RequestParam(name = "page", defaultValue = "0") int page,
+            @RequestParam(name = "size", defaultValue = "10") int size){
         Pageable pageable = PageRequest.of(page, size);
 
         Iterable<User> dataUsers = userService.getAllUser(pageable);
@@ -35,8 +35,8 @@ public class UserController {
     }
 
     @PostMapping("/post")
-    @PreAuthorize("hasAuthority('user:create')")
-    public ResponseEntity<?> createUser(@RequestBody @Valid UserDto bodyDto){
+    @PreAuthorize("hasAnyAuthority('user:create','admin:create')")
+    public ResponseEntity<?> store(@RequestBody @Valid UserDto bodyDto){
         User mapData = model.map(bodyDto, User.class);
         User result = userService.createUser(mapData);
 

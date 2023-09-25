@@ -66,14 +66,14 @@ public class AuthenticationService {
     saveUserToken(user, jwtToken);
 
     return AuthenticationResponse.builder()
-        .accessToken(jwtToken)
+            .accessToken(jwtToken)
             .refreshToken(refreshToken)
-        .build();
+            .build();
   }
 
   private void saveUserToken(User user, String jwtToken) {
     var token = Token.builder()
-        .user(user)
+        .userId(user)
         .token(jwtToken)
         .tokenType(TokenType.BEARER)
         .expired(false)

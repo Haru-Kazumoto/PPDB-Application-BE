@@ -34,6 +34,9 @@ public class SecurityConfiguration {
         .csrf(AbstractHttpConfigurer::disable)
         .authorizeHttpRequests(
                 (request) -> {
+                    //Public path
+                    request.requestMatchers("/api/public/**").permitAll();
+
                     //Authentication
                     request.requestMatchers(String.format("/api/v%d/auth/**",config.APP_VERSION)).permitAll();
 
@@ -48,13 +51,14 @@ public class SecurityConfiguration {
                     request.requestMatchers(DELETE, String.format("/api/v%d/admin/**", config.APP_VERSION)).hasRole(ADMIN.name());
 
                     //Role user
-                    request.requestMatchers(String.format("/api/v%d/user/**",config.APP_VERSION)).hasRole(USER.name());
+                    request.requestMatchers(String.format("/api/v%d/user/**",config.APP_VERSION)).hasAnyRole(USER.name(), ADMIN.name());
 
-                    request.requestMatchers(GET, String.format("/api/v%d/user/**", config.APP_VERSION)).hasRole(USER.name());
-                    request.requestMatchers(POST, String.format("/api/v%d/user/**", config.APP_VERSION)).hasRole(USER.name());
-                    request.requestMatchers(PUT, String.format("/api/v%d/user/**", config.APP_VERSION)).hasRole(USER.name());
-                    request.requestMatchers(PATCH, String.format("/api/v%d/user/**", config.APP_VERSION)).hasRole(USER.name());
-                    request.requestMatchers(DELETE, String.format("/api/v%d/user/**", config.APP_VERSION)).hasRole(USER.name());
+                    //User authority
+                    request.requestMatchers(GET, String.format("/api/v%d/user/**", config.APP_VERSION)).hasAnyRole(USER.name(), ADMIN.name());
+                    request.requestMatchers(POST, String.format("/api/v%d/user/**", config.APP_VERSION)).hasAnyRole(USER.name(), ADMIN.name());
+                    request.requestMatchers(PUT, String.format("/api/v%d/user/**", config.APP_VERSION)).hasAnyRole(USER.name(), ADMIN.name());
+                    request.requestMatchers(PATCH, String.format("/api/v%d/user/**", config.APP_VERSION)).hasAnyRole(USER.name(), ADMIN.name());
+                    request.requestMatchers(DELETE, String.format("/api/v%d/user/**", config.APP_VERSION)).hasAnyRole(USER.name(), ADMIN.name());
 
                     request.anyRequest().fullyAuthenticated();
                 }

@@ -1,6 +1,8 @@
 package dev.pack.modules.user;
 
 import dev.pack.exception.DataNotFoundException;
+import dev.pack.exception.DuplicateDataException;
+import dev.pack.modules.authorization.Role;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -24,13 +26,13 @@ public class UserServiceImpl implements UserService{
         this.userRepository
                 .findByUsername(bodyCreate.getUsername())
                 .ifPresent(username -> {
-                    throw new DataNotFoundException(String.format("Username %s is not found.", bodyCreate.getUsername()));
+                    throw new DuplicateDataException("Username has already exists.");
                 });
 
         this.userRepository
                 .findByEmail(bodyCreate.getEmail())
                 .ifPresent(email -> {
-                    throw new DataNotFoundException(String.format("Email %s is not found.", bodyCreate.getEmail()));
+                    throw new DataNotFoundException("Email has already exists.");
                 });
 
         String hashedPassword = this.password.encode(bodyCreate.getPassword());
@@ -41,7 +43,7 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public Iterable<User> getAllUser(Pageable pageable) {
-        return this.userPagingRepository.findAll(pageable);
+        return this.userRepository.findAll(pageable);
     }
 
     @Override
@@ -55,19 +57,20 @@ public class UserServiceImpl implements UserService{
         this.userRepository
                 .findByUsername(bodyUpdate.getUsername())
                 .ifPresent(username -> {
-                    throw new DataNotFoundException(String.format("Username %s is not found.", bodyUpdate.getUsername()));
+                    throw new DuplicateDataException("Username has already exists.");
                 });
 
         this.userRepository
                 .findByEmail(bodyUpdate.getEmail())
                 .ifPresent(email -> {
-                    throw new DataNotFoundException(String.format("Email %s is not found.", bodyUpdate.getEmail()));
+                    throw new DataNotFoundException("Email has already exists.");
                 });
+
 
         user.setUsername(bodyUpdate.getUsername());
         user.setEmail(bodyUpdate.getEmail());
         user.setPassword(password.encode(bodyUpdate.getPassword()));
-        user.setRole(bodyUpdate.getRole());
+//        user.setRole(bodyUpdate.getRole()); <- once has set role, cannot update.
 
         return this.userRepository.save(user);
     }
@@ -78,7 +81,7 @@ public class UserServiceImpl implements UserService{
 
         User user = this.userRepository
                 .findById(id)
-                .orElseThrow(() -> new DataNotFoundException(String.format("Data with id %d is not found.", id)));
+                .orElseThrow(() -> new DataNotFoundException("Id not found."));
         this.userRepository.delete(user);
 
         response.put("message", String.format("Data with id %s has success to delete.", id));

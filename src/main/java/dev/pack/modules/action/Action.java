@@ -22,9 +22,10 @@ public class Action extends Timestamps {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    @Column(unique = true, nullable = false)
     private String path;
 
-    private HttpMethod method;
+    private String method;
 
     private Role roleAccess;
 
@@ -35,18 +36,10 @@ public class Action extends Timestamps {
 
     private String bugDescription;
 
-    private Boolean isSolve;
-
-    @JsonSerialize(using = CustomDateSerializer.class)
-    @Temporal(value = TemporalType.TIMESTAMP)
-    private Date solveAt;
-
     @PrePersist
     protected void onCreate(){
         if(!isBug){
             this.bugDescription = null;
-            this.isSolve = true;
-            this.solveAt = null;
         }
     }
 

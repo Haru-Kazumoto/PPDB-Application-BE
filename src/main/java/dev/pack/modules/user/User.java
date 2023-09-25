@@ -1,8 +1,11 @@
 package dev.pack.modules.user;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import dev.pack.modules.authorization.Role;
+import dev.pack.modules.ppdbFlow.PpdbFlow;
 import dev.pack.modules.token.Token;
 import dev.pack.utils.CustomDateSerializer;
 import dev.pack.utils.Timestamps;
@@ -16,6 +19,9 @@ import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import static dev.pack.modules.authorization.Role.ADMIN;
+import static dev.pack.modules.authorization.Role.USER;
+
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Builder
@@ -23,6 +29,10 @@ import org.springframework.security.core.userdetails.UserDetails;
 @AllArgsConstructor
 @Entity
 @Table(name = "user_tbl")
+@JsonIdentityInfo(
+        generator = ObjectIdGenerators.PropertyGenerator.class,
+        property = "id"
+)
 public class User extends Timestamps implements UserDetails {
 
   @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -44,13 +54,39 @@ public class User extends Timestamps implements UserDetails {
   @Temporal(TemporalType.TIMESTAMP)
   private Date joinAt;
 
-  @OneToMany(mappedBy = "user")
+  @JsonIgnore
+  private boolean isAdmin = false;
+
+  @OneToMany(
+          mappedBy = "userId",
+          cascade = CascadeType.ALL,
+          orphanRemoval = true
+  )
   @JsonIgnore
   private List<Token> tokens;
+
+  /**
+   * ADMIN DATA
+   */
+  @OneToMany(
+          mappedBy = "userId",
+          cascade = CascadeType.ALL,
+          orphanRemoval = true
+  )
+  private List<PpdbFlow> ppdbFlows;
+
+  /**
+   * STUDENT DATA
+   */
+  //--
 
   @PrePersist
   protected void onCreate(){
       this.joinAt = new Date();
+
+      if(role == ADMIN){
+        isAdmin = true;
+      }
   }
 
   @Override

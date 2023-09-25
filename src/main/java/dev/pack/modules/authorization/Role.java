@@ -27,6 +27,11 @@ public enum Role {
                   USER_DELETE,
                   USER_CREATE
           )
+  ),
+  PUBLIC(
+          Set.of(
+                  PUBLIC_ACCESS
+          )
   )
 
   ;

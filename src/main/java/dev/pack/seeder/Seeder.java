@@ -26,6 +26,9 @@ public class Seeder implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         try{
+            //Put repo count here.
+            long userData = userRepository.count();
+
             log.info("Seeding data . . . ");
 
             /**
@@ -33,6 +36,11 @@ public class Seeder implements CommandLineRunner {
              */
             seedUserData();
             seedAdminData();
+
+            //Put logic repo here.
+            if(userData > 0){
+                log.info("Data enough, seed not running.");
+            }
 
         } catch (Exception ex){
             log.error("Seed data failed, due to error : {}", ex.getMessage());
