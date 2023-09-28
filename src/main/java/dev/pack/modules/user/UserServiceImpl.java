@@ -2,7 +2,6 @@ package dev.pack.modules.user;
 
 import dev.pack.exception.DataNotFoundException;
 import dev.pack.exception.DuplicateDataException;
-import dev.pack.modules.authorization.Role;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;

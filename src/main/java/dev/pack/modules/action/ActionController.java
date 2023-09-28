@@ -1,10 +1,9 @@
 package dev.pack.modules.action;
 
-import dev.pack.modules.authorization.Role;
+import dev.pack.modules.enums.Role;
 import dev.pack.payloads.PayloadsResponse;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

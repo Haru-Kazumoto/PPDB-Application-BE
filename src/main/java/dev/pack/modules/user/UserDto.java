@@ -1,6 +1,6 @@
 package dev.pack.modules.user;
 
-import dev.pack.modules.authorization.Role;
+import dev.pack.modules.enums.Role;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;

@@ -4,7 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import dev.pack.modules.authorization.Role;
+import dev.pack.modules.enums.Role;
+import dev.pack.modules.registerPath.RegisterPath;
 import dev.pack.modules.ppdbFlow.PpdbFlow;
 import dev.pack.modules.token.Token;
 import dev.pack.utils.CustomDateSerializer;
@@ -19,8 +20,7 @@ import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import static dev.pack.modules.authorization.Role.ADMIN;
-import static dev.pack.modules.authorization.Role.USER;
+import static dev.pack.modules.enums.Role.*;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
@@ -74,6 +74,13 @@ public class User extends Timestamps implements UserDetails {
           orphanRemoval = true
   )
   private List<PpdbFlow> ppdbFlows;
+
+  @OneToMany(
+          mappedBy = "userId",
+          cascade = CascadeType.ALL,
+          orphanRemoval = true
+  )
+  private List<RegisterPath> jalurPendaftarans;
 
   /**
    * STUDENT DATA

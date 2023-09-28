@@ -1,5 +1,12 @@
 package dev.pack.seeder;
 
+import dev.pack.modules.enums.FormPurchaseType;
+import dev.pack.modules.registerPath.RegisterPath;
+import dev.pack.modules.registerPath.RegisterPathRepository;
+import dev.pack.modules.registerPath.publicInformation.PublicInformation;
+import dev.pack.modules.registerPath.publicInformation.PublicInformationRepository;
+import dev.pack.modules.registerPath.publicInformation.information.Information;
+import dev.pack.modules.registerPath.publicInformation.information.InformationRepository;
 import dev.pack.modules.user.User;
 import dev.pack.modules.user.UserRepository;
 import jakarta.transaction.Transactional;
@@ -10,8 +17,10 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import static dev.pack.modules.authorization.Role.ADMIN;
-import static dev.pack.modules.authorization.Role.USER;
+import java.util.Date;
+
+import static dev.pack.modules.enums.Role.ADMIN;
+import static dev.pack.modules.enums.Role.USER;
 
 @Configuration
 @Transactional
@@ -19,6 +28,10 @@ import static dev.pack.modules.authorization.Role.USER;
 public class Seeder implements CommandLineRunner {
 
     private final UserRepository userRepository;
+    private final RegisterPathRepository registerPathRepository;
+    private final PublicInformationRepository publicInformationRepository;
+    private final InformationRepository informationRepository;
+
     private final PasswordEncoder passwordEncoder;
 
     private static final Logger log = LoggerFactory.getLogger(Seeder.class);
@@ -36,6 +49,7 @@ public class Seeder implements CommandLineRunner {
              */
             seedUserData();
             seedAdminData();
+            seedRegisterPath();
 
             //Put logic repo here.
             if(userData > 0){
@@ -77,5 +91,37 @@ public class Seeder implements CommandLineRunner {
 
             log.info("Seed data :: {} -> {}",admin.getRole(),userRepository.countByRole(ADMIN));
         }
+    }
+
+    public void seedRegisterPath(){
+        long countData = registerPathRepository.count();
+        if(countData == 0){
+            Information information = Information.builder()
+                    .namaKeterangan("Pembelian Formulir")
+                    .deskripsiKeterangan("Deskripsi pembelian Formulir")
+                    .publicInformationId(publicInformationRepository.getReferenceById(1))
+                    .build();
+
+            PublicInformation publicInformation = PublicInformation.builder()
+                    .keterangan(information)
+                    .registerPathId(registerPathRepository.getReferenceById(1))
+                    .build();
+
+            RegisterPath registerPath = RegisterPath.builder()
+                    .tipePembelian(FormPurchaseType.PEMBELIAN_FORMULIR)
+                    .namaJalurPendaftaran("PEMBELIAN FORMULIR")
+                    .waktuDibuka(new Date())
+                    .waktuDitutup(new Date())
+                    .biayaPendaftaran(200.00)
+                    .publicInformation(publicInformation)
+                    .userId(userRepository.getReferenceById(2))
+                    .build();
+
+            registerPathRepository.save(registerPath);
+        }
+
+
+
+        log.info("Seed data :: {} -> {}", "REGISTER_PATH",countData);
     }
 }

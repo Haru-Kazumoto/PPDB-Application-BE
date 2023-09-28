@@ -1,5 +1,6 @@
 package dev.pack.utils;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import jakarta.persistence.MappedSuperclass;
 import jakarta.persistence.PreUpdate;
@@ -17,10 +18,12 @@ public class Timestamps {
 
     @JsonSerialize(using = CustomDateSerializer.class)
     @Temporal(TemporalType.TIMESTAMP)
+    @JsonIgnore
     private Date createdAt;
 
     @JsonSerialize(using = CustomDateSerializer.class)
     @Temporal(TemporalType.TIMESTAMP)
+    @JsonIgnore
     private Date updatedAt;
 
     public Timestamps() {

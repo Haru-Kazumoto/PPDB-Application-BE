@@ -1,14 +1,9 @@
 package dev.pack.modules.action;
 
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import dev.pack.modules.authorization.Role;
-import dev.pack.utils.CustomDateSerializer;
+import dev.pack.modules.enums.Role;
 import dev.pack.utils.Timestamps;
 import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.http.HttpMethod;
-
-import java.util.Date;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
@@ -27,9 +22,10 @@ public class Action extends Timestamps {
 
     private String method;
 
+    private String module;
+
     private Role roleAccess;
 
-    @Column(columnDefinition = "VARCHAR(255)")
     private String descriptionAction;
 
     private Boolean isBug = true;

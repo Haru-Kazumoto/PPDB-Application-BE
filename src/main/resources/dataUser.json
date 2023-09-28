@@ -1,0 +1,169 @@
+{
+  "id": 1,
+  "username": "",
+  "email": "",
+  "password": "",
+  "role": "",
+  "joinAt": "",
+  "isAdmin": true,
+  "ppdbFlows": [
+    {
+      "id": 1,
+      "title": "",
+      "content": ""
+    }
+  ],
+  "jalur_pendaftaran": [
+    {
+      "id": 1,
+      "tipe": "pembelian",
+      "nama_jalur_pendaftaran": "PEMBELIAN FORMULIR",
+      "waktu_dibuka": "",
+      "waktu_ditutup": "",
+      "biaya_pendaftaran": 1,
+      "informasi_umum": {
+        "id": 1,
+        "keterangan": {
+          "nama_keterangan": "",
+          "deskripsi_keterangan": "",
+          "informasiUmumId": 1
+        },
+        "biaya_tambahan": [
+          {
+            "id": 1,
+            "judul_biaya": "Biaya Uang Gedung",
+            "biaya": [
+              {
+                "id": 1,
+                "nama_biaya_tambahan": "Gelombang 1",
+                "jumlah_biaya_tambahan": 1
+              },
+              {
+                "id": 2,
+                "nama_biaya_tambahan": "Gelombang 2",
+                "jumlah_biaya_tambahan": 1
+              }
+            ]
+          }
+        ]
+      },
+      "gelombang": [
+        {
+          "id": 1,
+          "nama_gelombang": "PENGEMBALIAN FORMULIR REGULER GEL.1",
+          "diskon": 0,
+          "jumlah_penerimaan": 200,
+          "waktu_oendaftaran_dibuka": "1 November 2023",
+          "waktu_oendaftaran_ditutup": "30 November 2023",
+          "nama_bank": "BCA",
+          "nomor_rekening": 123456789,
+          "nama_pemilik_rekening": "",
+          "biaya_pendaftaran": 1,
+          "ujian_penerimaan": [
+            {
+              "nama_ujian_penerimaan": "Test Akademik Gel.1",
+              "media_test": "test-online",
+              "keterangan": "tes online",
+              "waktu_dibuka": "1 Desember 2023 00:00",
+              "waktu_ditutup": "1 Desember 2023 23:59",
+              "lokasi_test": "",
+              "kkm": 70
+            },
+            {
+              "nama_ujian_penerimaan": "Test Akademik Gel.2",
+              "media_test": "test-online",
+              "keterangan": "tes online",
+              "waktu_dibuka": "1 Desember 2023 00:00",
+              "waktu_ditutup": "1 Desember 2023 23:59",
+              "lokasi_test": "",
+              "kkm": 70
+            }
+          ],
+          "pengumuman": [
+            {
+              "nama_pengumuman": "",
+              "tanggal_pengumuman": ""
+            }
+          ],
+          "kegiatan": [
+            {
+              "nama_kegiatan": "",
+              "waktu_dibuka": "",
+              "waktu_ditutup": ""
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "pendaftar_ppdb": {
+    "pembelian_formulir": [
+      {
+        "id": 1,
+        "title": "",
+        "jumlah_pendaftar": 0,
+        "jumlah_penerimaan": 0,
+        "peserta_diterima": 0,
+        "data_pendaftar": [
+          {
+            "id": 1,
+            "nama": "",
+            "no_telepon": "",
+            "tanggal_mendaftar": "",
+            "status_pendaftaran": "BELUM_TERKONFIRMASI",
+            "detail_pendaftar": {
+              "nama_pendaftar": "",
+              "alamat_pendaftar": "",
+              "no_telpon_pendaftar": "",
+              "tanggal_mendaftar": "",
+              "status_pembayaran_pendaftar": "PEMBAYARAN_TERKONFIRMASI",
+              "struk_pembayaran": {
+                "foto_pembayaran": "photo.img",
+                "tipe_pembayaran": "TUNAI",
+                "status_pembayaran": "TERKONFIRMASI",
+                "jumlah_pembayaran": ""
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "pengembalian_formulir": [
+      {
+        "id": 1,
+        "title": "",
+        "jumlah_pendaftar": 0,
+        "jumlah_penerimaan": 0,
+        "peserta_diterima": 0,
+        "data_pendaftar": [
+          {
+            "id": 1,
+            "nama": "",
+            "no_telepon": "",
+            "tanggal_mendaftar": "",
+            "status_pendaftaran": "BELUM_TERKONFIRMASI",
+            "detail_pendaftar": {
+              "foto_pendaftar": "url.img",
+              "nama_pendaftar": "",
+              "alamat_pendaftar": "",
+              "no_telpon_pendaftar": "",
+              "tanggal_mendaftar": "",
+              "status_pembayaran_pendaftar": "PEMBAYARAN_TERKONFIRMASI",
+              "struk_pembayaran": {
+                "foto_pembayaran": "photo.img",
+                "tipe_pembayaran": "TUNAI",
+                "status_pembayaran": "TERKONFIRMASI",
+                "jumlah_pembayaran": ""
+              },
+              "prestasi": {
+                "pengalaman": "url.img",
+                "sertifikasi": "url.img",
+                "asdfasdfadsf": "afdsfads"
+              }
+            }
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -3,7 +3,7 @@ package dev.pack.modules.user;
 import java.util.List;
 import java.util.Optional;
 
-import dev.pack.modules.authorization.Role;
+import dev.pack.modules.enums.Role;
 import dev.pack.modules.ppdbFlow.PpdbFlow;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

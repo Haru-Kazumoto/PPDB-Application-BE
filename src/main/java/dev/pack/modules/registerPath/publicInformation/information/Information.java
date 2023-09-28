@@ -1,38 +1,34 @@
-package dev.pack.modules.ppdbFlow;
+package dev.pack.modules.registerPath.publicInformation.information;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-import dev.pack.modules.user.User;
+import dev.pack.modules.registerPath.publicInformation.PublicInformation;
 import dev.pack.utils.Timestamps;
 import jakarta.persistence.*;
 import lombok.*;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
-@Builder
+@AllArgsConstructor
 @Entity
-@Table(name = "alur_ppdb_tbl")
+@Builder
+@Table(name = "information_tbl")
 @JsonIdentityInfo(
         generator = ObjectIdGenerators.PropertyGenerator.class,
         property = "id"
 )
-public class PpdbFlow extends Timestamps {
+public class Information extends Timestamps {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+    private String namaKeterangan;
+    private String deskripsiKeterangan;
 
-    @Column(unique = true, nullable = false)
-    private String title;
-
-    private String content;
-
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "publicInformationId", updatable = false)
     @JsonIgnore
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    private User userId;
+    private PublicInformation publicInformationId;
 
 }

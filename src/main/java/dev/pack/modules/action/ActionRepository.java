@@ -1,8 +1,7 @@
 package dev.pack.modules.action;
 
-import dev.pack.modules.authorization.Role;
+import dev.pack.modules.enums.Role;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;

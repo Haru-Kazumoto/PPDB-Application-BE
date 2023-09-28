@@ -2,10 +2,9 @@ package dev.pack.modules.action;
 
 import dev.pack.exception.DataNotFoundException;
 import dev.pack.exception.DuplicateDataException;
-import dev.pack.modules.authorization.Role;
+import dev.pack.modules.enums.Role;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -25,6 +24,8 @@ public class ActionServiceImpl implements ActionService{
                     throw new DuplicateDataException("Path is already exists");
                 });
 
+        bodyCreate.getMethod().toUpperCase();
+        
         return this.actionRepository.save(bodyCreate);
     }
 
