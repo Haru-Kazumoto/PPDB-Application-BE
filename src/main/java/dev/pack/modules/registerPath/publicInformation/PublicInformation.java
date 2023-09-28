@@ -13,6 +13,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -35,12 +37,12 @@ public class PublicInformation {
     )
     private Information keterangan;
 
-//    @OneToOne(
-//            mappedBy = "publicInformationId",
-//            cascade = CascadeType.ALL,
-//            orphanRemoval = true
-//    )
-//    private AdditionalCost biayaTambahan;
+    @OneToMany(
+            mappedBy = "publicInformationId",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    private List<AdditionalCost> biayaTambahan;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "registerPathId", updatable = false)
