@@ -9,8 +9,8 @@ import java.util.Optional;
 
 @Repository
 public interface ActionRepository extends JpaRepository<Action, Integer> {
-    List<Action> findAllByIsBug(Boolean condition);
-    List<Action> findAllByMethod(String method);
-    List<Action> findAllByRoleAccess(Role roleAccess);
     Optional<Action> findByPath(String path);
+    List<Action> findAllByMethod(String method);
+    List<Action> findAllByRoleAccess(Role role);
+    List<Action> findAllByIsBug(Boolean condition);
 }

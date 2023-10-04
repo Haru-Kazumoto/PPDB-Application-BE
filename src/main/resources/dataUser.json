@@ -81,12 +81,14 @@
           ],
           "pengumuman": [
             {
+              "id": 1,
               "nama_pengumuman": "",
               "tanggal_pengumuman": ""
             }
           ],
           "kegiatan": [
             {
+              "id": 1,
               "nama_kegiatan": "",
               "waktu_dibuka": "",
               "waktu_ditutup": ""

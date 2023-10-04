@@ -2,12 +2,12 @@ package dev.pack.utils;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import jakarta.persistence.MappedSuperclass;
-import jakarta.persistence.PreUpdate;
-import jakarta.persistence.Temporal;
-import jakarta.persistence.TemporalType;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import org.apache.coyote.Constants;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.util.Date;
 
@@ -17,14 +17,20 @@ import java.util.Date;
 public class Timestamps {
 
     @JsonSerialize(using = CustomDateSerializer.class)
-    @Temporal(TemporalType.TIMESTAMP)
+    @CreationTimestamp
+    @Column(nullable = false, updatable = false)
     @JsonIgnore
     private Date createdAt;
 
     @JsonSerialize(using = CustomDateSerializer.class)
-    @Temporal(TemporalType.TIMESTAMP)
+    @UpdateTimestamp
+    @Column(nullable = false)
     @JsonIgnore
     private Date updatedAt;
+
+    @JsonSerialize(using = CustomDateSerializer.class)
+    @JsonIgnore
+    private Date deletedAt;
 
     public Timestamps() {
         this.createdAt = new Date();

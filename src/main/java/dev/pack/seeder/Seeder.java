@@ -1,22 +1,31 @@
 package dev.pack.seeder;
 
+import dev.pack.modules.alur_ppdb.AlurPpdbRepository;
+import dev.pack.modules.biaya.BiayaRepository;
+import dev.pack.modules.biaya_tambahan.BiayaTambahanRepository;
+import dev.pack.modules.enums.Banks;
 import dev.pack.modules.enums.FormPurchaseType;
-import dev.pack.modules.ppdbFlow.PpdbFlow;
-import dev.pack.modules.ppdbFlow.PpdbFlowRepository;
-import dev.pack.modules.registerPath.RegisterPath;
-import dev.pack.modules.registerPath.RegisterPathRepository;
-import dev.pack.modules.registerPath.publicInformation.PublicInformation;
-import dev.pack.modules.registerPath.publicInformation.PublicInformationRepository;
-import dev.pack.modules.registerPath.publicInformation.aditionalCost.AdditionalCost;
-import dev.pack.modules.registerPath.publicInformation.aditionalCost.AdditionalCostRepository;
-import dev.pack.modules.registerPath.publicInformation.aditionalCost.cost.Cost;
-import dev.pack.modules.registerPath.publicInformation.aditionalCost.cost.CostRepository;
-import dev.pack.modules.registerPath.publicInformation.information.Information;
-import dev.pack.modules.registerPath.publicInformation.information.InformationRepository;
+import dev.pack.modules.alur_ppdb.AlurPpdb;
+import dev.pack.modules.enums.MediaTest;
+import dev.pack.modules.gelombang_ppdb.Gelombang;
+import dev.pack.modules.gelombang_ppdb.GelombangRepository;
+import dev.pack.modules.informasi_umum.InformasiUmumRepository;
+import dev.pack.modules.jalur_pendaftaran.JalurPendaftaranRepository;
+import dev.pack.modules.jalur_pendaftaran.JalurPendaftaran;
+import dev.pack.modules.informasi_umum.InformasiUmum;
+import dev.pack.modules.biaya_tambahan.BiayaTambahan;
+import dev.pack.modules.biaya.Biaya;
+import dev.pack.modules.kegiatan.Kegiatan;
+import dev.pack.modules.kegiatan.KegiatanRepository;
+import dev.pack.modules.keterangan.Keterangan;
+import dev.pack.modules.keterangan.KeteranganRepository;
+import dev.pack.modules.pengunguman.Pengunguman;
+import dev.pack.modules.pengunguman.PengungumanRepository;
+import dev.pack.modules.ujian_penerimaan.UjianPenerimaan;
+import dev.pack.modules.ujian_penerimaan.UjianPenerimaanRepository;
 import dev.pack.modules.user.User;
 import dev.pack.modules.user.UserRepository;
 import jakarta.transaction.Transactional;
-import jakarta.transaction.TransactionalException;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,12 +47,16 @@ import static dev.pack.modules.enums.Role.USER;
 public class Seeder implements CommandLineRunner {
 
     private final UserRepository userRepository;
-    private final RegisterPathRepository registerPathRepository;
-    private final PublicInformationRepository publicInformationRepository;
-    private final InformationRepository informationRepository;
-    private final AdditionalCostRepository additionalCostRepository;
-    private final CostRepository costRepository;
-    private final PpdbFlowRepository ppdbFlowRepository;
+    private final JalurPendaftaranRepository jalurPendaftaranRepository;
+    private final InformasiUmumRepository informasiUmumRepository;
+    private final KeteranganRepository keteranganRepository;
+    private final BiayaTambahanRepository biayaTambahanRepository;
+    private final BiayaRepository biayaRepository;
+    private final AlurPpdbRepository alurPpdbRepository;
+    private final GelombangRepository gelombangRepository;
+    private final UjianPenerimaanRepository ujianPenerimaanRepository;
+    private final PengungumanRepository pengungumanRepository;
+    private final KegiatanRepository kegiatanRepository;
 
     private final PasswordEncoder passwordEncoder;
 
@@ -52,12 +65,9 @@ public class Seeder implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         try{
-            //Put repo count here.
-            long userData = userRepository.count();
-
             log.info("Seeding data . . . ");
-
-            /**
+            long userData = userRepository.count();
+            /*
              * Put your seed function here
              */
             seedUserData();
@@ -66,6 +76,7 @@ public class Seeder implements CommandLineRunner {
             seedPpdbFlows();
 
             //Put logic repo here.
+
             if(userData > 0){
                 log.info("Data enough, seed not running.");
             }
@@ -87,7 +98,7 @@ public class Seeder implements CommandLineRunner {
 
             userRepository.save(user);
 
-            log.info("Seed data :: {} -> {}",user.getRole(),userRepository.countByRole(USER));
+            log.info("Seed data :: {} -> {}",user.getRole(), userRepository.countByRole(USER));
         }
     }
 
@@ -103,79 +114,119 @@ public class Seeder implements CommandLineRunner {
 
             userRepository.save(admin);
 
-            log.info("Seed data :: {} -> {}",admin.getRole(),userRepository.countByRole(ADMIN));
+            log.info("Seed data :: {} -> {}",admin.getRole(), userRepository.countByRole(ADMIN));
         }
     }
 
     public void seedPpdbFlows(){
-        PpdbFlow ppdbFlow = PpdbFlow.builder()
+        AlurPpdb alurPpdb = AlurPpdb.builder()
                 .title("PPDBFLOW TITLE")
                 .content("PPDB FLOW CONTENT")
                 .userId(userRepository.getReferenceById(2))
                 .build();
 
-        ppdbFlowRepository.save(ppdbFlow);
+        alurPpdbRepository.save(alurPpdb);
 
-        log.info("Seed data :: {} -> {}","PPDBFLOW",ppdbFlowRepository.count());
+        log.info("Seed data :: {} -> {}","PPDBFLOW", alurPpdbRepository.count());
     }
 
     public void seedRegisterPath(){
-        long countData = registerPathRepository.count();
+        long countData = jalurPendaftaranRepository.count();
         if(countData == 0) {
-            List<Cost> costs = new ArrayList<>();
-            List<AdditionalCost> additionalCosts = new ArrayList<>();
-            PublicInformation publicInformation = null;
+            List<BiayaTambahan> biayaTambahans = new ArrayList<>();
+            InformasiUmum informasiUmum = null;
 
-            RegisterPath registerPath = RegisterPath.builder()
+            JalurPendaftaran jalurPendaftaran = JalurPendaftaran.builder()
                     .tipePembelian(FormPurchaseType.PEMBELIAN_FORMULIR)
                     .namaJalurPendaftaran("PEMBELIAN FORMULIR")
                     .waktuDibuka(new Date())
                     .waktuDitutup(new Date())
                     .biayaPendaftaran(200.00)
-                    .publicInformation(publicInformation)
+                    .informasiUmum(informasiUmum)
                     .userId(userRepository.getReferenceById(2))
                     .build();
 
-            Information information = Information.builder()
+            Keterangan keterangan = Keterangan.builder()
                     .namaKeterangan("Pembelian Formulir")
                     .deskripsiKeterangan("Deskripsi pembelian Formulir")
-                    .publicInformationId(publicInformationRepository.getReferenceById(1))
+                    .informasiUmumId(informasiUmumRepository.getReferenceById(1))
                     .build();
 
-            publicInformation = PublicInformation.builder()
-                    .keterangan(information)
-                    .biayaTambahan(additionalCosts)
-                    .registerPathId(registerPathRepository.getReferenceById(1))
+            informasiUmum = InformasiUmum.builder()
+                    .keterangan(keterangan)
+                    .biayaTambahan(biayaTambahans)
+                    .jalurPendaftaranId(jalurPendaftaranRepository.getReferenceById(1))
                     .build();
 
-            for (AdditionalCost additionalCost_1 : additionalCosts) {
-                additionalCost_1.setJudulBiaya("Biaya tambahan gelombang 1");
-                additionalCost_1.setPublicInformationId(publicInformationRepository.getReferenceById(1));
-                additionalCost_1.setCosts(costs);
+            BiayaTambahan biayaTambahan = BiayaTambahan.builder()
+                    .judulBiaya("Biaya tambahan gedung")
+                    .informasiUmumId(informasiUmumRepository.getReferenceById(1))
+                    .build();
 
-                additionalCostRepository.save(additionalCost_1);
-            }
+            Biaya biaya = Biaya.builder()
+                    .biayaTambahanId(biayaTambahanRepository.getReferenceById(1))
+                    .namaBiayaTambahan("Biaya tambahan")
+                    .jumlahBiayaTambahan(100.00)
+                    .build();
 
-            for (Cost cost : costs) {
-                cost.setNamaBiayaTambahan("Biaya tambahan gedung");
-                cost.setJumlahBiayaTambahan(100.00);
-                cost.setAdditionalCostId(additionalCostRepository.getReferenceById(1));
+            Gelombang gelombang = Gelombang.builder()
+                    .namaGelombang("PENGEMBALIAN FORMULIR REGULER GEL.1")
+                    .diskonGelombang(50.0)
+                    .jumlahPenerimaan(200L)
+                    .waktuPendaftaranDibuka(new Date())
+                    .waktuPendaftaranDitutup(new Date())
+                    .namaBank(Banks.BCA)
+                    .nomorRekening("31293123971283")
+                    .namaPemilikRekening("USER 1")
+                    .biayaPendaftaran(100.00)
+                    .jalurPendaftaranId(this.jalurPendaftaranRepository.getReferenceById(1))
+//                    .ujianPenerimaanList()
+//                    .pengungumanList()
+//                    .kegiatanList()
+                    .build();
 
-                costRepository.save(cost);
-            }
+            UjianPenerimaan ujianPenerimaan = UjianPenerimaan.builder()
+                    .namaUjianPenerimaan("TEST AKADEMIK")
+                    .mediaTest(MediaTest.TEST_ONLINE)
+                    .waktuDibuka(new Date())
+                    .waktuDitutup(new Date())
+                    .lokasiTest("ONLINE")
+                    .kkm(90)
+                    .gelombangId(this.gelombangRepository.getReferenceById(1))
+                    .build();
 
+            Pengunguman pengunguman = Pengunguman.builder()
+                    .namaPengunguman("BATAS WAKTU UJIAN")
+                    .tanggalPengunguman(new Date())
+                    .gelombangId(gelombangRepository.getReferenceById(1))
+                    .build();
 
-            registerPathRepository.save(registerPath);
-            publicInformationRepository.save(publicInformation);
-            informationRepository.save(information);
-            additionalCostRepository.saveAll(additionalCosts);
-            costRepository.saveAll(costs);
+            Kegiatan kegiatan = Kegiatan.builder()
+                    .namaKegiatan("TEST AKADEMIK")
+                    .waktuDibuka(new Date())
+                    .waktuDitutup(new Date())
+                    .gelombangId(gelombangRepository.getReferenceById(1))
+                    .build();
+
+            jalurPendaftaranRepository.save(jalurPendaftaran);
+            informasiUmumRepository.save(informasiUmum);
+            keteranganRepository.save(keterangan);
+            biayaTambahanRepository.save(biayaTambahan);
+            biayaRepository.save(biaya);
+            gelombangRepository.save(gelombang);
+            ujianPenerimaanRepository.save(ujianPenerimaan);
+            pengungumanRepository.save(pengunguman);
+            kegiatanRepository.save(kegiatan);
         }
 
-        log.info("Seed data :: {} -> {}", "REGISTER_PATH",registerPathRepository.count());
-        log.info("Seed data :: {} -> {}", "ADDITIONAL_COST", additionalCostRepository.count());
-        log.info("Seed data :: {} -> {}", "PUBLIC_INFORMATION", publicInformationRepository.count());
-        log.info("Seed data :: {} -> {}", "INFORMATION", informationRepository.count());
-        log.info("Seed data :: {} -> {}", "COST", costRepository.count());
+        log.info("Seed data :: {} -> {}", "JALUR_PENDAFTARAN", jalurPendaftaranRepository.count());
+        log.info("Seed data :: {} -> {}", "BIAYA_TAMBAHAN", biayaTambahanRepository.count());
+        log.info("Seed data :: {} -> {}", "INFORMASI_UMUM", informasiUmumRepository.count());
+        log.info("Seed data :: {} -> {}", "KETERANGAN", keteranganRepository.count());
+        log.info("Seed data :: {} -> {}", "BIAYA", biayaRepository.count());
+        log.info("Seed data :: {} -> {}", "GELOMBANG", gelombangRepository.count());;
+        log.info("Seed data :: {} -> {}", "UJIAN_PENERIMAAN", ujianPenerimaanRepository.count());
+        log.info("Seed data :: {} -> {}", "PENGUNGUMAN", pengungumanRepository.count());
+        log.info("Seed data :: {} -> {}", "KEGIATAN", kegiatanRepository.count());
     }
 }

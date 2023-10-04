@@ -23,8 +23,6 @@ public class ActionServiceImpl implements ActionService{
                 .ifPresent(path -> {
                     throw new DuplicateDataException("Path is already exists");
                 });
-
-        bodyCreate.getMethod().toUpperCase();
         
         return this.actionRepository.save(bodyCreate);
     }

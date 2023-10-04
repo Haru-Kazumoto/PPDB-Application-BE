@@ -2,6 +2,7 @@ package dev.pack.modules.user;
 
 import dev.pack.exception.DataNotFoundException;
 import dev.pack.exception.DuplicateDataException;
+import dev.pack.modules.enums.Role;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -16,7 +17,6 @@ import java.util.Map;
 public class UserServiceImpl implements UserService{
 
     private final UserRepository userRepository;
-    private final UserPagingRepository userPagingRepository;
     private final PasswordEncoder password;
 
     @Override
@@ -43,6 +43,15 @@ public class UserServiceImpl implements UserService{
     @Override
     public Iterable<User> getAllUser(Pageable pageable) {
         return this.userRepository.findAll(pageable);
+    }
+
+    @Override
+    public Iterable<User> getAllUserByRole(Role role, Pageable pageable) {
+        var roles = this.userRepository
+                .findByRole(role)
+                .orElseThrow(() -> new DataNotFoundException(String.format("Role only have : ", role.getAuthorities())));
+
+        return this.userRepository.findAllByRole(roles.getRole());
     }
 
     @Override
