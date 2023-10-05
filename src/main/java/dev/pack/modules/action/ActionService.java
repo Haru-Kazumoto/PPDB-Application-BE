@@ -1,7 +1,6 @@
 package dev.pack.modules.action;
 
-import dev.pack.modules.authorization.Role;
-import org.springframework.http.HttpMethod;
+import dev.pack.modules.enums.Role;
 
 import java.util.List;
 

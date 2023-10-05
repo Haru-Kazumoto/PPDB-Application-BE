@@ -1,4 +1,4 @@
-package dev.pack.modules.ppdbFlow;
+package dev.pack.modules.alur_ppdb;
 
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class PpdbFlowDto {
+public class AlurPpdbDto {
 
     @NotEmpty
     @NotNull

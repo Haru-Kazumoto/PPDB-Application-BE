@@ -1,4 +1,4 @@
-package dev.pack.modules.authorization;
+package dev.pack.modules.enums;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

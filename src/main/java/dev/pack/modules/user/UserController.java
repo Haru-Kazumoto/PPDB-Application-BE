@@ -1,11 +1,14 @@
 package dev.pack.modules.user;
 
+import dev.pack.modules.enums.Role;
 import dev.pack.payloads.PayloadsResponse;
+import jakarta.annotation.security.RolesAllowed;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -17,21 +20,32 @@ import java.util.Date;
 @RequiredArgsConstructor
 @RequestMapping(path = "/api/v${application.version}/user")
 @PreAuthorize("hasAnyRole('USER','ADMIN')")
+@RolesAllowed({"ROLE_USER","ROLE_ADMIN"})
 public class UserController {
 
     private final UserService userService;
     private final ModelMapper model;
 
-    @GetMapping(path = "/index")
+    @GetMapping(path = "/index-all")
     @PreAuthorize("hasAnyAuthority('user:read','admin:read')")
     public ResponseEntity<Iterable<?>> index(
             @RequestParam(name = "page", defaultValue = "0") int page,
             @RequestParam(name = "size", defaultValue = "10") int size){
         Pageable pageable = PageRequest.of(page, size);
-
         Iterable<User> dataUsers = userService.getAllUser(pageable);
-
         return ResponseEntity.status(HttpStatus.OK).body(dataUsers);
+    }
+
+    @GetMapping(path = "/index-by-role")
+    @PreAuthorize("hasAnyAuthority('user:read','admin:read')")
+    public ResponseEntity<?> index(
+            @RequestParam(name = "page", defaultValue = "0") int page,
+            @RequestParam(name = "size", defaultValue = "10") int size,
+            @RequestParam(name = "role", defaultValue = "") Role role){
+        Pageable pageable = PageRequest.of(page,size);
+        return ResponseEntity.status(HttpStatus.OK).body(
+                this.userService.getAllUserByRole(role, pageable)
+        );
     }
 
     @PostMapping("/post")

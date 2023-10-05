@@ -1,11 +1,9 @@
-package dev.pack.modules.ppdbFlow;
+package dev.pack.modules.alur_ppdb;
 
 import dev.pack.payloads.PayloadsResponse;
 import jakarta.validation.Valid;
-import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -15,23 +13,23 @@ import java.util.Date;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping(path = "/api/v${application.version}/admin/ppdb-flow")
+@RequestMapping(path = "/api/v${application.version}/admin/alur-ppdb")
 @PreAuthorize("hasRole('ADMIN')")
-public class PpdbFlowController {
+public class AlurPpdbController {
 
-    private final PpdbFlowService ppdbFlowService;
+    private final AlurPpdbService alurPpdbService;
     private final ModelMapper model;
 
     @PostMapping(path = "/post")
     @PreAuthorize("hasAuthority('admin:create')")
-    public ResponseEntity<?> store(@RequestBody @Valid PpdbFlowDto bodyDto){
-        PpdbFlow data = model.map(bodyDto, PpdbFlow.class);
+    public ResponseEntity<?> store(@RequestBody @Valid AlurPpdbDto bodyDto){
+        AlurPpdb data = model.map(bodyDto, AlurPpdb.class);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(
                 new PayloadsResponse(
                         HttpStatus.CREATED.value(),
                         new Date(),
-                        this.ppdbFlowService.createFlow(data)
+                        this.alurPpdbService.createFlow(data)
                 )
         );
     }
@@ -43,7 +41,7 @@ public class PpdbFlowController {
                 new PayloadsResponse(
                         HttpStatus.OK.value(),
                         new Date(),
-                        this.ppdbFlowService.getAllFlowByUserId(userId)
+                        this.alurPpdbService.getAllFlowByUserId(userId)
                 )
         );
     }

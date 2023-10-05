@@ -1,4 +1,4 @@
-package dev.pack.modules.authorization;
+package dev.pack.modules.enums;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static dev.pack.modules.authorization.Permission.*;
+import static dev.pack.modules.enums.Permission.*;
 
 @RequiredArgsConstructor
 public enum Role {

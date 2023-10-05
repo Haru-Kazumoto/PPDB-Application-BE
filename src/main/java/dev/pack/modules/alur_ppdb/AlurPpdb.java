@@ -1,8 +1,7 @@
-package dev.pack.modules.ppdbFlow;
+package dev.pack.modules.alur_ppdb;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import dev.pack.modules.user.User;
 import dev.pack.utils.Timestamps;
@@ -15,12 +14,12 @@ import lombok.*;
 @NoArgsConstructor
 @Builder
 @Entity
-@Table(name = "ppdb_flow_tbl")
+@Table(name = "alur_ppdb_tbl")
 @JsonIdentityInfo(
         generator = ObjectIdGenerators.PropertyGenerator.class,
         property = "id"
 )
-public class PpdbFlow extends Timestamps {
+public class AlurPpdb extends Timestamps {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;

@@ -5,8 +5,8 @@ import dev.pack.modules.token.Token;
 import dev.pack.modules.token.TokenRepository;
 import dev.pack.modules.token.TokenType;
 import dev.pack.modules.user.User;
-import dev.pack.modules.user.UserRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import dev.pack.modules.user.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -22,11 +22,12 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class AuthenticationService {
 
-  private final UserRepository repository;
-  private final TokenRepository tokenRepository;
   private final PasswordEncoder passwordEncoder;
   private final AuthenticationManager authenticationManager;
   private final JwtService jwtService;
+
+  private final UserRepository userRepository;
+  private final TokenRepository tokenRepository;
 
   public AuthenticationResponse register(RegisterRequest request) {
     var user = User.builder()
@@ -36,7 +37,7 @@ public class AuthenticationService {
             .role(request.getRole())
             .build();
 
-    var savedUser = repository.save(user);
+    var savedUser = userRepository.save(user);
     var jwtToken = jwtService.generateToken(user);
     var refreshToken = jwtService.generateRefreshToken(user);
 
@@ -55,7 +56,7 @@ public class AuthenticationService {
             request.getPassword()
         )
     );
-    var user = repository
+    var user = userRepository
             .findByUsername(request.getUsername())
             .orElseThrow();
 
@@ -109,7 +110,7 @@ public class AuthenticationService {
     userEmail = jwtService.extractUsername(refreshToken);
 
     if (userEmail != null) {
-      var user = this.repository
+      var user = this.userRepository
               .findByUsername(userEmail)
               .orElseThrow();
 
