@@ -6,20 +6,35 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
 public class AlurPpdbDto {
 
-    @NotEmpty
-    @NotNull
-    private String title;
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class Create{
+        @NotEmpty
+        @NotNull
+        private String title;
 
-    @NotEmpty
-    @NotNull
-    private String content;
+        @NotEmpty
+        @NotNull
+        private String content;
 
-    @NotNull
-    private Integer userId;
+        @NotNull
+        private Integer user_id;
+    }
+
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class Update{
+        @NotEmpty
+        @NotNull
+        private String title;
+
+        @NotEmpty
+        @NotNull
+        private String content;
+    }
 
 }

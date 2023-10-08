@@ -7,11 +7,13 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import dev.pack.modules.enums.Role;
 import dev.pack.modules.jalur_pendaftaran.JalurPendaftaran;
 import dev.pack.modules.alur_ppdb.AlurPpdb;
+import dev.pack.modules.pendaftar_ppdb.PendaftarPpdb;
 import dev.pack.modules.token.Token;
 import dev.pack.utils.CustomDateSerializer;
 import dev.pack.utils.Timestamps;
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
@@ -63,7 +65,7 @@ public class User extends Timestamps implements UserDetails {
           orphanRemoval = true
   )
   @JsonIgnore
-  private List<Token> tokens;
+  private List<Token> tokens = new ArrayList<>();
 
   /**
    * ADMIN DATA
@@ -73,14 +75,21 @@ public class User extends Timestamps implements UserDetails {
           cascade = CascadeType.ALL,
           orphanRemoval = true
   )
-  private List<AlurPpdb> alurPpdbList;
+  private List<AlurPpdb> alurPpdbList = new ArrayList<>();
 
   @OneToMany(
           mappedBy = "userId",
           cascade = CascadeType.ALL,
           orphanRemoval = true
   )
-  private List<JalurPendaftaran> jalurPendaftaranList;
+  private List<JalurPendaftaran> jalurPendaftaranList = new ArrayList<>();
+
+  @OneToOne(
+          mappedBy = "userId",
+          cascade = CascadeType.ALL,
+          orphanRemoval = true
+  )
+  private PendaftarPpdb pendaftarPpdb;
 
   /**
    * STUDENT DATA

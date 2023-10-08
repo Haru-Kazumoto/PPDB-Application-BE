@@ -1,8 +1,6 @@
 package dev.pack.modules.jalur_pendaftaran;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.annotation.*;
 import dev.pack.modules.enums.FormPurchaseType;
 import dev.pack.modules.gelombang_ppdb.Gelombang;
 import dev.pack.modules.informasi_umum.InformasiUmum;
@@ -11,6 +9,7 @@ import dev.pack.utils.Timestamps;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -29,11 +28,25 @@ public class JalurPendaftaran extends Timestamps {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
+    @Enumerated(EnumType.STRING)
     private FormPurchaseType tipePembelian;
+
+    @Column(unique = true, nullable=false)
     private String namaJalurPendaftaran;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(nullable = false)
     private Date waktuDibuka;
-    private Date waktuDitutup;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(nullable = false)
+    private Date waktuDitutup; //contoh penginputan 2023-10-05T08:00:00
+
     private Double biayaPendaftaran;
+
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    private Integer user_id;
 
     @OneToOne(
             mappedBy = "jalurPendaftaranId",
@@ -47,10 +60,10 @@ public class JalurPendaftaran extends Timestamps {
             orphanRemoval = true,
             mappedBy = "jalurPendaftaranId"
     )
-    private List<Gelombang> gelombangList;
+    private List<Gelombang> gelombangList = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "userId")
+    @JoinColumn(name = "userEntityId")
     @JsonIgnore
     private User userId;
 }

@@ -10,9 +10,8 @@ import java.util.Optional;
 
 @Repository
 public interface AlurPpdbRepository extends JpaRepository<AlurPpdb, Integer> {
-    @Query("""
-        SELECT p FROM AlurPpdb p WHERE p.userId.id = :userId
-    """)
+    @Query("SELECT p FROM AlurPpdb p WHERE p.userId.id = :userId")
     List<AlurPpdb> findAllByUserId(Integer userId);
+
     Optional<AlurPpdb> findByTitle(String title);
 }

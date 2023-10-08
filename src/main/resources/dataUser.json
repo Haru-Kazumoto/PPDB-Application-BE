@@ -102,7 +102,7 @@
     "pembelian_formulir": [
       {
         "id": 1,
-        "title": "",
+        "nama": "",
         "jumlah_pendaftar": 0,
         "jumlah_penerimaan": 0,
         "peserta_diterima": 0,
@@ -114,6 +114,7 @@
             "tanggal_mendaftar": "",
             "status_pendaftaran": "BELUM_TERKONFIRMASI",
             "detail_pendaftar": {
+              "foto_pendaftar": "url.img",
               "nama_pendaftar": "",
               "alamat_pendaftar": "",
               "no_telpon_pendaftar": "",
@@ -151,6 +152,7 @@
               "no_telpon_pendaftar": "",
               "tanggal_mendaftar": "",
               "status_pembayaran_pendaftar": "PEMBAYARAN_TERKONFIRMASI",
+              "diskon": "",
               "struk_pembayaran": {
                 "foto_pembayaran": "photo.img",
                 "tipe_pembayaran": "TUNAI",
@@ -159,8 +161,7 @@
               },
               "prestasi": {
                 "pengalaman": "url.img",
-                "sertifikasi": "url.img",
-                "asdfasdfadsf": "afdsfads"
+                "sertifikasi": "url.img"
               }
             }
           }

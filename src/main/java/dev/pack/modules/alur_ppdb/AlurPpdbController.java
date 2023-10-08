@@ -22,7 +22,7 @@ public class AlurPpdbController {
 
     @PostMapping(path = "/post")
     @PreAuthorize("hasAuthority('admin:create')")
-    public ResponseEntity<?> store(@RequestBody @Valid AlurPpdbDto bodyDto){
+    public ResponseEntity<?> store(@RequestBody @Valid AlurPpdbDto.Create bodyDto){
         AlurPpdb data = model.map(bodyDto, AlurPpdb.class);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(
@@ -42,6 +42,22 @@ public class AlurPpdbController {
                         HttpStatus.OK.value(),
                         new Date(),
                         this.alurPpdbService.getAllFlowByUserId(userId)
+                )
+        );
+    }
+
+    @PatchMapping(path = "/update")
+    public ResponseEntity<?> update(
+            @RequestParam(name = "dataId", defaultValue = "") int dataId,
+            @RequestBody @Valid AlurPpdbDto.Update dto
+    ){
+        AlurPpdb newData = model.map(dto, AlurPpdb.class);
+
+        return ResponseEntity.status(HttpStatus.OK).body(
+                new PayloadsResponse(
+                        HttpStatus.OK.value(),
+                        new Date(),
+                        this.alurPpdbService.updateFlow(dataId, newData)
                 )
         );
     }

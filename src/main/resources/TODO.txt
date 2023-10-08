@@ -1,0 +1,3 @@
+-pembuatan logic diskon
+    rumus: jika pengembalian per gelombang formulir di tenggat waktu yang tepat maka akan mendapatkan diskon
+           value default 0,

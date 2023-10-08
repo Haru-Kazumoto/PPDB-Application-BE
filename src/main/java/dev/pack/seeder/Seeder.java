@@ -19,6 +19,7 @@ import dev.pack.modules.kegiatan.Kegiatan;
 import dev.pack.modules.kegiatan.KegiatanRepository;
 import dev.pack.modules.keterangan.Keterangan;
 import dev.pack.modules.keterangan.KeteranganRepository;
+import dev.pack.modules.pendaftar_ppdb.PendaftarPpdb;
 import dev.pack.modules.pengunguman.Pengunguman;
 import dev.pack.modules.pengunguman.PengungumanRepository;
 import dev.pack.modules.ujian_penerimaan.UjianPenerimaan;
@@ -41,8 +42,8 @@ import java.util.List;
 import static dev.pack.modules.enums.Role.ADMIN;
 import static dev.pack.modules.enums.Role.USER;
 
-@Configuration
-@Transactional
+//@Configuration
+//@Transactional
 @RequiredArgsConstructor
 public class Seeder implements CommandLineRunner {
 
@@ -180,9 +181,6 @@ public class Seeder implements CommandLineRunner {
                     .namaPemilikRekening("USER 1")
                     .biayaPendaftaran(100.00)
                     .jalurPendaftaranId(this.jalurPendaftaranRepository.getReferenceById(1))
-//                    .ujianPenerimaanList()
-//                    .pengungumanList()
-//                    .kegiatanList()
                     .build();
 
             UjianPenerimaan ujianPenerimaan = UjianPenerimaan.builder()
@@ -206,6 +204,10 @@ public class Seeder implements CommandLineRunner {
                     .waktuDibuka(new Date())
                     .waktuDitutup(new Date())
                     .gelombangId(gelombangRepository.getReferenceById(1))
+                    .build();
+
+            PendaftarPpdb pendaftarPpdb = PendaftarPpdb.builder()
+//                    .pembelianFormulirList()
                     .build();
 
             jalurPendaftaranRepository.save(jalurPendaftaran);

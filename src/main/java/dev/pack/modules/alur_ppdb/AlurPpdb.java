@@ -1,8 +1,6 @@
 package dev.pack.modules.alur_ppdb;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.annotation.*;
 import dev.pack.modules.user.User;
 import dev.pack.utils.Timestamps;
 import jakarta.persistence.*;
@@ -29,9 +27,12 @@ public class AlurPpdb extends Timestamps {
 
     private String content;
 
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    private Integer user_id; //FOR RELATION
+
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "userEntityId")
     private User userId;
 
 }
