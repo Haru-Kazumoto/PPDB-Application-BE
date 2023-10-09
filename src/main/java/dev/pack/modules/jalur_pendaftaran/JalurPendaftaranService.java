@@ -12,5 +12,5 @@ public interface JalurPendaftaranService {
     List<JalurPendaftaran> index(Integer id);
     JalurPendaftaran update(Integer id, JalurPendaftaran bodyUpdate);
     void softDelete(Integer id);
-    List<JalurPendaftaran> indexDeleted();
+    List<JalurPendaftaran> indexDeleted(Integer id);
 }

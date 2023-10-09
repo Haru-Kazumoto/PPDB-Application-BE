@@ -85,7 +85,10 @@ public class JalurPendaftaranServiceImpl implements JalurPendaftaranService{
     }
 
     @Override
-    public List<JalurPendaftaran> indexDeleted() {
-        return this.jalurPendaftaranRepository.findAllByDeletedAtIsNull();
+    public List<JalurPendaftaran> indexDeleted(Integer id) {
+        User data = this.userRepository.findById(id)
+                .orElseThrow(() -> new DataNotFoundException("Id not found."));
+
+        return this.jalurPendaftaranRepository.findAllByDeletedAtIsNull(data.getId());
     }
 }

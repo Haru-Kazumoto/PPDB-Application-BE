@@ -2,6 +2,7 @@ package dev.pack.modules.keterangan;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import dev.pack.modules.jalur_pendaftaran.JalurPendaftaran;
 import dev.pack.utils.Timestamps;
@@ -26,8 +27,11 @@ public class Keterangan extends Timestamps {
     private String namaKeterangan;
     private String deskripsiKeterangan;
 
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    private Integer jalurPendaftaran_id; //For relation
+
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "jalurPendaftaranId")
+    @JoinColumn(name = "jalurPendaftaranEntityId")
     @JsonIgnore
     private JalurPendaftaran jalurPendaftaranId;
 

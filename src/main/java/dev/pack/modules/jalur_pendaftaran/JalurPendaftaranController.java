@@ -54,8 +54,8 @@ public class JalurPendaftaranController {
     }
 
     @GetMapping(path = "/index-deleted")
-    public ResponseEntity<?> indexDeleted(){
-        return http.response(OK.value(), new Date(),this.jalurPendaftaranService.indexDeleted());
+    public ResponseEntity<?> indexDeleted(@RequestParam(name = "dataId", defaultValue = "") int dataId){
+        return http.response(OK.value(), new Date(),this.jalurPendaftaranService.indexDeleted(dataId));
     }
 
 

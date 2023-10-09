@@ -25,6 +25,9 @@ public interface JalurPendaftaranRepository extends JpaRepository<JalurPendaftar
     @Query("UPDATE JalurPendaftaran j SET j.deletedAt = CURRENT_TIMESTAMP WHERE j.id = :id")
     void softDeleteById(@Param("id") Integer id);
 
-    @Query("SELECT d FROM JalurPendaftaran d WHERE d.deletedAt IS NOT NULL ORDER BY d.id ASC")
-    List<JalurPendaftaran> findAllByDeletedAtIsNull();
+    @Query("SELECT d FROM JalurPendaftaran d WHERE d.deletedAt IS NOT NULL AND d.userId.id = :userId ORDER BY d.id ASC")
+    List<JalurPendaftaran> findAllByDeletedAtIsNull(@Param("userId") Integer userId);
+
+    @Query("UPDATE JalurPendaftaran j SET j.deletedAt = NULL WHERE j.id = :id")
+    Optional<JalurPendaftaran> restoreData(@Param("id") Integer id);
 }

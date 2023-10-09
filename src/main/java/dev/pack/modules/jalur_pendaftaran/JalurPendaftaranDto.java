@@ -37,7 +37,7 @@ public class JalurPendaftaranDto {
         private Double biayaPendaftaran;
 
         @NotNull
-        @JsonIgnore
+//        @JsonIgnore
         private Integer user_id;
     }
 

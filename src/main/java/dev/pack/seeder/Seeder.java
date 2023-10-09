@@ -40,8 +40,8 @@ import java.util.List;
 import static dev.pack.modules.enums.Role.ADMIN;
 import static dev.pack.modules.enums.Role.USER;
 
-//@Configuration
-//@Transactional
+@Configuration
+@Transactional
 @RequiredArgsConstructor
 public class Seeder implements CommandLineRunner {
 
@@ -68,10 +68,10 @@ public class Seeder implements CommandLineRunner {
             /*
              * Put your seed function here
              */
-            seedUserData();
+//            seedUserData();
             seedAdminData();
-            seedRegisterPath();
-            seedPpdbFlows();
+//            seedRegisterPath();
+//            seedPpdbFlows();
 
             //Put logic repo here.
 
