@@ -1,9 +1,10 @@
 package dev.pack.modules.jalur_pendaftaran;
 
 import com.fasterxml.jackson.annotation.*;
+import dev.pack.modules.biaya_tambahan.BiayaTambahan;
 import dev.pack.modules.enums.FormPurchaseType;
 import dev.pack.modules.gelombang_ppdb.Gelombang;
-import dev.pack.modules.informasi_umum.InformasiUmum;
+import dev.pack.modules.keterangan.Keterangan;
 import dev.pack.modules.user.User;
 import dev.pack.utils.Timestamps;
 import jakarta.persistence.*;
@@ -48,12 +49,19 @@ public class JalurPendaftaran extends Timestamps {
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private Integer user_id;
 
-    @OneToOne(
-            mappedBy = "jalurPendaftaranId",
+    @OneToMany(
             cascade = CascadeType.ALL,
-            orphanRemoval = true
+            orphanRemoval = true,
+            mappedBy = "jalurPendaftaranId"
     )
-    private InformasiUmum informasiUmum;
+    private List<Keterangan> keteranganList;
+
+    @OneToMany(
+            cascade = CascadeType.ALL,
+            orphanRemoval = true,
+            mappedBy = "jalurPendaftaranId"
+    )
+    private List<BiayaTambahan> biayaTambahanList;
 
     @OneToMany(
             cascade = CascadeType.ALL,

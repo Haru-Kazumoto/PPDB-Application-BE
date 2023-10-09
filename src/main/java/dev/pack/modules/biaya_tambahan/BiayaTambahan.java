@@ -3,8 +3,8 @@ package dev.pack.modules.biaya_tambahan;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-import dev.pack.modules.informasi_umum.InformasiUmum;
 import dev.pack.modules.biaya.Biaya;
+import dev.pack.modules.jalur_pendaftaran.JalurPendaftaran;
 import dev.pack.utils.Timestamps;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -39,8 +39,8 @@ public class BiayaTambahan extends Timestamps {
     private List<Biaya> biayaList;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "informasiUmumId")
+    @JoinColumn(name = "jalurPendaftaranId")
     @JsonIgnore()
-    private InformasiUmum informasiUmumId;
+    private JalurPendaftaran jalurPendaftaranId;
 
 }

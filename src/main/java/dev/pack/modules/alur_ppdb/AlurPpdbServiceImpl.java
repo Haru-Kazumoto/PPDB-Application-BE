@@ -74,6 +74,7 @@ public class AlurPpdbServiceImpl implements AlurPpdbService {
         this.alurPpdbRepository.findById(id).orElseThrow(() -> new DataNotFoundException("Id not found."));
         return new DeleteResponse(
                 HttpStatus.OK.value(),
+                id,
                 "Data successfully delete permanently."
         );
     }

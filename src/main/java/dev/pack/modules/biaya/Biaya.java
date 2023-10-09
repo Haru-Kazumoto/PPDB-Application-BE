@@ -1,6 +1,7 @@
 package dev.pack.modules.biaya;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import dev.pack.modules.biaya_tambahan.BiayaTambahan;
 import dev.pack.utils.Timestamps;
@@ -31,7 +32,7 @@ public class Biaya extends Timestamps {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "biayaTambahanId")
-//    @JsonIgnore <- uncomment this when has success
+    @JsonIgnore
     private BiayaTambahan biayaTambahanId;
 
 

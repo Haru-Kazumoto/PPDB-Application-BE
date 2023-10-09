@@ -9,10 +9,8 @@ import dev.pack.modules.alur_ppdb.AlurPpdb;
 import dev.pack.modules.enums.MediaTest;
 import dev.pack.modules.gelombang_ppdb.Gelombang;
 import dev.pack.modules.gelombang_ppdb.GelombangRepository;
-import dev.pack.modules.informasi_umum.InformasiUmumRepository;
 import dev.pack.modules.jalur_pendaftaran.JalurPendaftaranRepository;
 import dev.pack.modules.jalur_pendaftaran.JalurPendaftaran;
-import dev.pack.modules.informasi_umum.InformasiUmum;
 import dev.pack.modules.biaya_tambahan.BiayaTambahan;
 import dev.pack.modules.biaya.Biaya;
 import dev.pack.modules.kegiatan.Kegiatan;
@@ -49,7 +47,6 @@ public class Seeder implements CommandLineRunner {
 
     private final UserRepository userRepository;
     private final JalurPendaftaranRepository jalurPendaftaranRepository;
-    private final InformasiUmumRepository informasiUmumRepository;
     private final KeteranganRepository keteranganRepository;
     private final BiayaTambahanRepository biayaTambahanRepository;
     private final BiayaRepository biayaRepository;
@@ -135,7 +132,6 @@ public class Seeder implements CommandLineRunner {
         long countData = jalurPendaftaranRepository.count();
         if(countData == 0) {
             List<BiayaTambahan> biayaTambahans = new ArrayList<>();
-            InformasiUmum informasiUmum = null;
 
             JalurPendaftaran jalurPendaftaran = JalurPendaftaran.builder()
                     .tipePembelian(FormPurchaseType.PEMBELIAN_FORMULIR)
@@ -143,25 +139,18 @@ public class Seeder implements CommandLineRunner {
                     .waktuDibuka(new Date())
                     .waktuDitutup(new Date())
                     .biayaPendaftaran(200.00)
-                    .informasiUmum(informasiUmum)
                     .userId(userRepository.getReferenceById(2))
                     .build();
 
             Keterangan keterangan = Keterangan.builder()
                     .namaKeterangan("Pembelian Formulir")
                     .deskripsiKeterangan("Deskripsi pembelian Formulir")
-                    .informasiUmumId(informasiUmumRepository.getReferenceById(1))
-                    .build();
-
-            informasiUmum = InformasiUmum.builder()
-                    .keterangan(keterangan)
-                    .biayaTambahan(biayaTambahans)
-                    .jalurPendaftaranId(jalurPendaftaranRepository.getReferenceById(1))
+                    .jalurPendaftaranId(this.jalurPendaftaranRepository.getReferenceById(1))
                     .build();
 
             BiayaTambahan biayaTambahan = BiayaTambahan.builder()
                     .judulBiaya("Biaya tambahan gedung")
-                    .informasiUmumId(informasiUmumRepository.getReferenceById(1))
+                    .jalurPendaftaranId(this.jalurPendaftaranRepository.getReferenceById(1))
                     .build();
 
             Biaya biaya = Biaya.builder()
@@ -211,7 +200,6 @@ public class Seeder implements CommandLineRunner {
                     .build();
 
             jalurPendaftaranRepository.save(jalurPendaftaran);
-            informasiUmumRepository.save(informasiUmum);
             keteranganRepository.save(keterangan);
             biayaTambahanRepository.save(biayaTambahan);
             biayaRepository.save(biaya);
@@ -223,7 +211,6 @@ public class Seeder implements CommandLineRunner {
 
         log.info("Seed data :: {} -> {}", "JALUR_PENDAFTARAN", jalurPendaftaranRepository.count());
         log.info("Seed data :: {} -> {}", "BIAYA_TAMBAHAN", biayaTambahanRepository.count());
-        log.info("Seed data :: {} -> {}", "INFORMASI_UMUM", informasiUmumRepository.count());
         log.info("Seed data :: {} -> {}", "KETERANGAN", keteranganRepository.count());
         log.info("Seed data :: {} -> {}", "BIAYA", biayaRepository.count());
         log.info("Seed data :: {} -> {}", "GELOMBANG", gelombangRepository.count());;

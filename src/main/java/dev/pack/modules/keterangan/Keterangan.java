@@ -3,7 +3,7 @@ package dev.pack.modules.keterangan;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-import dev.pack.modules.informasi_umum.InformasiUmum;
+import dev.pack.modules.jalur_pendaftaran.JalurPendaftaran;
 import dev.pack.utils.Timestamps;
 import jakarta.persistence.*;
 import lombok.*;
@@ -26,9 +26,9 @@ public class Keterangan extends Timestamps {
     private String namaKeterangan;
     private String deskripsiKeterangan;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "informasiUmumId", updatable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "jalurPendaftaranId")
     @JsonIgnore
-    private InformasiUmum informasiUmumId;
+    private JalurPendaftaran jalurPendaftaranId;
 
 }

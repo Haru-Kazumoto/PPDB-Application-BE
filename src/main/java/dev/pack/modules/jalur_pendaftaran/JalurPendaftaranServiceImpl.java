@@ -71,4 +71,21 @@ public class JalurPendaftaranServiceImpl implements JalurPendaftaranService{
 
         return this.jalurPendaftaranRepository.save(data);
     }
+
+    @Override
+    public void softDelete(Integer id) {
+        JalurPendaftaran data = this.jalurPendaftaranRepository.findById(id)
+                .orElseThrow(() -> new DataNotFoundException("Id not found."));
+
+        if(data.getDeletedAt() != null){
+            throw new IllegalArgumentException("Data has already deleted.");
+        }
+
+        this.jalurPendaftaranRepository.softDeleteById(data.getId());
+    }
+
+    @Override
+    public List<JalurPendaftaran> indexDeleted() {
+        return this.jalurPendaftaranRepository.findAllByDeletedAtIsNull();
+    }
 }

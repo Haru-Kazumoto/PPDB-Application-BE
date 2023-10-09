@@ -1,13 +1,12 @@
 package dev.pack.modules.jalur_pendaftaran;
 
+import dev.pack.exception.DataNotFoundException;
+import dev.pack.payloads.DeleteResponse;
 import dev.pack.payloads.HttpResponse;
-import dev.pack.payloads.PayloadsResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
@@ -43,5 +42,22 @@ public class JalurPendaftaranController {
         JalurPendaftaran entity = this.modelMapper.map(dto, JalurPendaftaran.class);
         return http.response(OK.value(), new Date(), this.jalurPendaftaranService.update(dataId, entity));
     }
+
+    @DeleteMapping(path = "/delete")
+    public ResponseEntity<?> softDelete(@RequestParam(name = "dataId", defaultValue = "") int dataId){
+        try{
+            this.jalurPendaftaranService.softDelete(dataId);
+            return http.response(OK.value(), new Date(), "Data success to delete");
+        } catch(DataNotFoundException ex) {
+            throw new DataNotFoundException(ex.getMessage());
+        }
+    }
+
+    @GetMapping(path = "/index-deleted")
+    public ResponseEntity<?> indexDeleted(){
+        return http.response(OK.value(), new Date(),this.jalurPendaftaranService.indexDeleted());
+    }
+
+
 
 }

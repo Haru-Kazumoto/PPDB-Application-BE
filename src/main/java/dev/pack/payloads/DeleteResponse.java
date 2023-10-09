@@ -12,9 +12,7 @@ import java.util.Date;
 @NoArgsConstructor
 @Builder
 public class DeleteResponse {
-
-//    private Date deleteAt;
     private Integer httpStatus;
+    private Integer id_data;
     private String message;
-
 }
