@@ -2,6 +2,7 @@ package dev.pack.modules.alur_ppdb;
 
 import dev.pack.exception.DataNotFoundException;
 import dev.pack.exception.DuplicateDataException;
+import dev.pack.exception.ErrorSoftDelete;
 import dev.pack.modules.user.User;
 import dev.pack.modules.user.UserRepository;
 import dev.pack.payloads.DeleteResponse;
@@ -70,22 +71,20 @@ public class AlurPpdbServiceImpl implements AlurPpdbService {
     }
 
     @Override
-    public DeleteResponse hardDeleteById(Integer id) {
-        this.alurPpdbRepository.findById(id).orElseThrow(() -> new DataNotFoundException("Id not found."));
-        return new DeleteResponse(
-                HttpStatus.OK.value(),
-                id,
-                "Data successfully delete permanently."
-        );
+    public void hardDeleteById(Integer id) {
+        //NOT RETURNING YET
     }
 
     @Override
-    public DeleteResponse softDeleteById(Integer id) {
-        return null;
+    public void softDeleteById(Integer id) {
+        User data = this.userRepository.findById(id).orElseThrow(() -> new DataNotFoundException("Id not found."));
+        if(data.getDeletedAt() != null) throw new ErrorSoftDelete("Data has been deactive.");
+
+        this.alurPpdbRepository.softDeleteById(id);
     }
 
     @Override
-    public DeleteResponse deleteDataHasDeleted() {
-        return null;
+    public void deleteDataHasDeleted() {
+
     }
 }

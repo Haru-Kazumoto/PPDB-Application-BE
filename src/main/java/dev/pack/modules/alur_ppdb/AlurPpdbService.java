@@ -10,7 +10,7 @@ public interface AlurPpdbService {
     List<AlurPpdb> getAllFlowByUserId(Integer userId);
     List<AlurPpdb> getAll();
     AlurPpdb updateFlow(Integer id, AlurPpdb bodyUpdate);
-    DeleteResponse hardDeleteById(Integer id);
-    DeleteResponse softDeleteById(Integer id);
-    DeleteResponse deleteDataHasDeleted(); //Deleting data where 'deteledAt' is not null
+    void hardDeleteById(Integer id);
+    void softDeleteById(Integer id);
+    void deleteDataHasDeleted(); //Deleting data where 'deteledAt' is not null
 }

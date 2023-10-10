@@ -1,3 +1,14 @@
 -pembuatan logic diskon
     rumus: jika pengembalian per gelombang formulir di tenggat waktu yang tepat maka akan mendapatkan diskon
            value default 0,
+
+ISSUED AT CREATING DATA THAT HAS DELETED.
+
+API HAS DONE :
+-Auth
+-User
+-AlurPpdb
+-JalurPendaftaran
+-Keterangan
+-BiayaTambahan
+-Biaya [on progress]

@@ -31,6 +31,8 @@ public class BiayaTambahan extends Timestamps {
 
     private String judulBiaya;
 
+    private Integer jalurPendaftaran_id;
+
     @OneToMany(
             cascade = CascadeType.ALL,
             orphanRemoval = true,
@@ -39,7 +41,7 @@ public class BiayaTambahan extends Timestamps {
     private List<Biaya> biayaList;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "jalurPendaftaranId")
+    @JoinColumn(name = "jalurPendaftaranEntityId")
     @JsonIgnore()
     private JalurPendaftaran jalurPendaftaranId;
 
