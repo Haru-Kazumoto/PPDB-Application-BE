@@ -5,6 +5,7 @@ import lombok.NonNull;
 import org.springframework.data.domain.Pageable;
 
 
+import java.util.List;
 import java.util.Map;
 
 public interface UserService {
@@ -13,6 +14,6 @@ public interface UserService {
     Iterable<User> getAllUser(Pageable pageable);
     Iterable<User> getAllUserByRole(Role role,Pageable pageable);
     User updateUser(@NonNull Integer id, User bodyUpdate);
-    Map<String, String> deleteUser(@NonNull Integer id);
-
-}
+    void softDelete(Integer id);
+//    List<User> getAllDataHasDeactive(@NonNull Integer id);
+}   

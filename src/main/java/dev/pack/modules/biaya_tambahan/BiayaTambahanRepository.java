@@ -10,7 +10,7 @@ import java.util.List;
 @Repository
 public interface BiayaTambahanRepository extends JpaRepository<BiayaTambahan, Integer> {
 
-    @Query("SELECT j FROM BiayaTambahan j WHERE j.jalurPendaftaranId.id = :jalurPendaftaranId ORDER BY j.id ASC")
+    @Query("SELECT j FROM BiayaTambahan j WHERE j.deletedAt IS NULL AND j.jalurPendaftaranId.id = :jalurPendaftaranId ORDER BY j.id ASC")
     List<BiayaTambahan> findAllByJalurPendaftaranId(@Param("jalurPendaftaranId") Integer jalurPendaftaranId);
 
 }

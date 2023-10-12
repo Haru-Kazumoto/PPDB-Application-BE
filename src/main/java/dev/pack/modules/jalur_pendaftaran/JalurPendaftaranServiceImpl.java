@@ -2,6 +2,7 @@ package dev.pack.modules.jalur_pendaftaran;
 
 import dev.pack.exception.DataNotFoundException;
 import dev.pack.exception.DuplicateDataException;
+import dev.pack.exception.ErrorSoftDelete;
 import dev.pack.modules.user.User;
 import dev.pack.modules.user.UserRepository;
 import dev.pack.utils.Validator;
@@ -55,6 +56,8 @@ public class JalurPendaftaranServiceImpl implements JalurPendaftaranService{
     @Override
     public JalurPendaftaran update(Integer id, JalurPendaftaran bodyUpdate) {
         JalurPendaftaran data = this.jalurPendaftaranRepository.findById(id).orElseThrow(() -> new DataNotFoundException("Id not found."));
+
+        if(data.getDeletedAt() != null) throw new ErrorSoftDelete("This data has been deleted.");
 
         this.jalurPendaftaranRepository.findByNamaJalurPendaftaran(bodyUpdate.getNamaJalurPendaftaran())
                         .ifPresent((jalur) -> {

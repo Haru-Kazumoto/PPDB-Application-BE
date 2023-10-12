@@ -6,9 +6,9 @@ ISSUED AT CREATING DATA THAT HAS DELETED.
 
 API HAS DONE :
 -Auth
--User
+-User [Soft delete]
 -AlurPpdb
--JalurPendaftaran
+-JalurPendaftaran [Soft delete]
 -Keterangan
 -BiayaTambahan
 -Biaya [on progress]

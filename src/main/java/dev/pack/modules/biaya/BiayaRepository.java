@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface BiayaRepository extends JpaRepository<Biaya, Integer> {
@@ -13,6 +14,6 @@ public interface BiayaRepository extends JpaRepository<Biaya, Integer> {
     List<Biaya> findAllByBiayaTambahanId(Integer id);
 
     @Query("SELECT b FROM Biaya b WHERE b.namaBiayaTambahan = :namaBiaya")
-    Biaya findByNamaBiayaTambahan(String namaBiaya);
+    Optional<Biaya> findByNamaBiayaTambahan(String namaBiaya);
 
 }

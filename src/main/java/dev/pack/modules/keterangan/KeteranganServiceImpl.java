@@ -1,6 +1,7 @@
 package dev.pack.modules.keterangan;
 
 import dev.pack.exception.DataNotFoundException;
+import dev.pack.exception.ErrorSoftDelete;
 import dev.pack.modules.jalur_pendaftaran.JalurPendaftaran;
 import dev.pack.modules.jalur_pendaftaran.JalurPendaftaranRepository;
 import jakarta.transaction.Transactional;
@@ -40,6 +41,8 @@ public class KeteranganServiceImpl implements KeteranganService{
     public Keterangan update(Integer id, Keterangan bodyUpdate) {
         Keterangan data = this.keteranganRepository.findById(id)
                 .orElseThrow(() -> new DataNotFoundException("Data not found."));
+
+        if(data.getDeletedAt() != null) throw new ErrorSoftDelete("Data has been deleted, cannot update.");
 
         data.setNamaKeterangan(bodyUpdate.getNamaKeterangan());
         data.setDeskripsiKeterangan(bodyUpdate.getDeskripsiKeterangan());

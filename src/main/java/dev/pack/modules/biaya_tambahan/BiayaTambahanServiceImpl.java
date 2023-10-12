@@ -17,6 +17,12 @@ public class BiayaTambahanServiceImpl implements BiayaTambahanService{
 
     @Override
     public BiayaTambahan store(BiayaTambahan bodyCreate) {
+        JalurPendaftaran data = this.jalurPendaftaranRepository.findById(bodyCreate.getJalurPendaftaran_id())
+                .orElseThrow(() -> new DataNotFoundException("Data not found."));
+
+        bodyCreate.setJalurPendaftaran_id(bodyCreate.getJalurPendaftaran_id());
+        bodyCreate.setJalurPendaftaranId(data);
+
         return this.biayaTambahanRepository.save(bodyCreate);
     }
 

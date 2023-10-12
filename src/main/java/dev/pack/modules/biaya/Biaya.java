@@ -31,8 +31,10 @@ public class Biaya extends Timestamps {
 
     private Double jumlahBiayaTambahan;
 
+    private Integer biayaTambahan_id;
+
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "biayaTambahanId")
+    @JoinColumn(name = "biayaTambahanEntityId")
     @JsonIgnore
     private BiayaTambahan biayaTambahanId;
 
