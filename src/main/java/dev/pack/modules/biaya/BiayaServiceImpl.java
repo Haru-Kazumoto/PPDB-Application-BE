@@ -2,9 +2,10 @@ package dev.pack.modules.biaya;
 
 import dev.pack.exception.DataNotFoundException;
 import dev.pack.exception.DuplicateDataException;
+import dev.pack.exception.ErrorSoftDelete;
 import dev.pack.modules.biaya_tambahan.BiayaTambahan;
 import dev.pack.modules.biaya_tambahan.BiayaTambahanRepository;
-import dev.pack.modules.jalur_pendaftaran.JalurPendaftaran;
+import dev.pack.utils.Validator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -12,12 +13,13 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class BiayaServiceImpl implements BiayaService{
+public class BiayaServiceImpl implements BiayaService {
 
     private final BiayaRepository biayaRepository;
     private final BiayaTambahanRepository biayaTambahanRepository;
+    private final Validator validator;
 
-    //TODO : CRUD MANAGEMENT BIAYA
+    //TODO : CRUD MANAGEMENT BIAYAx
 
     @Override
     public Biaya store(Biaya bodyCreate) {
@@ -37,11 +39,26 @@ public class BiayaServiceImpl implements BiayaService{
 
     @Override
     public List<Biaya> index(Integer biayaTambahanId) {
-        return null;
+        var data = this.biayaTambahanRepository.findById(biayaTambahanId)
+                .orElseThrow(() -> new DataNotFoundException("Id not found."));
+
+        return this.biayaRepository.findAllByBiayaTambahanId(data.getId());
     }
 
     @Override
     public Biaya update(Integer id, Biaya bodyUpdate) {
-        return null;
+        Biaya data = this.biayaRepository.findById(id).orElseThrow(() -> new DataNotFoundException("Id not found."));
+
+        this.biayaRepository.findByNamaBiayaTambahan(data.getNamaBiayaTambahan())
+                .ifPresent((name) -> {
+                    throw new DuplicateDataException("Nama biaya tambahan has already exists.");
+                });
+
+        validator.isDataHasDeleted(bodyUpdate.getDeletedAt());
+
+        data.setNamaBiayaTambahan(bodyUpdate.getNamaBiayaTambahan());
+        data.setJumlahBiayaTambahan(bodyUpdate.getJumlahBiayaTambahan());
+
+        return data;
     }
 }
