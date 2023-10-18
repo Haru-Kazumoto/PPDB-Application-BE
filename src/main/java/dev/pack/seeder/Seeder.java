@@ -1,27 +1,27 @@
 package dev.pack.seeder;
 
-import dev.pack.modules.alur_ppdb.AlurPpdbRepository;
-import dev.pack.modules.biaya.BiayaRepository;
-import dev.pack.modules.biaya_tambahan.BiayaTambahanRepository;
-import dev.pack.modules.enums.Banks;
-import dev.pack.modules.enums.FormPurchaseType;
-import dev.pack.modules.alur_ppdb.AlurPpdb;
-import dev.pack.modules.enums.MediaTest;
-import dev.pack.modules.gelombang_ppdb.Gelombang;
-import dev.pack.modules.gelombang_ppdb.GelombangRepository;
-import dev.pack.modules.jalur_pendaftaran.JalurPendaftaranRepository;
-import dev.pack.modules.jalur_pendaftaran.JalurPendaftaran;
-import dev.pack.modules.biaya_tambahan.BiayaTambahan;
-import dev.pack.modules.biaya.Biaya;
-import dev.pack.modules.kegiatan.Kegiatan;
-import dev.pack.modules.kegiatan.KegiatanRepository;
-import dev.pack.modules.keterangan.Keterangan;
-import dev.pack.modules.keterangan.KeteranganRepository;
-import dev.pack.modules.pendaftar_ppdb.PendaftarPpdb;
-import dev.pack.modules.pengunguman.Pengunguman;
-import dev.pack.modules.pengunguman.PengungumanRepository;
-import dev.pack.modules.ujian_penerimaan.UjianPenerimaan;
-import dev.pack.modules.ujian_penerimaan.UjianPenerimaanRepository;
+import dev.pack.modules.admin.alur_ppdb.AlurPpdbRepository;
+import dev.pack.modules.admin.biaya.BiayaRepository;
+import dev.pack.modules.admin.biaya_tambahan.BiayaTambahanRepository;
+import dev.pack.modules.admin.enums.Banks;
+import dev.pack.modules.admin.enums.FormPurchaseType;
+import dev.pack.modules.admin.alur_ppdb.AlurPpdb;
+import dev.pack.modules.admin.enums.MediaTest;
+import dev.pack.modules.admin.gelombang_ppdb.Gelombang;
+import dev.pack.modules.admin.gelombang_ppdb.GelombangRepository;
+import dev.pack.modules.admin.jalur_pendaftaran.JalurPendaftaranRepository;
+import dev.pack.modules.admin.jalur_pendaftaran.JalurPendaftaran;
+import dev.pack.modules.admin.biaya_tambahan.BiayaTambahan;
+import dev.pack.modules.admin.biaya.Biaya;
+import dev.pack.modules.admin.kegiatan.Kegiatan;
+import dev.pack.modules.admin.kegiatan.KegiatanRepository;
+import dev.pack.modules.admin.keterangan.Keterangan;
+import dev.pack.modules.admin.keterangan.KeteranganRepository;
+import dev.pack.modules.admin.pendaftar_ppdb.PendaftarPpdb;
+import dev.pack.modules.admin.pengunguman.Pengunguman;
+import dev.pack.modules.admin.pengunguman.PengungumanRepository;
+import dev.pack.modules.admin.ujian_penerimaan.UjianPenerimaan;
+import dev.pack.modules.admin.ujian_penerimaan.UjianPenerimaanRepository;
 import dev.pack.modules.user.User;
 import dev.pack.modules.user.UserRepository;
 import jakarta.transaction.Transactional;
@@ -37,8 +37,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import static dev.pack.modules.enums.Role.ADMIN;
-import static dev.pack.modules.enums.Role.USER;
+import static dev.pack.modules.admin.enums.Role.ADMIN;
+import static dev.pack.modules.admin.enums.Role.USER;
 
 @Configuration
 @Transactional

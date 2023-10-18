@@ -14,7 +14,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.LogoutHandler;
 
-import static dev.pack.modules.enums.Role.*;
+import static dev.pack.modules.admin.enums.Role.*;
 import static org.springframework.http.HttpMethod.*;
 
 @Configuration

@@ -1,16 +1,15 @@
 package dev.pack.seeder;
 
 import dev.pack.config.ApplicationConfig;
-import dev.pack.modules.action.Action;
-import dev.pack.modules.action.ActionRepository;
+import dev.pack.modules.admin.action.Action;
+import dev.pack.modules.admin.action.ActionRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
-import org.springframework.context.annotation.Configuration;
 
-import static dev.pack.modules.enums.Role.*;
+import static dev.pack.modules.admin.enums.Role.*;
 
 @Transactional
 //@Configuration

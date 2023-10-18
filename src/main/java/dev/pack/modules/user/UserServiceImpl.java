@@ -3,7 +3,7 @@ package dev.pack.modules.user;
 import dev.pack.exception.DataNotFoundException;
 import dev.pack.exception.DuplicateDataException;
 import dev.pack.exception.ErrorSoftDelete;
-import dev.pack.modules.enums.Role;
+import dev.pack.modules.admin.enums.Role;
 import dev.pack.utils.SoftDeleteRepository;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;

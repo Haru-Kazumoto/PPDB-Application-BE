@@ -1,12 +1,8 @@
 package dev.pack.modules.user;
 
-import dev.pack.modules.enums.Role;
+import dev.pack.modules.admin.enums.Role;
 import lombok.NonNull;
 import org.springframework.data.domain.Pageable;
-
-
-import java.util.List;
-import java.util.Map;
 
 public interface UserService {
 

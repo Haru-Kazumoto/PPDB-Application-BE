@@ -4,10 +4,9 @@ import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import dev.pack.modules.enums.Role;
-import dev.pack.modules.jalur_pendaftaran.JalurPendaftaran;
-import dev.pack.modules.alur_ppdb.AlurPpdb;
-import dev.pack.modules.pendaftar_ppdb.PendaftarPpdb;
+import dev.pack.modules.admin.enums.Role;
+import dev.pack.modules.admin.jalur_pendaftaran.JalurPendaftaran;
+import dev.pack.modules.admin.alur_ppdb.AlurPpdb;
 import dev.pack.modules.token.Token;
 import dev.pack.utils.CustomDateSerializer;
 import dev.pack.utils.Timestamps;
@@ -22,7 +21,7 @@ import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import static dev.pack.modules.enums.Role.*;
+import static dev.pack.modules.admin.enums.Role.*;
 
 @EqualsAndHashCode(callSuper = false)
 @Data
@@ -83,13 +82,6 @@ public class User extends Timestamps implements UserDetails {
           orphanRemoval = true
   )
   private List<JalurPendaftaran> jalurPendaftaranList = new ArrayList<>();
-
-  @OneToOne(
-          mappedBy = "userId",
-          cascade = CascadeType.ALL,
-          orphanRemoval = true
-  )
-  private PendaftarPpdb pendaftarPpdb;
 
   /**
    * STUDENT DATA

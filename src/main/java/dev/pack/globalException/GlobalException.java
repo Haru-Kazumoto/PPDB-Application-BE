@@ -36,23 +36,23 @@ public class GlobalException extends ResponseEntityExceptionHandler {
 
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     @ExceptionHandler(BadCredentialsException.class)
-    protected ResponseEntity<Object> handleBadCredentialsException(BadCredentialsException ex, HttpHeaders headers, HttpStatusCode statusCode, WebRequest request) {
+    public ResponseEntity<Object> handleBadCredentialsException(BadCredentialsException ex, HttpHeaders headers, HttpStatusCode statusCode, WebRequest request) {
         ErrorResponse err = errorResponse(ex.getMessage(), new Date(), statusCode.value());
         return new ResponseEntity<>(err, headers, statusCode);
     }
 
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     @ExceptionHandler(AuthenticationException.class)
-    protected ResponseEntity<Object> handleAuthenticationException(AuthenticationException ex, HttpHeaders headers, HttpStatusCode statusCode, WebRequest request) {
+    public ResponseEntity<Object> handleAuthenticationException(AuthenticationException ex, HttpHeaders headers, HttpStatusCode statusCode, WebRequest request) {
         ErrorResponse err = errorResponse(ex.getMessage(), new Date(), statusCode.value());
         return new ResponseEntity<>(err, headers, statusCode);
     }
 
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(DataNotFoundException.class)
-    protected ResponseEntity<Object> handleDataNotFound(DataNotFoundException ex, HttpHeaders headers, HttpStatusCode statusCode){
+    public ResponseEntity<ErrorResponse> handleDataNotFound(DataNotFoundException ex, HttpHeaders headers, HttpStatusCode statusCode){
         ErrorResponse err = errorResponse(ex.getMessage(), new Date(), statusCode.value());
-        return new ResponseEntity<>(err, headers, statusCode);
+        return new ResponseEntity<>(err, statusCode);
     }
 
     @Override
