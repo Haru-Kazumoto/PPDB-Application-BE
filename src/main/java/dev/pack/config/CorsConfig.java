@@ -10,18 +10,24 @@ import org.springframework.web.filter.CorsFilter;
 public class CorsConfig {
 
     @Bean
-    public CorsFilter corsFilter(){
+    public CorsFilter corsFilter() {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration configuration = new CorsConfiguration();
 
-        configuration.addAllowedOrigin("http://localhost:7890");
-        configuration.addAllowedHeader("authorization");
+        // Mengizinkan semua origin
+        configuration.addAllowedOrigin("*");
+
+        // Mengizinkan semua header
+        configuration.addAllowedHeader("*");
+
+        // Mengizinkan semua method (GET, POST, PUT, dll.)
         configuration.addAllowedMethod("*");
+
+        // Mengatur max age (durasi cache) dalam detik
         configuration.setMaxAge(3600L);
 
         source.registerCorsConfiguration("/**", configuration);
 
         return new CorsFilter(source);
     }
-
 }
