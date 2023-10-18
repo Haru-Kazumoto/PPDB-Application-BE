@@ -195,10 +195,13 @@ public class Seeder implements CommandLineRunner {
                     .gelombangId(gelombangRepository.getReferenceById(1))
                     .build();
 
+<<<<<<< HEAD
             // PendaftarPpdb pendaftarPpdb = PendaftarPpdb.builder()
 //                    .pembelianFormulirList()
                     // .build();
 
+=======
+>>>>>>> 275ec6b166c6d026fcf3fd4d969efeb72271e926
             jalurPendaftaranRepository.save(jalurPendaftaran);
             keteranganRepository.save(keterangan);
             biayaTambahanRepository.save(biayaTambahan);

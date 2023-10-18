@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import dev.pack.modules.admin.enums.Banks;
 import dev.pack.modules.admin.jalur_pendaftaran.JalurPendaftaran;
+import dev.pack.modules.admin.pendaftar_gelombang.PendaftarGelombang;
 import dev.pack.modules.admin.ujian_penerimaan.UjianPenerimaan;
 import dev.pack.modules.admin.kegiatan.Kegiatan;
 import dev.pack.modules.admin.pengunguman.Pengunguman;
@@ -67,6 +68,13 @@ public class Gelombang extends Timestamps {
             mappedBy = "gelombangId"
     )
     private List<Kegiatan> kegiatanList;
+
+    @OneToOne(
+            cascade = CascadeType.ALL,
+            orphanRemoval = true,
+            mappedBy = "gelombangId"
+    )
+    private PendaftarGelombang pendaftarGelombang;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "jalurPendaftaranEntityId")
