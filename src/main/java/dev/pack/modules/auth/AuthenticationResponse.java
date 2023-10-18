@@ -1,4 +1,4 @@
-package dev.pack.modules.admin.auth;
+package dev.pack.modules.auth;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;

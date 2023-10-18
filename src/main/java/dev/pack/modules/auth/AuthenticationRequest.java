@@ -1,4 +1,4 @@
-package dev.pack.modules.admin.auth;
+package dev.pack.modules.auth;
 
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;

@@ -17,7 +17,6 @@ import dev.pack.modules.admin.kegiatan.Kegiatan;
 import dev.pack.modules.admin.kegiatan.KegiatanRepository;
 import dev.pack.modules.admin.keterangan.Keterangan;
 import dev.pack.modules.admin.keterangan.KeteranganRepository;
-import dev.pack.modules.admin.pendaftar_ppdb.PendaftarPpdb;
 import dev.pack.modules.admin.pengunguman.Pengunguman;
 import dev.pack.modules.admin.pengunguman.PengungumanRepository;
 import dev.pack.modules.admin.ujian_penerimaan.UjianPenerimaan;
@@ -193,10 +192,6 @@ public class Seeder implements CommandLineRunner {
                     .waktuDibuka(new Date())
                     .waktuDitutup(new Date())
                     .gelombangId(gelombangRepository.getReferenceById(1))
-                    .build();
-
-            PendaftarPpdb pendaftarPpdb = PendaftarPpdb.builder()
-//                    .pembelianFormulirList()
                     .build();
 
             jalurPendaftaranRepository.save(jalurPendaftaran);

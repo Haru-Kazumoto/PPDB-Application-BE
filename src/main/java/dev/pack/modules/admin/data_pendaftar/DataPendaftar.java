@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import dev.pack.modules.admin.detail_pendaftar.DetailPendaftar;
 import dev.pack.modules.admin.enums.StatusPendaftaran;
+import dev.pack.modules.admin.pendaftar_gelombang.PendaftarGelombang;
 import dev.pack.utils.Timestamps;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -29,10 +30,14 @@ public class DataPendaftar extends Timestamps implements Serializable {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String nama;
+
     @Column(unique = true)
     private String nomorTelepon;
+
     private Date tanggalMendaftar;
     private StatusPendaftaran statusPendaftaran;
+
+    private Integer pendaftarGelombang_id; //Relation key
 
     @OneToOne(
             cascade = CascadeType.ALL,
@@ -40,5 +45,9 @@ public class DataPendaftar extends Timestamps implements Serializable {
             mappedBy = "dataPendaftarId"
     )
     private DetailPendaftar detailPendaftar;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "pendaftarGelombangEntityId")
+    private PendaftarGelombang pendaftarGelombangId;
 
 }

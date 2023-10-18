@@ -1,4 +1,4 @@
-package dev.pack.modules.admin.auth;
+package dev.pack.modules.auth;
 
 import dev.pack.modules.admin.enums.Role;
 import jakarta.validation.constraints.Email;

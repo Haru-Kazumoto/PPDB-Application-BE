@@ -11,6 +11,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService{
@@ -53,6 +55,12 @@ public class UserServiceImpl implements UserService{
                 .orElseThrow(() -> new DataNotFoundException(String.format("Role only have : ", role.getAuthorities())));
 
         return this.userRepository.findAllByRole(roles.getRole());
+    }
+
+    @Override
+    public User getUserByUsername(String username) {
+        return this.userRepository.findByUsername(username)
+                .orElseThrow(() -> new DataNotFoundException("Username not found."));
     }
 
     @Override

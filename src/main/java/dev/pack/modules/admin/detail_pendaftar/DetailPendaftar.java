@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import dev.pack.modules.admin.data_pendaftar.DataPendaftar;
 import dev.pack.modules.admin.enums.StatusPembayaran;
+import dev.pack.modules.admin.prestasi.Prestasi;
 import dev.pack.modules.admin.struk_pembayaran.StrukPembayaran;
 import dev.pack.utils.Timestamps;
 import jakarta.persistence.*;
@@ -42,8 +43,15 @@ public class DetailPendaftar extends Timestamps {
     )
     private StrukPembayaran strukPembayaran;
 
+    @OneToOne(
+            cascade = CascadeType.ALL,
+            mappedBy = "detailPendaftarId",
+            orphanRemoval = true
+    )
+    private Prestasi prestasi;
+
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "detailPendaftarId", updatable = false)
+    @JoinColumn(name = "dataPendaftarEntityId", updatable = false)
     @JsonIgnore
     private DataPendaftar dataPendaftarId;
 }

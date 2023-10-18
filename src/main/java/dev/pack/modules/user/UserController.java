@@ -1,6 +1,7 @@
 package dev.pack.modules.user;
 
 import dev.pack.modules.admin.enums.Role;
+import dev.pack.payloads.HttpResponse;
 import dev.pack.payloads.PayloadsResponse;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.validation.Valid;
@@ -25,6 +26,8 @@ public class UserController {
     private final UserService userService;
     private final ModelMapper model;
 
+    private final HttpResponse http;
+
     @GetMapping(path = "/index-all")
     @PreAuthorize("hasAnyAuthority('user:read','admin:read')")
     public ResponseEntity<Iterable<?>> index(
@@ -45,6 +48,12 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body(
                 this.userService.getAllUserByRole(role, pageable)
         );
+    }
+
+    @GetMapping(path = "/findByUsername")
+    @PreAuthorize("hasAnyAuthority('user:read','admin:read')")
+    public ResponseEntity<?> findByusername(@RequestParam(name = "username", defaultValue = "") String username){
+        return http.response(HttpStatus.OK.value(), new Date(), this.userService.getUserByUsername(username));
     }
 
     @PostMapping("/post")
