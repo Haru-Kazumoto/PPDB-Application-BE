@@ -58,6 +58,8 @@ public class SecurityConfiguration {
                     //Role user
                     request.requestMatchers(String.format("/api/v%d/user/**",config.APP_VERSION)).hasAnyRole(USER.name(), ADMIN.name());
 
+                    // request.requestMatchers("/api/v1/user/findByUsername").permitAll();
+                    
                     //User authority
                     request.requestMatchers(GET, String.format("/api/v%d/user/**", config.APP_VERSION)).hasAnyRole(USER.name(), ADMIN.name());
                     request.requestMatchers(POST, String.format("/api/v%d/user/**", config.APP_VERSION)).hasAnyRole(USER.name(), ADMIN.name());
