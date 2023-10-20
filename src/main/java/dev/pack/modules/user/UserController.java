@@ -50,12 +50,6 @@ public class UserController {
         );
     }
 
-    @GetMapping(path = "/findByUsername")
-    @PreAuthorize("hasAnyAuthority('user:read','admin:read')")
-    public ResponseEntity<?> findByusername(@RequestParam(name = "username", defaultValue = "") String username){
-        return http.response(HttpStatus.OK.value(), new Date(), this.userService.getUserByUsername(username));
-    }
-
     @PostMapping("/post")
     @PreAuthorize("hasAnyAuthority('user:create','admin:create')")
     public ResponseEntity<?> store(@RequestBody @Valid UserDto bodyDto){

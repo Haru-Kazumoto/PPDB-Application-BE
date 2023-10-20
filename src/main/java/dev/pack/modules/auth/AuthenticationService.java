@@ -1,6 +1,7 @@
 package dev.pack.modules.auth;
 
 import dev.pack.config.JwtService;
+import dev.pack.exception.DataNotFoundException;
 import dev.pack.modules.token.Token;
 import dev.pack.modules.token.TokenRepository;
 import dev.pack.modules.token.TokenType;
@@ -17,6 +18,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -44,9 +46,10 @@ public class AuthenticationService {
     saveUserToken(savedUser, jwtToken);
 
     return AuthenticationResponse.builder()
-        .accessToken(jwtToken)
+            .accessToken(jwtToken)
             .refreshToken(refreshToken)
-        .build();
+            .role(String.valueOf(savedUser.getRole()))
+            .build();
   }
 
   public AuthenticationResponse authenticate(AuthenticationRequest request) {
@@ -69,6 +72,7 @@ public class AuthenticationService {
     return AuthenticationResponse.builder()
             .accessToken(jwtToken)
             .refreshToken(refreshToken)
+            .role(String.valueOf(user.getRole()))
             .build();
   }
 
@@ -95,6 +99,11 @@ public class AuthenticationService {
     });
 
     tokenRepository.saveAll(validUserTokens);
+  }
+
+  public User findUserByUsername(String username){
+    return this.userRepository.findByUsername(username)
+            .orElseThrow(() -> new DataNotFoundException("Username not found."));
   }
 
   public void refreshToken(HttpServletRequest request, HttpServletResponse response) throws IOException {

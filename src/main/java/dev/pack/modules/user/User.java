@@ -96,7 +96,6 @@ public class User extends Timestamps implements UserDetails {
         isAdmin = true;
       }
 
-
   }
 
   @Override

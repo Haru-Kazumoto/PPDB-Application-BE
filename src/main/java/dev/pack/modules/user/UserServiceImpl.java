@@ -97,10 +97,4 @@ public class UserServiceImpl implements UserService{
         if(data.getDeletedAt() != null) throw new ErrorSoftDelete("Data has been deactive.");
         this.softDeleteRepository.softDeleteById(data.getId());
     }
-
-//    @Override
-//    public List<User> getAllDataHasDeactive(@NonNull Integer id) {
-//        User data = this.userRepository.findById(id).orElseThrow(() -> new DataNotFoundException("Id not found."));
-//        return this.userRepository.findAllDeactive(data.getId());
-//    }
 }

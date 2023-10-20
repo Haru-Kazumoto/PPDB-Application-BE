@@ -3,7 +3,7 @@ package dev.pack.modules.admin.prestasi;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-import dev.pack.modules.admin.detail_pendaftar.DetailPendaftar;
+import dev.pack.modules.admin.data_pendaftar.DataPendaftar;
 import dev.pack.utils.Timestamps;
 import jakarta.persistence.*;
 import lombok.*;
@@ -28,8 +28,8 @@ public class Prestasi extends Timestamps {
     private String kemampuanBahasa;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "detailPendaftarId", updatable = false)
+    @JoinColumn(name = "dataPendaftarId", updatable = false)
     @JsonIgnore
-    private DetailPendaftar detailPendaftarId;
+    private DataPendaftar dataPendaftarId;
 
 }
