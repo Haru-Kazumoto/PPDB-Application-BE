@@ -49,7 +49,6 @@ public class UserController {
                 this.userService.getAllUserByRole(role, pageable));
     }
 
-
     @PostMapping("/post")
     @PreAuthorize("hasAnyAuthority('user:create','admin:create')")
     public ResponseEntity<?> store(@RequestBody @Valid UserDto bodyDto) {

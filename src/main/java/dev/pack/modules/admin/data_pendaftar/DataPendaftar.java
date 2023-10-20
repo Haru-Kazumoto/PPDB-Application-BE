@@ -2,9 +2,10 @@ package dev.pack.modules.admin.data_pendaftar;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-import dev.pack.modules.admin.detail_pendaftar.DetailPendaftar;
 import dev.pack.modules.admin.enums.StatusPendaftaran;
 import dev.pack.modules.admin.pendaftar_gelombang.PendaftarGelombang;
+import dev.pack.modules.admin.prestasi.Prestasi;
+import dev.pack.modules.admin.struk_pembayaran.StrukPembayaran;
 import dev.pack.utils.Timestamps;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -39,12 +40,23 @@ public class DataPendaftar extends Timestamps implements Serializable {
 
     private Integer pendaftarGelombang_id; //Relation key
 
+    private String namaPendaftar;
+    private String alamatPendaftar;
+    private Boolean statusPembayaranPendaftar;
+
+    @OneToOne(
+            mappedBy = "dataPendaftarId",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    private StrukPembayaran strukPembayaran;
+
     @OneToOne(
             cascade = CascadeType.ALL,
-            orphanRemoval = true,
-            mappedBy = "dataPendaftarId"
+            mappedBy = "dataPendaftarId",
+            orphanRemoval = true
     )
-    private DetailPendaftar detailPendaftar;
+    private Prestasi prestasi;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "pendaftarGelombangEntityId")

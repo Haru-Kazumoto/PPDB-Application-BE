@@ -28,9 +28,4 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 
     @Query("SELECT u FROM User u WHERE u.deletedAt IS NULL ORDER BY u.id ASC")
     Page<User> findAllActive(Pageable pageable);
-
-
-
-//    @Query("SELECT u FROM User u WHERE u.deletedAt IS NOT NULL AND u.id = :id ORDER BY u.id ASC")
-//    List<User> findAllDeactive(Integer userId);
 }

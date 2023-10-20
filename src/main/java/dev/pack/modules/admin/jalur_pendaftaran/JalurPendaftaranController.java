@@ -22,6 +22,16 @@ public class JalurPendaftaranController {
 
     private final HttpResponse http;
 
+    /**
+     * CONTROLLER DOCUMENTATION
+     *
+     * [http://localhost:8080/api/v1/admin/jalur-pendaftaran/post]
+     * [http://localhost:8080/api/v1/admin/jalur-pendaftaran/index?userId=0]
+     * [http://localhost:8080/api/v1/admin/jalur-pendaftaran/update?dataId=0]
+     * [http://localhost:8080/api/v1/admin/jalur-pendaftaran/]
+     * [http://localhost:8080/api/v1/admin/jalur-pendaftaran]
+     */
+
     @PostMapping(path = "/post")
     public ResponseEntity<?> store(@RequestBody @Valid JalurPendaftaranDto.Create dto){
         JalurPendaftaran entity = modelMapper.map(dto, JalurPendaftaran.class);

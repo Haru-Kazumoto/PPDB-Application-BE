@@ -38,12 +38,7 @@ public class SecurityConfiguration {
                     request.requestMatchers("/api/public/**").permitAll();
 
                     //Authentication
-                    request.requestMatchers(
-                            String.format("/api/v%d/auth/login",config.APP_VERSION),
-                            String.format("/api/v%d/auth/logout",config.APP_VERSION),
-                            String.format("/api/v%d/auth/register",config.APP_VERSION),
-                            String.format("/api/v%d/auth/refresh-token",config.APP_VERSION)
-                    ).permitAll();
+                    request.requestMatchers(String.format("/api/v%d/auth/**",config.APP_VERSION)).permitAll();
 
                     //Role admin
                     request.requestMatchers(String.format("/api/v%d/admin/**", config.APP_VERSION)).hasRole(ADMIN.name());
@@ -66,6 +61,8 @@ public class SecurityConfiguration {
                     request.requestMatchers(PUT, String.format("/api/v%d/user/**", config.APP_VERSION)).hasAnyRole(USER.name(), ADMIN.name());
                     request.requestMatchers(PATCH, String.format("/api/v%d/user/**", config.APP_VERSION)).hasAnyRole(USER.name(), ADMIN.name());
                     request.requestMatchers(DELETE, String.format("/api/v%d/user/**", config.APP_VERSION)).hasAnyRole(USER.name(), ADMIN.name());
+
+                    request.requestMatchers("/api/v1/user/findByUsername?**").permitAll();
 
                     request.anyRequest().fullyAuthenticated();
                 }

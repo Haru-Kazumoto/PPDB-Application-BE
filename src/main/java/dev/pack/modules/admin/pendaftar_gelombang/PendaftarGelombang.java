@@ -27,8 +27,9 @@ public class PendaftarGelombang extends Timestamps {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    private Long jumlahPendaftar; //get all student that has registered by wave
-    private Long jumlahPendaftarDiterima;
+    private Integer jumlahPendaftar; //auto get all student that has registered by wave
+
+    private Integer jumlahPendaftarDiterima; //Auto get data when data from dataPendaftar
 
     @OneToMany(
             cascade = CascadeType.ALL,
@@ -42,4 +43,14 @@ public class PendaftarGelombang extends Timestamps {
     @JsonIgnore
     private Gelombang gelombangId;
 
+    //TODO:BUAT DATA OTOMATIS UNTUK MENGHITUNG DATA DATA USER YANG MENDAFTAR DI GELOMBANG INI.
+
+    @PrePersist
+    public void onCount(){
+        this.jumlahPendaftar = dataPendaftarList.size();
+        this.jumlahPendaftarDiterima = Math.toIntExact(dataPendaftarList
+                .stream()
+                .filter(DataPendaftar::getStatusPembayaranPendaftar)
+                .count());
+    }
 }

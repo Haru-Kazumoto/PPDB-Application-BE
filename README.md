@@ -1,7 +1,8 @@
-# Spring Boot 3.0 Security with JWT Implementation
-This project demonstrates the implementation of security using Spring Boot 3.0 and JSON Web Tokens (JWT). It includes the following features:
+# PPDB ONLINE APPLICATION
+PPDB online adalah aplikasi untuk pendaftaran siswa masuk ke instansi sekolah secara online.
 
 ## Features
+* 2 panel management (student and admin)
 * User registration and login with JWT authentication
 * Password encryption using BCrypt
 * Role-based authorization with Spring Security
@@ -25,10 +26,12 @@ To get started with this project, you will need to have the following installed 
 
 To build and run the project, follow these steps:
 
-* Clone the repository: `git clone https://github.com/ali-bouali/spring-boot-3-jwt-security.git`
-* Navigate to the project directory: cd spring-boot-security-jwt
-* Add database "jwt_security" to postgres 
+* Clone the repository: `git clone https://github.com/Haru-Kazumoto/PPDB-Application-BE.git`
+* Navigate to the project directory: cd PPDB-Application-BE
+* Add database "PPDB-DB" to postgres 
 * Build the project: mvn clean install
 * Run the project: mvn spring-boot:run 
 
 -> The application will be available at http://localhost8080:.
+
+

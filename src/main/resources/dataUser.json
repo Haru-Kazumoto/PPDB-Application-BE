@@ -6,7 +6,7 @@
   "role": "",
   "joinAt": "",
   "isAdmin": true,
-  "ppdbFlows": [
+  "alurPpdb": [
     {
       "id": 1,
       "title": "",
@@ -20,7 +20,7 @@
       "nama_jalur_pendaftaran": "PEMBELIAN FORMULIR",
       "waktu_dibuka": "",
       "waktu_ditutup": "",
-      "biaya_pendaftaran": 1,
+      "biaya_pendaftaran": 100.00,
       "keterangan": [
         {
           "id": 1,
@@ -60,9 +60,9 @@
           "waktu_pendaftaran_dibuka": "1 November 2023",
           "waktu_pendaftaran_ditutup": "30 November 2023",
           "nama_bank": "BCA",
-          "nomor_rekening": 123456789,
+          "nomor_rekening": "123456789",
           "nama_pemilik_rekening": "",
-          "biaya_pendaftaran": 1,
+          "biaya_pendaftaran": 100.00,
           "ujian_penerimaan": [
             {
               "nama_ujian_penerimaan": "Test Akademik Gel.1",
@@ -93,80 +93,23 @@
                 "nama": "",
                 "no_telepon": "",
                 "tanggal_mendaftar": "",
-                "status_pendaftaran": "BELUM_TERKONFIRMASI",
-                "detail_pendaftar": {
-                  "foto_pendaftar": "url.img",
-                  "nama_pendaftar": "",
-                  "alamat_pendaftar": "",
-                  "no_telpon_pendaftar": "",
-                  "tanggal_mendaftar": "",
-                  "status_pembayaran_pendaftar": "PEMBAYARAN_TERKONFIRMASI",
-                  "struk_pembayaran": {
-                    "foto_pembayaran": "photo.img",
-                    "tipe_pembayaran": "TUNAI",
-                    "status_pembayaran": "TERKONFIRMASI",
-                    "jumlah_pembayaran": ""
-                  },
-                  "prestasi": {
-                    "id": 1,
-                    "pengalaman": "",
-                    "sertifikasi": "",
-                    "bahasa": ""
-                  }
-                }
-              },
-              {
-                "id": 2,
-                "nama": "",
-                "no_telepon": "",
-                "tanggal_mendaftar": "",
-                "status_pendaftaran": "BELUM_TERKONFIRMASI",
-                "detail_pendaftar": {
-                  "foto_pendaftar": "url.img",
-                  "nama_pendaftar": "",
-                  "alamat_pendaftar": "",
-                  "no_telpon_pendaftar": "",
-                  "tanggal_mendaftar": "",
-                  "status_pembayaran_pendaftar": "PEMBAYARAN_TERKONFIRMASI",
-                  "struk_pembayaran": {
-                    "foto_pembayaran": "photo.img",
-                    "tipe_pembayaran": "TUNAI",
-                    "status_pembayaran": "TERKONFIRMASI",
-                    "jumlah_pembayaran": ""
-                  },
-                  "prestasi": {
-                    "id": 1,
-                    "pengalaman": "",
-                    "sertifikasi": "",
-                    "bahasa": ""
-                  }
-                }
-              },
-              {
-                "id": 3,
-                "nama": "",
-                "no_telepon": "",
-                "tanggal_mendaftar": "",
-                "status_pendaftaran": "BELUM_TERKONFIRMASI",
-                "detail_pendaftar": {
-                  "foto_pendaftar": "url.img",
-                  "nama_pendaftar": "",
-                  "alamat_pendaftar": "",
-                  "no_telpon_pendaftar": "",
-                  "tanggal_mendaftar": "",
-                  "status_pembayaran_pendaftar": "PEMBAYARAN_TERKONFIRMASI",
-                  "struk_pembayaran": {
-                    "foto_pembayaran": "photo.img",
-                    "tipe_pembayaran": "TUNAI",
-                    "status_pembayaran": "TERKONFIRMASI",
-                    "jumlah_pembayaran": ""
-                  },
-                  "prestasi": {
-                    "id": 1,
-                    "pengalaman": "",
-                    "sertifikasi": "",
-                    "bahasa": ""
-                  }
+                "status_pendaftaran": false,
+                "foto_pendaftar": "url.img",
+                "nama_pendaftar": "",
+                "alamat_pendaftar": "",
+                "no_telpon_pendaftar": "",
+                "status_pembayaran_pendaftar": false,
+                "struk_pembayaran": {
+                  "foto_pembayaran": "photo.img",
+                  "tipe_pembayaran": "TUNAI",
+                  "status_pembayaran": false,
+                  "jumlah_pembayaran": ""
+                },
+                "prestasi": {
+                  "id": 1,
+                  "pengalaman": "",
+                  "sertifikasi": "",
+                  "bahasa": ""
                 }
               }
             ]
