@@ -3,6 +3,8 @@ package dev.pack.config;
 import dev.pack.utils.LoggingInterceptor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.lang.NonNull;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -15,5 +17,14 @@ public class InterceptorConfig implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(loggingInterceptor);
+    }
+
+    @Override
+    public void addCorsMappings(@NonNull CorsRegistry registry) {
+        registry
+                .addMapping("/**")
+                .allowedOrigins("*")
+                .allowedMethods("*")
+                .allowCredentials(true);
     }
 }
