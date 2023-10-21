@@ -1,23 +1,23 @@
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/PPDB-DB  # Ubah port jika diperlukan
-    username: postgres
-    password: admin
+    url: jdbc:mysql://localhost:3306/PPDB_DB
+    username: root
+    password: Akbar_123
     hikari:
       connection-timeout: 3000
       maximum-pool-size: 10
       minimum-idle: 4
       idle-timeout: 600000
       pool-name: PPDB Application Pool
-    driver-class-name: org.postgresql.Driver  # Mengganti driver class ke PostgreSQL
+    driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     hibernate:
       ddl-auto: update
     properties:
       hibernate:
-        dialect: org.hibernate.dialect.PostgreSQLDialect  # Mengganti dialect ke PostgreSQL
+        dialect: org.hibernate.dialect.MySQLDialect
         format_sql: true
-    database: postgresql  # Mengganti tipe database ke postgresql
+    database: mysql
 
 application:
   version: 1
