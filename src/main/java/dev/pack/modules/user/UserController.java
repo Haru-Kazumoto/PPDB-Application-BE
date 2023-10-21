@@ -20,7 +20,7 @@ import java.util.Date;
 @RequiredArgsConstructor
 @RequestMapping(path = "/api/v${application.version}/user")
 @PreAuthorize("hasAnyRole('USER','ADMIN')")
-@RolesAllowed({"ROLE_USER","ROLE_ADMIN"})
+@RolesAllowed({ "ROLE_USER", "ROLE_ADMIN" })
 public class UserController {
 
     private final UserService userService;
@@ -32,7 +32,7 @@ public class UserController {
     @PreAuthorize("hasAnyAuthority('user:read','admin:read')")
     public ResponseEntity<Iterable<?>> index(
             @RequestParam(name = "page", defaultValue = "0") int page,
-            @RequestParam(name = "size", defaultValue = "10") int size){
+            @RequestParam(name = "size", defaultValue = "10") int size) {
         Pageable pageable = PageRequest.of(page, size);
         Iterable<User> dataUsers = userService.getAllUser(pageable);
         return ResponseEntity.status(HttpStatus.OK).body(dataUsers);
@@ -43,16 +43,15 @@ public class UserController {
     public ResponseEntity<?> index(
             @RequestParam(name = "page", defaultValue = "0") int page,
             @RequestParam(name = "size", defaultValue = "10") int size,
-            @RequestParam(name = "role", defaultValue = "") Role role){
-        Pageable pageable = PageRequest.of(page,size);
+            @RequestParam(name = "role", defaultValue = "") Role role) {
+        Pageable pageable = PageRequest.of(page, size);
         return ResponseEntity.status(HttpStatus.OK).body(
-                this.userService.getAllUserByRole(role, pageable)
-        );
+                this.userService.getAllUserByRole(role, pageable));
     }
 
     @PostMapping("/post")
     @PreAuthorize("hasAnyAuthority('user:create','admin:create')")
-    public ResponseEntity<?> store(@RequestBody @Valid UserDto bodyDto){
+    public ResponseEntity<?> store(@RequestBody @Valid UserDto bodyDto) {
         User mapData = model.map(bodyDto, User.class);
         User result = userService.createUser(mapData);
 
@@ -60,8 +59,6 @@ public class UserController {
                 new PayloadsResponse(
                         HttpStatus.CREATED.value(),
                         new Date(),
-                        result
-                )
-        );
+                        result));
     }
 }
