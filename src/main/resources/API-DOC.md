@@ -80,3 +80,12 @@ Mengambil data user berdasarnam username untuk keperluan login di Front End
 }
 ```
 ---
+## User
+
+- [GET /user/index-all]()
+- [GET /user/index-by-role]()
+- [POST /user/post]()
+- []()
+
+---
+
