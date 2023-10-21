@@ -12,12 +12,15 @@ import dev.pack.utils.CustomDateSerializer;
 import dev.pack.utils.Timestamps;
 import jakarta.persistence.*;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
 import lombok.*;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -34,6 +37,8 @@ import static dev.pack.modules.admin.enums.Role.*;
         generator = ObjectIdGenerators.PropertyGenerator.class,
         property = "id"
 )
+//@SQLDelete(sql = "update user_tbl set deletedAt = current_timestamp where id = ?")
+//@Where(clause = "deletedAt = current_timestamps")
 public class User extends Timestamps implements UserDetails {
 
   @Id @GeneratedValue(strategy = GenerationType.IDENTITY)

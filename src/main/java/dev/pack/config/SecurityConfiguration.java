@@ -76,6 +76,8 @@ public class SecurityConfiguration {
             (form) -> {
                 form.logoutUrl(String.format("/api/v%d/auth/logout", config.APP_VERSION));
                 form.addLogoutHandler(logoutHandler);
+                form.logoutSuccessUrl(String.format("/api/v%d/auth/logout?logout", config.APP_VERSION));
+                form.invalidateHttpSession(true);
                 form.logoutSuccessHandler((request, response, authentication) -> SecurityContextHolder.clearContext());
             }
     );
