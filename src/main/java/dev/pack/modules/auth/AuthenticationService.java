@@ -8,9 +8,12 @@ import dev.pack.modules.token.TokenType;
 import dev.pack.modules.user.User;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dev.pack.modules.user.UserRepository;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -30,6 +33,9 @@ public class AuthenticationService {
 
   private final UserRepository userRepository;
   private final TokenRepository tokenRepository;
+
+  @Value("${application.security.jwt.secret-key}")
+  private String SIGNING_KEY;
 
   public AuthenticationResponse register(RegisterRequest request) {
     var user = User.builder()
@@ -99,6 +105,17 @@ public class AuthenticationService {
     });
 
     tokenRepository.saveAll(validUserTokens);
+  }
+
+  public User decodeJwt(String token){
+    Claims claims = Jwts.parserBuilder()
+            .setSigningKey(this.jwtService.getSignInKey())
+            .build()
+            .parseClaimsJws(token)
+            .getBody();
+
+    return this.userRepository.findByUsername(claims.getSubject())
+            .orElse(null);
   }
 
   public User findUserByUsername(String username){

@@ -27,4 +27,5 @@ public class InterceptorConfig implements WebMvcConfigurer {
                 .allowedMethods("*")
                 .allowCredentials(true);
     }
+
 }
