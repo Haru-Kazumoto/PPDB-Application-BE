@@ -15,10 +15,10 @@ public class CorsConfig {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration configuration = new CorsConfiguration();
 
-        // Mengizinkan semua origin
+        // Mengizinkan hanya origin yang spesifik
         configuration.addAllowedOrigin("*");
 
-        // Mengizinkan semua header
+        // Mengizinkan semua header yang diperlukan
         configuration.addAllowedHeader("*");
 
         // Mengizinkan semua method (GET, POST, PUT, dll.)
@@ -32,3 +32,4 @@ public class CorsConfig {
         return new CorsFilter(source);
     }
 }
+
