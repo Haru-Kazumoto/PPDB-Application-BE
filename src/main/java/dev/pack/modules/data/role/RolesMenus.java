@@ -1,6 +1,5 @@
 package dev.pack.modules.data.role;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -27,11 +26,8 @@ public class RolesMenus {
             nullable = false,
             name = "role_id"
     )
-    private Integer role_id;
-
+    @JoinColumn(name = "roles",nullable = false)
     @OneToOne(cascade = CascadeType.ALL)
-//    @JoinColumn(name = "roles",nullable = false)
-    @JsonIgnore
-    private Roles roles;
+    private Roles role_id;
 
 }
