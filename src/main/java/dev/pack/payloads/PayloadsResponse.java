@@ -21,6 +21,6 @@ public class PayloadsResponse {
     @Temporal(TemporalType.DATE)
     private Date timestamps = new Date();
 
-    private Object payload;
+    private Object data;
 
 }
