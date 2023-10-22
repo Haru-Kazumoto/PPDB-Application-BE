@@ -1,7 +1,7 @@
 package dev.pack.modules.alur_ppdb;
 
 import com.fasterxml.jackson.annotation.*;
-import dev.pack.modules.newdata.user.User;
+import dev.pack.modules.data.user.User;
 import dev.pack.utils.Timestamps;
 import jakarta.persistence.*;
 import lombok.*;

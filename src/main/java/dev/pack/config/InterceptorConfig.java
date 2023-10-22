@@ -23,7 +23,7 @@ public class InterceptorConfig implements WebMvcConfigurer {
     public void addCorsMappings(@NonNull CorsRegistry registry) {
         registry
                 .addMapping("/**")
-                .allowedOriginPatterns("*")
+                .allowedOriginPatterns("http://localhost:8000")
                 .allowedMethods("*")
                 .allowCredentials(true);
     }

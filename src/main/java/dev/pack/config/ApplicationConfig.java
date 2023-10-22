@@ -1,6 +1,6 @@
 package dev.pack.config;
 
-import dev.pack.modules.newdata.user.UserRepository;
+import dev.pack.modules.data.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Value;

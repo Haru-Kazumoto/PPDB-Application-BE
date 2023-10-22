@@ -2,20 +2,15 @@ package dev.pack.seeder;
 
 import dev.pack.modules.alur_ppdb.AlurPpdbRepository;
 import dev.pack.modules.alur_ppdb.AlurPpdb;
-import dev.pack.modules.newdata.user.User;
-import dev.pack.modules.newdata.user.UserRepository;
+import dev.pack.modules.data.user.User;
+import dev.pack.modules.data.user.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.UnexpectedRollbackException;
-
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
 import static dev.pack.modules.enums.Role.ADMIN;
 import static dev.pack.modules.enums.Role.USER;
