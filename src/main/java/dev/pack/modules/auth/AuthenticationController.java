@@ -55,7 +55,7 @@ public class AuthenticationController {
     );
   }
 
-  @GetMapping(path = "/decode")
+  @GetMapping(path = "/session")
   public ResponseEntity<?> decodeJWT(@RequestParam(name = "token", defaultValue = "") String token){
     return ResponseEntity.status(OK).body(
             new PayloadsResponse(
