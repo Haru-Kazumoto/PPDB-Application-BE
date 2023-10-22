@@ -30,7 +30,7 @@ public class RolesMenus {
     private Integer role_id;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "roles",nullable = false)
+//    @JoinColumn(name = "roles",nullable = false)
     @JsonIgnore
     private Roles roles;
 
