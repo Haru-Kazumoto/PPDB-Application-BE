@@ -1,29 +1,9 @@
 package dev.pack.seeder;
 
-import dev.pack.modules.admin.alur_ppdb.AlurPpdbRepository;
-import dev.pack.modules.admin.biaya.BiayaRepository;
-import dev.pack.modules.admin.biaya_tambahan.BiayaTambahanRepository;
-import dev.pack.modules.admin.enums.Banks;
-import dev.pack.modules.admin.enums.FormPurchaseType;
-import dev.pack.modules.admin.alur_ppdb.AlurPpdb;
-import dev.pack.modules.admin.enums.MediaTest;
-import dev.pack.modules.admin.gelombang_ppdb.Gelombang;
-import dev.pack.modules.admin.gelombang_ppdb.GelombangRepository;
-import dev.pack.modules.admin.jalur_pendaftaran.JalurPendaftaranRepository;
-import dev.pack.modules.admin.jalur_pendaftaran.JalurPendaftaran;
-import dev.pack.modules.admin.biaya_tambahan.BiayaTambahan;
-import dev.pack.modules.admin.biaya.Biaya;
-import dev.pack.modules.admin.kegiatan.Kegiatan;
-import dev.pack.modules.admin.kegiatan.KegiatanRepository;
-import dev.pack.modules.admin.keterangan.Keterangan;
-import dev.pack.modules.admin.keterangan.KeteranganRepository;
-// import dev.pack.modules.admin.pendaftar_ppdb.PendaftarPpdb;
-import dev.pack.modules.admin.pengunguman.Pengunguman;
-import dev.pack.modules.admin.pengunguman.PengungumanRepository;
-import dev.pack.modules.admin.ujian_penerimaan.UjianPenerimaan;
-import dev.pack.modules.admin.ujian_penerimaan.UjianPenerimaanRepository;
-import dev.pack.modules.user.User;
-import dev.pack.modules.user.UserRepository;
+import dev.pack.modules.alur_ppdb.AlurPpdbRepository;
+import dev.pack.modules.alur_ppdb.AlurPpdb;
+import dev.pack.modules.newdata.user.User;
+import dev.pack.modules.newdata.user.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -37,24 +17,16 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import static dev.pack.modules.admin.enums.Role.ADMIN;
-import static dev.pack.modules.admin.enums.Role.USER;
+import static dev.pack.modules.enums.Role.ADMIN;
+import static dev.pack.modules.enums.Role.USER;
 
-@Configuration
+//@Configuration
 @Transactional
 @RequiredArgsConstructor
 public class Seeder implements CommandLineRunner {
 
     private final UserRepository userRepository;
-    private final JalurPendaftaranRepository jalurPendaftaranRepository;
-    private final KeteranganRepository keteranganRepository;
-    private final BiayaTambahanRepository biayaTambahanRepository;
-    private final BiayaRepository biayaRepository;
     private final AlurPpdbRepository alurPpdbRepository;
-    private final GelombangRepository gelombangRepository;
-    private final UjianPenerimaanRepository ujianPenerimaanRepository;
-    private final PengungumanRepository pengungumanRepository;
-    private final KegiatanRepository kegiatanRepository;
 
     private final PasswordEncoder passwordEncoder;
 
@@ -89,7 +61,6 @@ public class Seeder implements CommandLineRunner {
         if(countDataByRole == 0){
             User user = User.builder()
                     .username("student")
-                    .email("Student@gmail.com")
                     .password(passwordEncoder.encode("1234"))
                     .role(USER)
                     .build();
@@ -105,7 +76,6 @@ public class Seeder implements CommandLineRunner {
         if(countDataByRole == 0){
             User admin = User.builder()
                     .username("admin")
-                    .email("Admin@gmail.com")
                     .password(passwordEncoder.encode("1234"))
                     .role(ADMIN)
                     .build();
@@ -128,90 +98,4 @@ public class Seeder implements CommandLineRunner {
         log.info("Seed data :: {} -> {}","PPDBFLOW", alurPpdbRepository.count());
     }
 
-    public void seedRegisterPath(){
-        long countData = jalurPendaftaranRepository.count();
-        if(countData == 0) {
-            List<BiayaTambahan> biayaTambahans = new ArrayList<>();
-
-            JalurPendaftaran jalurPendaftaran = JalurPendaftaran.builder()
-                    .tipePembelian(FormPurchaseType.PEMBELIAN_FORMULIR)
-                    .namaJalurPendaftaran("PEMBELIAN FORMULIR")
-                    .waktuDibuka(new Date())
-                    .waktuDitutup(new Date())
-                    .biayaPendaftaran(200.00)
-                    .userId(userRepository.getReferenceById(2))
-                    .build();
-
-            Keterangan keterangan = Keterangan.builder()
-                    .namaKeterangan("Pembelian Formulir")
-                    .deskripsiKeterangan("Deskripsi pembelian Formulir")
-                    .jalurPendaftaranId(this.jalurPendaftaranRepository.getReferenceById(1))
-                    .build();
-
-            BiayaTambahan biayaTambahan = BiayaTambahan.builder()
-                    .judulBiaya("Biaya tambahan gedung")
-                    .jalurPendaftaranId(this.jalurPendaftaranRepository.getReferenceById(1))
-                    .build();
-
-            Biaya biaya = Biaya.builder()
-                    .biayaTambahanId(biayaTambahanRepository.getReferenceById(1))
-                    .namaBiayaTambahan("Biaya tambahan")
-                    .jumlahBiayaTambahan(100.00)
-                    .build();
-
-            Gelombang gelombang = Gelombang.builder()
-                    .namaGelombang("PENGEMBALIAN FORMULIR REGULER GEL.1")
-                    .diskonGelombang(50.0)
-                    .jumlahPenerimaan(200L)
-                    .waktuPendaftaranDibuka(new Date())
-                    .waktuPendaftaranDitutup(new Date())
-                    .namaBank(Banks.BCA)
-                    .nomorRekening("31293123971283")
-                    .namaPemilikRekening("USER 1")
-                    .biayaPendaftaran(100.00)
-                    .jalurPendaftaranId(this.jalurPendaftaranRepository.getReferenceById(1))
-                    .build();
-
-            UjianPenerimaan ujianPenerimaan = UjianPenerimaan.builder()
-                    .namaUjianPenerimaan("TEST AKADEMIK")
-                    .mediaTest(MediaTest.TEST_ONLINE)
-                    .waktuDibuka(new Date())
-                    .waktuDitutup(new Date())
-                    .lokasiTest("ONLINE")
-                    .kkm(90)
-                    .gelombangId(this.gelombangRepository.getReferenceById(1))
-                    .build();
-
-            Pengunguman pengunguman = Pengunguman.builder()
-                    .namaPengunguman("BATAS WAKTU UJIAN")
-                    .tanggalPengunguman(new Date())
-                    .gelombangId(gelombangRepository.getReferenceById(1))
-                    .build();
-
-            Kegiatan kegiatan = Kegiatan.builder()
-                    .namaKegiatan("TEST AKADEMIK")
-                    .waktuDibuka(new Date())
-                    .waktuDitutup(new Date())
-                    .gelombangId(gelombangRepository.getReferenceById(1))
-                    .build();
-
-            jalurPendaftaranRepository.save(jalurPendaftaran);
-            keteranganRepository.save(keterangan);
-            biayaTambahanRepository.save(biayaTambahan);
-            biayaRepository.save(biaya);
-            gelombangRepository.save(gelombang);
-            ujianPenerimaanRepository.save(ujianPenerimaan);
-            pengungumanRepository.save(pengunguman);
-            kegiatanRepository.save(kegiatan);
-        }
-
-        log.info("Seed data :: {} -> {}", "JALUR_PENDAFTARAN", jalurPendaftaranRepository.count());
-        log.info("Seed data :: {} -> {}", "BIAYA_TAMBAHAN", biayaTambahanRepository.count());
-        log.info("Seed data :: {} -> {}", "KETERANGAN", keteranganRepository.count());
-        log.info("Seed data :: {} -> {}", "BIAYA", biayaRepository.count());
-        log.info("Seed data :: {} -> {}", "GELOMBANG", gelombangRepository.count());;
-        log.info("Seed data :: {} -> {}", "UJIAN_PENERIMAAN", ujianPenerimaanRepository.count());
-        log.info("Seed data :: {} -> {}", "PENGUNGUMAN", pengungumanRepository.count());
-        log.info("Seed data :: {} -> {}", "KEGIATAN", kegiatanRepository.count());
-    }
 }

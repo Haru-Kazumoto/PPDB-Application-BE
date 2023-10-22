@@ -1,6 +1,7 @@
 package dev.pack.modules.auth;
 
-import dev.pack.modules.admin.enums.Role;
+import dev.pack.modules.enums.Role;
+import dev.pack.modules.newdata.student.StudentDto;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -38,7 +39,17 @@ public class RegisterRequest {
   @NoArgsConstructor
   public static class User{
 
-    //DATA USER HERE.
+    @NotEmpty(message = "Username cannot be empty!")
+    private String username;
+
+    @NotEmpty(message = "Password cannot be empty!")
+    private String password;
+
+    @NotNull(message = "Role is required")
+    private Role role;
+
+    @NotNull(message = "student data cannot be null!")
+    private StudentDto.OnRegister studentData;
 
   }
 

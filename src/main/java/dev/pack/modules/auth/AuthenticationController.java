@@ -23,12 +23,23 @@ public class AuthenticationController {
   private final HttpResponse http;
 
   @PostMapping("/register")
-  public ResponseEntity<PayloadsResponse> register(@RequestBody RegisterRequest request) {
+  public ResponseEntity<PayloadsResponse> registerAdmin(@RequestBody RegisterRequest.Admin request) {
     return ResponseEntity.status(CREATED).body(
             new PayloadsResponse(
                     CREATED.value(),
                     new Date(),
-                    this.service.register(request)
+                    this.service.registerAdmin(request)
+            )
+    );
+  }
+
+  @PostMapping("/register-student")
+  public ResponseEntity<PayloadsResponse> registerStudent(@RequestBody RegisterRequest.User request) {
+    return ResponseEntity.status(CREATED).body(
+            new PayloadsResponse(
+                    CREATED.value(),
+                    new Date(),
+                    this.service.registerStudent(request)
             )
     );
   }

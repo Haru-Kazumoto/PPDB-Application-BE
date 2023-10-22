@@ -2,12 +2,15 @@ package dev.pack.modules.auth;
 
 import dev.pack.config.JwtService;
 import dev.pack.exception.DataNotFoundException;
+import dev.pack.exception.DuplicateDataException;
+import dev.pack.modules.newdata.student.Student;
+import dev.pack.modules.newdata.student.StudentRepository;
 import dev.pack.modules.token.Token;
 import dev.pack.modules.token.TokenRepository;
 import dev.pack.modules.token.TokenType;
-import dev.pack.modules.user.User;
+import dev.pack.modules.newdata.user.User;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import dev.pack.modules.user.UserRepository;
+import dev.pack.modules.newdata.user.UserRepository;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import jakarta.servlet.http.HttpServletRequest;
@@ -21,7 +24,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -32,20 +34,53 @@ public class AuthenticationService {
   private final JwtService jwtService;
 
   private final UserRepository userRepository;
+  private final StudentRepository studentRepository;
   private final TokenRepository tokenRepository;
 
   @Value("${application.security.jwt.secret-key}")
   private String SIGNING_KEY;
 
-  public AuthenticationResponse register(RegisterRequest request) {
+  public AuthenticationResponse registerAdmin(RegisterRequest.Admin request) {
     var user = User.builder()
             .username(request.getUsername())
-            .email(request.getEmail())
             .password(passwordEncoder.encode(request.getPassword()))
             .role(request.getRole())
             .build();
 
     var savedUser = userRepository.save(user);
+    var jwtToken = jwtService.generateToken(user);
+    var refreshToken = jwtService.generateRefreshToken(user);
+
+    saveUserToken(savedUser, jwtToken);
+
+    return AuthenticationResponse.builder()
+            .accessToken(jwtToken)
+            .refreshToken(refreshToken)
+            .role(String.valueOf(savedUser.getRole()))
+            .build();
+  }
+
+  public AuthenticationResponse registerStudent(RegisterRequest.User request){
+    this.userRepository.findByUsername(request.getUsername()).ifPresent((username) -> {
+        throw new DuplicateDataException("Nomor whatsapp telah di registerasi.");
+    });
+
+    var student = Student.builder()
+            .name(request.getStudentData().getName())
+            .address(request.getStudentData().getAddress())
+            .school_origin(request.getStudentData().getSchool_origin())
+            .build();
+
+    var user = User.builder()
+            .username(request.getUsername())
+            .password(passwordEncoder.encode(request.getPassword()))
+            .role(request.getRole())
+            .student(student)
+            .build();
+
+    var savedStudent = this.studentRepository.save(student);
+    var savedUser = this.userRepository.save(user);
+
     var jwtToken = jwtService.generateToken(user);
     var refreshToken = jwtService.generateRefreshToken(user);
 
