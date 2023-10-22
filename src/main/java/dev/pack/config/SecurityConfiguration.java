@@ -14,18 +14,13 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.LogoutHandler;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.CorsConfigurationSource;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-
-import java.util.Arrays;
 
 import static dev.pack.modules.enums.Role.*;
 import static org.springframework.http.HttpMethod.*;
 
 @Configuration
-@RequiredArgsConstructor
 @EnableWebSecurity
+@RequiredArgsConstructor
 public class SecurityConfiguration {
 
   private final JwtAuthenticationFilter jwtAuthFilter;
@@ -35,7 +30,9 @@ public class SecurityConfiguration {
 
   @Bean
   public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.cors(Customizer.withDefaults()).csrf(AbstractHttpConfigurer::disable)
+        http.cors(Customizer.withDefaults());
+        http
+            .csrf(AbstractHttpConfigurer::disable)
             .authorizeHttpRequests(
                     (request) -> {
                         //Public path

@@ -12,7 +12,7 @@ spring:
       pool-name: PPDB Application Pool
   jpa:
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: update
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect # Use PostgreSQL dialect

@@ -1,7 +1,7 @@
 package dev.pack.modules.alur_ppdb;
 
 import com.fasterxml.jackson.annotation.*;
-import dev.pack.modules.data.user.User;
+import dev.pack.modules.user.User;
 import dev.pack.utils.Timestamps;
 import jakarta.persistence.*;
 import lombok.*;
@@ -32,7 +32,6 @@ public class AlurPpdb extends Timestamps {
 
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "userEntityId")
     private User userId;
 
 }
