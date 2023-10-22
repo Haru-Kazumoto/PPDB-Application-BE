@@ -10,24 +10,36 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.UniqueElements;
 
-@Data
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor
 public class RegisterRequest {
 
-  @UniqueElements
-  @NotEmpty(message = "Username cannot be empty!")
-  private String username;
+  @Data
+  @Builder
+  @AllArgsConstructor
+  @NoArgsConstructor
+  public static class Admin{
+    @UniqueElements
+    @NotEmpty(message = "Username cannot be empty!")
+    private String username;
 
-  @Email(message = "Email pattern doesn't valid!")
-  @NotEmpty(message = "Email cannot be empty!")
-  private String email;
+    @Email(message = "Email pattern doesn't valid!")
+    @NotEmpty(message = "Email cannot be empty!")
+    private String email;
 
-  @NotEmpty(message = "Password cannot be empty!")
-  private String password;
+    @NotEmpty(message = "Password cannot be empty!")
+    private String password;
 
-  @NotNull(message = "Role is required")
-  private Role role;
+    @NotNull(message = "Role is required")
+    private Role role;
+  }
+
+  @Data
+  @Builder
+  @AllArgsConstructor
+  @NoArgsConstructor
+  public static class User{
+
+    //DATA USER HERE.
+
+  }
 
 }

@@ -55,10 +55,6 @@ public class UserController {
         User mapData = model.map(bodyDto, User.class);
         User result = userService.createUser(mapData);
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(
-                new PayloadsResponse(
-                        HttpStatus.CREATED.value(),
-                        new Date(),
-                        result));
+        return ResponseEntity.status(HttpStatus.CREATED).body(this.http.response(HttpStatus.CREATED.value(), new Date(), result));
     }
 }

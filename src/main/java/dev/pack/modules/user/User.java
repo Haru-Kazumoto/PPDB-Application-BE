@@ -10,6 +10,7 @@ import dev.pack.modules.admin.alur_ppdb.AlurPpdb;
 import dev.pack.modules.token.Token;
 import dev.pack.utils.CustomDateSerializer;
 import dev.pack.utils.Timestamps;
+import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
@@ -47,7 +48,8 @@ public class User extends Timestamps implements UserDetails {
   @Column(unique = true, nullable = false)
   private String username;
 
-  @Column(unique = true, nullable = false)
+  @Column(unique = true, nullable = true)
+  @Nullable
   private String email;
 
   @JsonIgnore
