@@ -62,34 +62,35 @@ public class AuthenticationService {
 
   public AuthenticationResponse registerStudent(RegisterRequest.User request){
     this.userRepository.findByUsername(request.getUsername()).ifPresent((username) -> {
-        throw new DuplicateDataException("Nomor whatsapp telah di registerasi.");
+      throw new DuplicateDataException("Nomor whatsapp telah di registerasi.");
     });
+
+    User user = User.builder()
+            .username(request.getUsername())
+            .password(passwordEncoder.encode(request.getPassword()))
+            .role(request.getRole())
+            .build();
+
+    user = this.userRepository.save(user); // Simpan User terlebih dahulu
 
     var student = Student.builder()
             .name(request.getStudentData().getName())
             .address(request.getStudentData().getAddress())
             .school_origin(request.getStudentData().getSchool_origin())
+            .userId(user)
             .build();
 
-    var user = User.builder()
-            .username(request.getUsername())
-            .password(passwordEncoder.encode(request.getPassword()))
-            .role(request.getRole())
-            .student(student)
-            .build();
-
-    var savedStudent = this.studentRepository.save(student);
-    var savedUser = this.userRepository.save(user);
+    this.studentRepository.save(student); // Simpan Student setelah User disimpan
 
     var jwtToken = jwtService.generateToken(user);
     var refreshToken = jwtService.generateRefreshToken(user);
 
-    saveUserToken(savedUser, jwtToken);
+    saveUserToken(user, jwtToken);
 
     return AuthenticationResponse.builder()
             .accessToken(jwtToken)
             .refreshToken(refreshToken)
-            .role(String.valueOf(savedUser.getRole()))
+            .role(String.valueOf(user.getRole()))
             .build();
   }
 

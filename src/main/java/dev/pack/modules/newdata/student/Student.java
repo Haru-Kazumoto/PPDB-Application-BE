@@ -1,5 +1,8 @@
 package dev.pack.modules.newdata.student;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerator;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import dev.pack.modules.enums.Genders;
 import dev.pack.modules.newdata.user.User;
 import dev.pack.utils.Timestamps;
@@ -18,6 +21,10 @@ import java.util.Date;
 @NoArgsConstructor
 @Builder
 @Entity
+@JsonIdentityInfo(
+        generator = ObjectIdGenerators.PropertyGenerator.class,
+        property = "id"
+)
 @Table(name = "students")
 public class Student extends Timestamps implements Serializable {
 
@@ -51,6 +58,6 @@ public class Student extends Timestamps implements Serializable {
     private Integer user_id;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "userEntityId", nullable = false)
+    @JoinColumn(name = "userEntityId")
     private User userId;
 }
