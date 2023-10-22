@@ -12,7 +12,7 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 @Entity
-@Table(name = "action_tbl")
+@Table(name = "action")
 public class Action extends Timestamps {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)

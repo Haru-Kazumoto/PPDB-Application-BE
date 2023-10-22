@@ -1,6 +1,6 @@
 package dev.pack.modules.token;
 
-import dev.pack.modules.data.user.User;
+import dev.pack.modules.user.User;
 import dev.pack.utils.Timestamps;
 import jakarta.persistence.*;
 import lombok.*;
@@ -10,7 +10,7 @@ import lombok.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "token_tbl")
+@Table(name = "tokens")
 @Entity
 public class Token extends Timestamps {
 
@@ -29,6 +29,5 @@ public class Token extends Timestamps {
   public boolean expired;
 
   @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "userEntityId")
   public User userId;
 }

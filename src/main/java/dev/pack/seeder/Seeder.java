@@ -2,13 +2,14 @@ package dev.pack.seeder;
 
 import dev.pack.modules.alur_ppdb.AlurPpdbRepository;
 import dev.pack.modules.alur_ppdb.AlurPpdb;
-import dev.pack.modules.data.user.User;
-import dev.pack.modules.data.user.UserRepository;
+import dev.pack.modules.user.User;
+import dev.pack.modules.user.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.UnexpectedRollbackException;
 
