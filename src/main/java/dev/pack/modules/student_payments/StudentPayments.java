@@ -25,4 +25,6 @@ public class StudentPayments extends Timestamps {
     private Integer batch_id;
     private Integer pict_id;
 
+    //many to one dari student
+
 }

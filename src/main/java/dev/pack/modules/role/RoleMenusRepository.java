@@ -1,4 +1,4 @@
-package dev.pack.modules.newdata.role;
+package dev.pack.modules.role;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

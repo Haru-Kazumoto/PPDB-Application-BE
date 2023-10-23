@@ -1,5 +1,6 @@
 package dev.pack.modules.student_logs;
 
+import dev.pack.modules.staging.Staging;
 import dev.pack.utils.Timestamps;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -17,10 +18,16 @@ public class StudentLogs extends Timestamps {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
     private String status;
+
     private String remark;
+
     private Integer path_id;
+
     private Integer batch_id;
-    private Integer staging_id;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Staging staging;
 
 }

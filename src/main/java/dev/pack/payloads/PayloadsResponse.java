@@ -1,5 +1,6 @@
 package dev.pack.payloads;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import dev.pack.utils.CustomDateSerializer;
 import jakarta.persistence.Temporal;
@@ -21,6 +22,12 @@ public class PayloadsResponse {
     @Temporal(TemporalType.DATE)
     private Date timestamps = new Date();
 
+    @JsonSerialize
+    @JsonIgnoreProperties(
+            {
+                    "hibernateLazyInitializer",
+                    "handler"
+            })
     private Object data;
 
 }

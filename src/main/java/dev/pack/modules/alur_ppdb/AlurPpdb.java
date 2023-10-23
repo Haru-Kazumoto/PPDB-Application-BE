@@ -22,9 +22,9 @@ public class AlurPpdb extends Timestamps {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(unique = true, nullable = false)
     private String title;
 
+    @Column(length = 2000)
     private String content;
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)

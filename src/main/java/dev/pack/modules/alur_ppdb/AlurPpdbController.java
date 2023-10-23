@@ -1,5 +1,6 @@
 package dev.pack.modules.alur_ppdb;
 
+import dev.pack.payloads.HttpResponse;
 import dev.pack.payloads.PayloadsResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +24,7 @@ public class AlurPpdbController {
 
     private final AlurPpdbService alurPpdbService;
     private final ModelMapper model;
+    private final HttpResponse http;
 
     @PostMapping(path = "/post")
     @PreAuthorize("hasAuthority('admin:create')")
@@ -50,7 +52,7 @@ public class AlurPpdbController {
         );
     }
 
-    @PatchMapping(path = "/update")
+    @PutMapping(path = "/update")
     public ResponseEntity<?> update(
             @RequestParam(name = "dataId", defaultValue = "") int dataId,
             @RequestBody @Valid AlurPpdbDto.Update dto
@@ -64,5 +66,10 @@ public class AlurPpdbController {
                         this.alurPpdbService.updateFlow(dataId, newData)
                 )
         );
+    }
+
+    @DeleteMapping(path = "/delete")
+    public void delete(@RequestParam(name = "id", defaultValue = "")int id){
+        this.alurPpdbService.hardDeleteById(id);
     }
 }

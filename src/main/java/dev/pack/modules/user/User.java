@@ -18,6 +18,7 @@ import java.util.Date;
 import java.util.List;
 
 import lombok.*;
+import org.hibernate.annotations.SQLDelete;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -32,7 +33,9 @@ import org.springframework.security.core.userdetails.UserDetails;
         generator = ObjectIdGenerators.PropertyGenerator.class,
         property = "id"
 )
+//@SQLDelete(sql = "UPDATE users SET deletedAt = CURRENT_TIMESTAMP WHERE id = ?")
 public class User extends Timestamps implements UserDetails{
+
 
   @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Integer id;

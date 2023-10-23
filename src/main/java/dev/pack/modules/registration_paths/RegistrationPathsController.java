@@ -13,7 +13,7 @@ import static org.springframework.http.HttpStatus.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping(path = "/api/v${application.version}/registration-paths")
+@RequestMapping(path = "/api/v${application.version}/admin/registration-paths")
 public class RegistrationPathsController {
 
     private final RegistrationPathsService registrationPathsService;
@@ -32,10 +32,15 @@ public class RegistrationPathsController {
      * @param dto
      * @return ?
      */
-    @PostMapping(path = "/post")
-    public ResponseEntity<?> store(@RequestBody @Valid RegistrationPathDto.Create dto){
+    @PostMapping(path = "/post-multi")
+    public ResponseEntity<?> storeMultiModel(@RequestBody @Valid RegistrationPathDto.Create dto){
         RegistrationPaths entity = this.modelMapper.map(dto, RegistrationPaths.class);
         return http.response(CREATED.value(), new Date(), this.registrationPathsService.create(entity));
+    }
+
+    @PostMapping(path = "/post-single")
+    public ResponseEntity<?> storeSingleModel(@RequestBody @Valid RegistrationPathDto.Create dto){
+        return null;
     }
 
     /**
@@ -65,4 +70,8 @@ public class RegistrationPathsController {
         return http.response(OK.value(), new Date(), this.registrationPathsService.update(id, entity));
     }
 
+    @DeleteMapping(path = "/delete")
+    public void delete(@RequestParam(name = "id", defaultValue = "0")int id){
+        this.registrationPathsService.delete(id);
+    }
 }
