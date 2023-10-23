@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import dev.pack.modules.enums.Role;
 import dev.pack.modules.alur_ppdb.AlurPpdb;
+import dev.pack.modules.role.Roles;
 import dev.pack.modules.student.Student;
 import dev.pack.modules.token.Token;
 import dev.pack.utils.CustomDateSerializer;
@@ -46,18 +47,15 @@ public class User extends Timestamps implements UserDetails{
   @JsonIgnore
   private String password;
 
-  private Integer role_id;
-
   @Enumerated(EnumType.STRING)
   private Role role; //changed
 
   //Relasi role model
-//  @OneToOne(
-//          cascade = CascadeType.ALL,
-//          orphanRemoval = true,
-//          mappedBy = "userId"
-//  )
-//  private Roles roles;
+  @JoinColumn(name = "role_id",nullable = false)
+  @ManyToOne(
+          cascade = CascadeType.ALL
+  )
+  private Roles role_id;
   
   @JsonSerialize(using = CustomDateSerializer.class)
   @Temporal(TemporalType.TIMESTAMP)
