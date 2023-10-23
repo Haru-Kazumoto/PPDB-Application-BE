@@ -50,14 +50,20 @@ public class Student extends Timestamps implements Serializable {
     private String sub_district;
     private String postal_code;
     private String school_origin; //4
+
+    @Column(nullable = true)
     private String profile_picture;
+
     private String status;
+
+    private String major; //mengambil data type dari lookup
+
     private Integer staging_id;
     private Integer path_id;
     private Integer batch_id;
-    private Integer user_id;
 
     @OneToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "userEntityId", nullable = false)
     private User userId;
+
+    //one to many ke student_payments
 }

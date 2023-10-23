@@ -55,12 +55,6 @@ public class AlurPpdbServiceImpl implements AlurPpdbService {
                 .findById(id)
                 .orElseThrow(() -> new DataNotFoundException("Id not found."));
 
-        this.alurPpdbRepository
-                .findByTitle(bodyUpdate.getTitle())
-                .ifPresent(title -> {
-                    throw new DuplicateDataException("Title has already exists.");
-                });
-
         data.setTitle(bodyUpdate.getTitle());
         data.setContent(bodyUpdate.getContent());
 
@@ -69,7 +63,7 @@ public class AlurPpdbServiceImpl implements AlurPpdbService {
 
     @Override
     public void hardDeleteById(Integer id) {
-        //NOT RETURNING YET
+        this.alurPpdbRepository.deleteById(id);
     }
 
     @Override

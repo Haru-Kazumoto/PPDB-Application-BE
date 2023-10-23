@@ -16,7 +16,13 @@ public class Lookup {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    private String name;
-    private String type;
+
+    private String name; // Teknik Jaringan dan Komputer
+
+    private String value; // TJKT
+
+    private String type; // MAJOR
+
+    // select * from lookup where type = 'MAJOR'
 
 }

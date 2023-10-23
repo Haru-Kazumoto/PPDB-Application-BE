@@ -1,11 +1,14 @@
 package dev.pack.modules.staging;
 
+import dev.pack.modules.student_logs.StudentLogs;
 import dev.pack.utils.Timestamps;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -17,8 +20,18 @@ public class Staging extends Timestamps {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    private String path_type;
-    private Integer index;
-    private Boolean is_visible = Boolean.FALSE;
+
+    private String name; //PILIH GELOMBANG
+
+    private Integer index; // urutan
+
+    private Boolean is_visible = Boolean.TRUE;
+
+    @OneToMany(
+            cascade = CascadeType.ALL,
+            orphanRemoval = true,
+            mappedBy = "staging"
+    )
+    private List<StudentLogs> studentLogs;
 
 }

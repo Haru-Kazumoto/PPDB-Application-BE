@@ -1,6 +1,5 @@
-package dev.pack.modules.data.role;
+package dev.pack.modules.role;
 
-import dev.pack.modules.data.role.Roles;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

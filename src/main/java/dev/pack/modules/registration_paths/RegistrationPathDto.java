@@ -1,10 +1,18 @@
 package dev.pack.modules.registration_paths;
 
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
+import dev.pack.modules.enums.FormPurchaseType;
+import dev.pack.modules.registration_batch.RegistrationBatch;
+import dev.pack.modules.registration_batch.RegistrationBatchDto;
+import jakarta.annotation.Nullable;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.Date;
+import java.util.List;
 
 public class RegistrationPathDto {
 
@@ -17,8 +25,20 @@ public class RegistrationPathDto {
         private String name;
 
         @NotNull()
-        @NotEmpty()
-        private String type;
+        @Enumerated(EnumType.STRING)
+        private FormPurchaseType type;
+
+        private Date start_date;
+
+        @Future
+        private Date end_date;
+
+        private Double price;
+
+        //uncomment this if necessary
+//        @Nullable()
+//        @Null()
+//        private List<RegistrationBatchDto> registrationBatches;
     }
 
     @Data
