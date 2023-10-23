@@ -52,6 +52,13 @@ public class RegistrationPathDto {
         @NotNull()
         @NotEmpty()
         private String type;
+
+        private Date start_date;
+
+        @Future
+        private Date end_date;
+
+        private Double price;
     }
 
 }

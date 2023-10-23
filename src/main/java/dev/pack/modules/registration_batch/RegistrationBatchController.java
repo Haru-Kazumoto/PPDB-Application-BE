@@ -21,9 +21,12 @@ public class RegistrationBatchController {
     private final ModelMapper modelMapper;
 
     @PostMapping(path = "/post")
-    public ResponseEntity<?> store(@RequestBody @Valid RegistrationBatchDto dto){
+    public ResponseEntity<?> store(
+            @RequestBody @Valid RegistrationBatchDto dto,
+            @RequestParam(name = "regisId", defaultValue = "0") int regisId
+    ){
         RegistrationBatch entity = this.modelMapper.map(dto, RegistrationBatch.class);
-        return this.http.response(CREATED.value(), new Date(), this.registrationBatchService.store(entity));
+        return this.http.response(CREATED.value(), new Date(), this.registrationBatchService.store(entity, regisId));
     }
 
     @GetMapping(path = "/index")
@@ -43,5 +46,15 @@ public class RegistrationBatchController {
     @DeleteMapping(path = "/delete")
     public void delete(@RequestParam(name = "id", defaultValue = "0")int id){
         this.registrationBatchService.delete(id);
+    }
+
+    @GetMapping(path = "/index-total-pendaftar")
+    public ResponseEntity<?> indexTotalPendaftar(){
+        return this.http.response(OK.value(), new Date(), this.registrationBatchService.getTotalPendaftarPerBatch());
+    }
+
+    @GetMapping(path = "/get-total")
+    public Long getTotal(){
+        return this.registrationBatchService.getTotalPendaftar();
     }
 }

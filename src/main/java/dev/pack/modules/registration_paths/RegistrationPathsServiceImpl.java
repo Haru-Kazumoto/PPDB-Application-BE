@@ -78,6 +78,9 @@ public class RegistrationPathsServiceImpl implements RegistrationPathsService {
 
         data.setName(bodyUpdate.getName());
         data.setType(bodyUpdate.getType());
+        data.setStart_date(bodyUpdate.getStart_date());
+        data.setEnd_date(bodyUpdate.getEnd_date());
+        data.setPrice(bodyUpdate.getPrice());
 
         return this.registrationPathsRepository.save(data);
     }

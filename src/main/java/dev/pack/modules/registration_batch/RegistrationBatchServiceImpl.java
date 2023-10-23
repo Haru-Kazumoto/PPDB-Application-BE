@@ -1,6 +1,8 @@
 package dev.pack.modules.registration_batch;
 
 import dev.pack.exception.DataNotFoundException;
+import dev.pack.modules.registration_paths.RegistrationPaths;
+import dev.pack.modules.registration_paths.RegistrationPathsRepository;
 import dev.pack.utils.Validator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -12,15 +14,20 @@ import java.util.List;
 public class RegistrationBatchServiceImpl implements RegistrationBatchService{
 
     private final RegistrationBatchRepository registrationBatchRepository;
+    private final RegistrationPathsRepository registrationPathsRepository;
     private final Validator validate;
 
     @Override
-    public RegistrationBatch store(RegistrationBatch bodyCreate) {
-
+    public RegistrationBatch store(RegistrationBatch bodyCreate, Integer regisId) {
         this.validate.dateValidate(
                 bodyCreate.getStart_date(),
                 bodyCreate.getEnd_date()
         );
+
+        RegistrationPaths registrationPaths = registrationPathsRepository.findById(regisId)
+                .orElseThrow(() -> new DataNotFoundException("RegistrationPaths not found"));
+
+        bodyCreate.setRegistrationPaths(registrationPaths);
 
         return this.registrationBatchRepository.save(bodyCreate);
     }
@@ -55,5 +62,22 @@ public class RegistrationBatchServiceImpl implements RegistrationBatchService{
     @Override
     public void delete(Integer id) {
         this.registrationBatchRepository.deleteById(id);
+    }
+
+    @Override
+    public List<Object[]> getTotalPendaftarPerBatch() {
+        return this.registrationBatchRepository.findTotalPendaftarPerBatch();
+    }
+
+    @Override
+    public Long getTotalPendaftar(){
+        List<Object[]> result = this.registrationBatchRepository.findTotalPendaftarPerBatch();
+        Long totalPendaftar = 0L;
+        for(Object[] row : result){
+            Integer idBatch = (Integer) row[0];
+            totalPendaftar = (Long) row[1];
+        }
+
+        return totalPendaftar;
     }
 }

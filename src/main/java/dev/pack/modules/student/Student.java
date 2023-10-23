@@ -3,6 +3,7 @@ package dev.pack.modules.student;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import dev.pack.modules.enums.Genders;
+import dev.pack.modules.registration_batch.RegistrationBatch;
 import dev.pack.modules.user.User;
 import dev.pack.utils.Timestamps;
 import jakarta.persistence.*;
@@ -61,6 +62,9 @@ public class Student extends Timestamps implements Serializable {
     private Integer staging_id;
     private Integer path_id;
     private Integer batch_id;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    private RegistrationBatch registrationBatch;
 
     @OneToOne(fetch = FetchType.LAZY)
     private User userId;

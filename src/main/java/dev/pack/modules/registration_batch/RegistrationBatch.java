@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import dev.pack.modules.registration_paths.RegistrationPaths;
 import dev.pack.modules.enums.Banks;
+import dev.pack.modules.student.Student;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -14,6 +15,7 @@ import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -29,6 +31,7 @@ public class RegistrationBatch implements Serializable {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+    private String name;
     private Integer index;
     private Integer max_quota;
 
@@ -40,7 +43,10 @@ public class RegistrationBatch implements Serializable {
     private Double price;
     private String bank_account; //nomor rekening
 
-    private Boolean isOpen = true;
+    private Boolean isOpen = true; //buat cron schedule service
+
+    @Transient
+    private Integer countStudent; //read only, not stored to column table
 
     @JsonIgnoreProperties(
             {
@@ -52,5 +58,12 @@ public class RegistrationBatch implements Serializable {
     private RegistrationPaths registrationPaths;
 
     //one to many ke 3 model students, student_payments, student_logs
+
+    @OneToMany(
+            cascade = CascadeType.ALL,
+            orphanRemoval = true,
+            mappedBy = "registrationBatch"
+    )
+    private List<Student> students;
 
 }
