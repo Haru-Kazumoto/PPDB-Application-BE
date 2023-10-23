@@ -1,5 +1,6 @@
 package dev.pack.modules.role;
 
+import dev.pack.modules.user.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -7,6 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -22,16 +24,18 @@ public class Roles implements Serializable {
     @Column(unique = true, nullable = false, name = "role_name")
     private String role_name;
 
-    @OneToOne(
-            cascade = CascadeType.ALL,
+    @OneToMany(
+            cascade = CascadeType.MERGE,
             orphanRemoval = true,
-            mappedBy = "roles"
+            mappedBy = "role_id"
     )
-    private RolesMenus rolesMenus;
+    private List<RolesMenus> rolesMenus;
 
-//    @OneToOne(cascade = CascadeType.ALL)
-//    @JoinColumn(name = "userId", updatable = false)
-//    @JsonIgnore
-//    private User userId;
+    @OneToMany(
+            cascade = CascadeType.MERGE,
+            orphanRemoval = true,
+            mappedBy = "role_id"
+    )
+    private List<User> users;
 
 }

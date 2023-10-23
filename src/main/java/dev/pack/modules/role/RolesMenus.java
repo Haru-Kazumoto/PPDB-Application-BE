@@ -1,8 +1,8 @@
 package dev.pack.modules.role;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+@Builder
 @Table(name = "roles_menus")
 public class RolesMenus {
 
@@ -23,15 +24,9 @@ public class RolesMenus {
     )
     private String path;
 
-    @Column(
-            nullable = false,
-            name = "role_id"
-    )
-    private Integer role_id;
 
-    @OneToOne(cascade = CascadeType.ALL)
-//    @JoinColumn(name = "roles",nullable = false)
-    @JsonIgnore
-    private Roles roles;
+    @JoinColumn(name = "role_id",nullable = false)
+    @ManyToOne(cascade = CascadeType.MERGE)
+    private Roles role_id;
 
 }

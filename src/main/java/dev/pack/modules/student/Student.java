@@ -39,8 +39,8 @@ public class Student extends Timestamps implements Serializable {
     private String phone; //1
 
     private String surname;
-    @Enumerated(EnumType.STRING)
-    private Genders gender;
+
+    private String gender;
     private String religion;
     private String birth_place;
     private Date birth_date; //custom
