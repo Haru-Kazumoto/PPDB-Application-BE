@@ -43,6 +43,9 @@ public class User extends Timestamps implements UserDetails{
   @Column(unique = true)
   private String username; //ini jadi nomor whatsapp
 
+  @Column(nullable = true)
+  private String fullname;
+
   @JsonIgnore
   private String password;
 

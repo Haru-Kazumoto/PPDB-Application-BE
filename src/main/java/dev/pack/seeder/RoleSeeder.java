@@ -38,6 +38,7 @@ public class RoleSeeder implements CommandLineRunner {
     private void seedRoles(){
         List<String> roles = new ArrayList<>();
         List<String> userPath = new ArrayList<>();
+        List<String> adminPath = new ArrayList<>();
 
         roles.add("User");
         roles.add("Admin");
@@ -45,6 +46,12 @@ public class RoleSeeder implements CommandLineRunner {
         userPath.add("/ppdb/main/home");
         userPath.add("/ppdb/main/pembelian");
         userPath.add("/ppdb/main/pengembalian");
+
+
+        adminPath.add("/ppdb/main/dashboard");
+        adminPath.add("/ppdb/main/alur");
+        adminPath.add("/ppdb/main/jalur-pendaftaran");
+        adminPath.add("/ppdb/main/pendaftar-ppdb");
 
         var index = 0;
         for (var role : roles ) {
@@ -58,6 +65,12 @@ public class RoleSeeder implements CommandLineRunner {
             if(index == 0) {
                 for (var p : userPath) {
                     this.roleMenusRepository.save(RolesMenus.builder().role_id(result).path(p).build());
+                }
+            }
+
+            if(index == 1) {
+                for(var s : adminPath) {
+                    this.roleMenusRepository.save(RolesMenus.builder().role_id(result).path(s).build());
                 }
             }
 

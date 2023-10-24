@@ -22,15 +22,12 @@ public class RegisterRequest {
     @NotEmpty(message = "Username cannot be empty!")
     private String username;
 
-    @Email(message = "Email pattern doesn't valid!")
-    @NotEmpty(message = "Email cannot be empty!")
-    private String email;
+    @NotEmpty(message = "Fullname cannot be empty!")
+    private String fullname;
 
     @NotEmpty(message = "Password cannot be empty!")
     private String password;
 
-    @NotNull(message = "Role is required")
-    private Role role;
   }
 
   @Data

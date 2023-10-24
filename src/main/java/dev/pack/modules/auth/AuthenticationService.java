@@ -5,6 +5,7 @@ import dev.pack.config.JwtService;
 import dev.pack.exception.DataNotFoundException;
 import dev.pack.exception.DuplicateDataException;
 import dev.pack.exception.UserNotFoundException;
+import dev.pack.modules.enums.Role;
 import dev.pack.modules.role.RoleRepository;
 import dev.pack.modules.role.Roles;
 import dev.pack.modules.student.Student;
@@ -44,24 +45,18 @@ public class AuthenticationService {
   @Value("${application.security.jwt.secret-key}")
   private String SIGNING_KEY;
 
-  public AuthenticationResponse registerAdmin(RegisterRequest.Admin request) {
+  public User registerAdmin(RegisterRequest.Admin request) {
+    Roles role = this.roleRepository.findRolesByName("Admin").orElseThrow(() -> new DataNotFoundException("Data tidak ditemukan untuk Role Admin"));
+
     var user = User.builder()
             .username(request.getUsername())
+            .fullname(request.getFullname())
             .password(passwordEncoder.encode(request.getPassword()))
-            .role(request.getRole())
+            .role(Role.ADMIN)
+            .role_id(role)
             .build();
 
-    var savedUser = userRepository.save(user);
-    var jwtToken = jwtService.generateToken(user);
-    var refreshToken = jwtService.generateRefreshToken(user);
-
-    saveUserToken(savedUser, jwtToken);
-
-    return AuthenticationResponse.builder()
-            .accessToken(jwtToken)
-            .refreshToken(refreshToken)
-            .role(String.valueOf(savedUser.getRole()))
-            .build();
+    return userRepository.save(user);
   }
 
   public AuthenticationResponse registerStudent(RegisterRequest.User request){
@@ -164,6 +159,7 @@ public class AuthenticationService {
             .id(user.getId())
             .role_id(user.getRole_id())
             .username(user.getUsername())
+            .fullname(user.getFullname())
             .student(user.getStudent())
             .build();
 
