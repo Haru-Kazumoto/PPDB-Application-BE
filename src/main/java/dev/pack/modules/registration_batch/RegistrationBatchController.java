@@ -4,10 +4,12 @@ import dev.pack.payloads.HttpResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
+import java.util.Map;
 
 import static org.springframework.http.HttpStatus.*;
 
@@ -30,8 +32,8 @@ public class RegistrationBatchController {
     }
 
     @GetMapping(path = "/index")
-    public ResponseEntity<?> index(){
-        return this.http.response(OK.value(), new Date(), this.registrationBatchService.index());
+    public ResponseEntity<?> index(@RequestParam(name = "pathId", defaultValue = "") int pathId){
+        return this.http.response(OK.value(), new Date(), this.registrationBatchService.index(pathId));
     }
 
     @PatchMapping(path = "/update")
@@ -44,17 +46,27 @@ public class RegistrationBatchController {
     }
 
     @DeleteMapping(path = "/delete")
-    public void delete(@RequestParam(name = "id", defaultValue = "0")int id){
-        this.registrationBatchService.delete(id);
+    public Map<String, String> delete(@RequestParam(name = "id", defaultValue = "0")int id){
+        return this.registrationBatchService.delete(id);
     }
 
-    @GetMapping(path = "/index-total-pendaftar")
-    public ResponseEntity<?> indexTotalPendaftar(){
-        return this.http.response(OK.value(), new Date(), this.registrationBatchService.getTotalPendaftarPerBatch());
+    @GetMapping(path = "/count")
+    public ResponseEntity<?> countStudentsByBatch(){
+        return this.http.response(
+                OK.value(),
+                new Date(),
+                this.registrationBatchService.countStudents()
+        );
     }
 
-    @GetMapping(path = "/get-total")
-    public Long getTotal(){
-        return this.registrationBatchService.getTotalPendaftar();
+    @GetMapping(path = "/get-batch-by-pathsId")
+    public ResponseEntity<?> getAllRegisBatchByRegisPathsId(
+            @RequestParam(name = "pathsId", defaultValue = "0") int pathsId
+    ){
+        return this.http.response(
+                OK.value(),
+                new Date(),
+                this.registrationBatchService.getAllGelombangByPathsId(pathsId)
+        );
     }
 }

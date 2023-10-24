@@ -30,9 +30,7 @@ public enum Role {
           Set.of(
                   Permission.PUBLIC_ACCESS
           )
-  )
-
-  ;
+  );
 
   @Getter
   private final Set<Permission> permissions;

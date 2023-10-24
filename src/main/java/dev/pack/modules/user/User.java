@@ -77,15 +77,6 @@ public class User extends Timestamps implements UserDetails{
           mappedBy = "userId"
   )
   private Student student;
-    /**
-   * ADMIN DATA
-   */
-  @OneToMany(
-          mappedBy = "userId",
-          cascade = CascadeType.ALL,
-          orphanRemoval = true
-  )
-  private List<AlurPpdb> alurPpdbList = new ArrayList<>();
 
   @PrePersist
   protected void onCreate(){

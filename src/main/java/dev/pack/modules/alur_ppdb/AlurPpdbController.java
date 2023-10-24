@@ -15,19 +15,13 @@ import java.util.Date;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(path = "/api/v${application.version}/admin/alur-ppdb")
-@PreAuthorize("hasRole('ADMIN')")
 public class AlurPpdbController {
-
-    /**
-     * Indexing all
-     */
 
     private final AlurPpdbService alurPpdbService;
     private final ModelMapper model;
     private final HttpResponse http;
 
     @PostMapping(path = "/post")
-    @PreAuthorize("hasAuthority('admin:create')")
     public ResponseEntity<?> store(@RequestBody @Valid AlurPpdbDto.Create bodyDto){
         AlurPpdb data = model.map(bodyDto, AlurPpdb.class);
 
@@ -41,13 +35,12 @@ public class AlurPpdbController {
     }
 
     @GetMapping(path ="/index")
-    @PreAuthorize("hasAuthority('admin:read')")
-    public ResponseEntity<?> index(@RequestParam(name = "userId", defaultValue = "") int userId){
+    public ResponseEntity<?> index(){
         return ResponseEntity.status(HttpStatus.OK).body(
                 new PayloadsResponse(
                         HttpStatus.OK.value(),
                         new Date(),
-                        this.alurPpdbService.getAllFlowByUserId(userId)
+                        this.alurPpdbService.getAll()
                 )
         );
     }

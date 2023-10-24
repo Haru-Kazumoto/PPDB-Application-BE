@@ -63,8 +63,6 @@ public class SecurityConfiguration {
                         request.requestMatchers(PATCH, String.format("/api/v%d/user/**", config.APP_VERSION)).hasAnyRole(USER.name(), ADMIN.name());
                         request.requestMatchers(DELETE, String.format("/api/v%d/user/**", config.APP_VERSION)).hasAnyRole(USER.name(), ADMIN.name());
 
-                        request.requestMatchers("/api/v1/user/findByUsername?**").permitAll();
-
                         request.anyRequest().fullyAuthenticated();
                     }
             );

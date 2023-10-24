@@ -1,7 +1,10 @@
 package dev.pack.modules.registration_batch;
 
+import dev.pack.modules.student.Student;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -9,11 +12,37 @@ import java.util.List;
 @Repository
 public interface RegistrationBatchRepository extends JpaRepository<RegistrationBatch, Integer> {
 
-    @Query("""
-            SELECT rb.id,\s
-            COUNT(s) AS countStudent FROM RegistrationBatch rb\s
-            LEFT JOIN rb.students s GROUP BY rb.id
+    @Query(value = """
+            SELECT new dev.pack.modules.registration_batch.CountBatchRegistrar(rb.id, rb.name, COUNT(s))\s
+            FROM RegistrationBatch rb\s
+            LEFT JOIN rb.students s GROUP BY rb.id\s
     """)
-    List<Object[]> findTotalPendaftarPerBatch();
+    List<CountBatchRegistrar> findTotalPendaftarPerBatch();
 
+    @Query(value = """
+            SELECT new dev.pack.modules.registration_batch.RegistrationBatch(
+            rb.id,\s
+            rb.name,
+            rb.index,
+            rb.max_quota,
+            rb.start_date,
+            rb.end_date,
+            rb.bank_name,
+            rb.bank_user,
+            rb.price,
+            rb.bank_account,\s
+            COUNT(s)
+            )\s
+            FROM RegistrationBatch rb\s
+            LEFT JOIN rb.students s\s
+            WHERE rb.registrationPaths.id = :regisPathId
+            GROUP BY rb.id\s
+    """)
+    List<RegistrationBatch> findTotalPendaftarPerBatchModel(@Param("regisPathId") Integer regisPathId);
+
+    @Query("SELECT rb FROM RegistrationBatch rb WHERE rb.registrationPaths.id = :regisPathsId")
+    List<RegistrationBatch> findByRegistrationPathsId(@Param("regisPathsId") Integer regisPathsId);
+
+    @Query("SELECT s FROM Student s WHERE s.batch_id = :batchId")
+    List<Student> findStudentFromBatchId(@Param("batchId") Integer batchId, Pageable pageable);
 }

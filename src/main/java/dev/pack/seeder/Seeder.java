@@ -86,7 +86,6 @@ public class Seeder implements CommandLineRunner {
         AlurPpdb alurPpdb = AlurPpdb.builder()
                 .title("PPDBFLOW TITLE")
                 .content("PPDB FLOW CONTENT")
-                .userId(userRepository.getReferenceById(2))
                 .build();
 
         alurPpdbRepository.save(alurPpdb);

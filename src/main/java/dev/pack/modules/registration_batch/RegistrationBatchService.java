@@ -1,13 +1,16 @@
 package dev.pack.modules.registration_batch;
 
 import java.util.List;
+import java.util.Map;
 
 public interface RegistrationBatchService {
 
     RegistrationBatch store(RegistrationBatch bodyCreate, Integer regisId);
-    List<RegistrationBatch> index();
+    List<RegistrationBatch> index(Integer regisPathsId);
     RegistrationBatch update(Integer id, RegistrationBatch bodyUpdate);
-    void delete(Integer id);
-    List<Object[]> getTotalPendaftarPerBatch();
-    Long getTotalPendaftar();
+    Map<String, String> delete(Integer id);
+//    List<Object[]> getTotalPendaftarPerBatch(Integer batchId);
+//    Long getTotalPendaftar(Integer batchId);
+    List<RegistrationBatch> countStudents();
+    List<RegistrationBatch> getAllGelombangByPathsId(Integer pathsId);
 }

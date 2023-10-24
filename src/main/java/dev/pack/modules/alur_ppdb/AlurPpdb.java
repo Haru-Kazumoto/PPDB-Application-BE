@@ -27,11 +27,4 @@ public class AlurPpdb extends Timestamps {
     @Column(length = 2000)
     private String content;
 
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    private Integer user_id; //FOR RELATION
-
-    @JsonIgnore
-    @ManyToOne(fetch = FetchType.LAZY)
-    private User userId;
-
 }

@@ -19,9 +19,6 @@ public class AlurPpdbDto {
         @NotEmpty
         @NotNull
         private String content;
-
-        @NotNull
-        private Integer user_id;
     }
 
     @Data

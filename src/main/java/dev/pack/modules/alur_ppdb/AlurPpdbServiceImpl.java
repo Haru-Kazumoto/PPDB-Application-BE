@@ -21,27 +21,7 @@ public class AlurPpdbServiceImpl implements AlurPpdbService {
 
     @Override
     public AlurPpdb createFlow(AlurPpdb bodyCreate) {
-        this.alurPpdbRepository.findByTitle(bodyCreate.getTitle())
-                .ifPresent((title) -> {
-                    throw new DuplicateDataException("Title has exists.");
-                });
-
-        User user = this.userRepository.findById(bodyCreate.getUser_id())
-                .orElseThrow(() -> new DataNotFoundException("Id user not found."));
-
-        bodyCreate.setUser_id(bodyCreate.getUser_id());
-        bodyCreate.setUserId(user);
-
         return this.alurPpdbRepository.save(bodyCreate);
-    }
-
-    @Override
-    public List<AlurPpdb> getAllFlowByUserId(Integer userId) {
-        var idUser = this.userRepository
-                .findById(userId)
-                .orElseThrow(() -> new DataNotFoundException("Id not found."));
-
-        return this.alurPpdbRepository.findAllByUserId(idUser.getId());
     }
 
     @Override

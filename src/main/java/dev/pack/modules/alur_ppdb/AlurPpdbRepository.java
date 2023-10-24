@@ -12,8 +12,6 @@ import java.util.Optional;
 
 @Repository
 public interface AlurPpdbRepository extends JpaRepository<AlurPpdb, Integer> {
-    @Query("SELECT p FROM AlurPpdb p WHERE p.userId.id = :userId")
-    List<AlurPpdb> findAllByUserId(Integer userId);
 
     @Query("SELECT t FROM AlurPpdb t WHERE t.title = :title")
     Optional<AlurPpdb> findByTitle(@Param("title") String title);
@@ -22,10 +20,4 @@ public interface AlurPpdbRepository extends JpaRepository<AlurPpdb, Integer> {
     @Modifying
     @Query("UPDATE AlurPpdb j SET j.deletedAt = CURRENT_TIMESTAMP WHERE j.id = :id")
     void softDeleteById(Integer id);
-
-    @Query("SELECT d FROM AlurPpdb d WHERE d.deletedAt IS NULL AND d.userId.id = :id")
-    List<AlurPpdb> indexDeleted(@Param("id") Integer id);
-
-    @Query("SELECT d FROM AlurPpdb d WHERE d.deletedAt IS NULL")
-    List<AlurPpdb> indexDeleted();
 }

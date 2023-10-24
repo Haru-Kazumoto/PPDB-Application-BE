@@ -45,8 +45,21 @@ public class RegistrationBatch implements Serializable {
 
     private Boolean isOpen = true; //buat cron schedule service
 
-    @Transient
-    private Integer countStudent; //read only, not stored to column table
+    private Long countStudent; //read only, not stored to column table
+
+    public RegistrationBatch(Integer id, String name, Integer index, Integer max_quota, Date start_date, Date end_date, Banks bank_name, String bank_user, Double price, String bank_account, Long countStudent) {
+        this.id = id;
+        this.name = name;
+        this.index = index;
+        this.max_quota = max_quota;
+        this.start_date = start_date;
+        this.end_date = end_date;
+        this.bank_name = bank_name;
+        this.bank_user = bank_user;
+        this.price = price;
+        this.bank_account = bank_account;
+        this.countStudent = countStudent;
+    }
 
     @JsonIgnoreProperties(
             {
@@ -54,6 +67,7 @@ public class RegistrationBatch implements Serializable {
                     "handler"
             })
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "path_id")
     @JsonIgnore
     private RegistrationPaths registrationPaths;
 
@@ -64,6 +78,7 @@ public class RegistrationBatch implements Serializable {
             orphanRemoval = true,
             mappedBy = "registrationBatch"
     )
+    @JsonIgnore
     private List<Student> students;
 
 }

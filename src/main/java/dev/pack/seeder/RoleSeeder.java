@@ -13,7 +13,7 @@ import org.springframework.context.annotation.Configuration;
 import java.util.ArrayList;
 import java.util.List;
 
-@Configuration
+//@Configuration
 @RequiredArgsConstructor
 public class RoleSeeder implements CommandLineRunner {
 

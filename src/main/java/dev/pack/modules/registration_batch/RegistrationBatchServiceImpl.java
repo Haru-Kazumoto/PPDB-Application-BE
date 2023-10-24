@@ -7,7 +7,9 @@ import dev.pack.utils.Validator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -33,8 +35,10 @@ public class RegistrationBatchServiceImpl implements RegistrationBatchService{
     }
 
     @Override
-    public List<RegistrationBatch> index() {
-        return this.registrationBatchRepository.findAll();
+    public List<RegistrationBatch> index(Integer regisPathsId) {
+        this.registrationPathsRepository.findById(regisPathsId)
+                .orElseThrow(() -> new DataNotFoundException("Id not found."));
+        return this.registrationBatchRepository.findTotalPendaftarPerBatchModel(regisPathsId);
     }
 
     @Override
@@ -48,6 +52,7 @@ public class RegistrationBatchServiceImpl implements RegistrationBatchService{
         );
 
         data.setIndex(bodyUpdate.getIndex());
+        data.setName(bodyUpdate.getName());
         data.setMax_quota(bodyUpdate.getMax_quota());
         data.setStart_date(bodyUpdate.getStart_date());
         data.setEnd_date(bodyUpdate.getEnd_date());
@@ -60,24 +65,28 @@ public class RegistrationBatchServiceImpl implements RegistrationBatchService{
     }
 
     @Override
-    public void delete(Integer id) {
+    public Map<String, String> delete(Integer id) {
+        Map<String, String> res = new HashMap<>();
+
+        this.registrationBatchRepository.findById(id)
+                .orElseThrow(() -> new DataNotFoundException("Id not found."));
         this.registrationBatchRepository.deleteById(id);
+
+        res.put("status","SUCCESS");
+
+        return res;
     }
 
     @Override
-    public List<Object[]> getTotalPendaftarPerBatch() {
-        return this.registrationBatchRepository.findTotalPendaftarPerBatch();
+    public List<RegistrationBatch> countStudents() {
+        return null;
     }
 
     @Override
-    public Long getTotalPendaftar(){
-        List<Object[]> result = this.registrationBatchRepository.findTotalPendaftarPerBatch();
-        Long totalPendaftar = 0L;
-        for(Object[] row : result){
-            Integer idBatch = (Integer) row[0];
-            totalPendaftar = (Long) row[1];
-        }
+    public List<RegistrationBatch> getAllGelombangByPathsId(Integer pathsId) {
+        this.registrationPathsRepository.findById(pathsId)
+                .orElseThrow(() -> new DataNotFoundException("Id paths not found."));
 
-        return totalPendaftar;
+        return this.registrationBatchRepository.findByRegistrationPathsId(pathsId);
     }
 }

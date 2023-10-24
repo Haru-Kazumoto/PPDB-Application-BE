@@ -4,6 +4,7 @@ import dev.pack.modules.enums.Banks;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.Future;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -20,6 +21,10 @@ public class RegistrationBatchDto {
 
     @NotNull()
     private Integer index;
+
+    @NotEmpty
+    @NotNull
+    private String name;
 
     @NotNull()
     private Integer max_quota;
@@ -43,5 +48,6 @@ public class RegistrationBatchDto {
 
     @NotNull()
     private String bank_account; //nomor rekening
+
 
 }
