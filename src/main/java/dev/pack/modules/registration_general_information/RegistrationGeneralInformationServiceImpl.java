@@ -18,13 +18,7 @@ public class RegistrationGeneralInformationServiceImpl implements RegistrationGe
 
     @Override
     public RegistrationGeneralInformation create(RegistrationGeneralInformation bodyCreate) {
-        RegistrationPaths dataRegistrationPaths = this.registrationPathsRepository.findById(bodyCreate.getPath_id())
-                .orElseThrow(() -> new DataNotFoundException("Id registration path not found."));
-
-        bodyCreate.setRegistrationPaths(dataRegistrationPaths);
-        bodyCreate.setPath_id(dataRegistrationPaths.getId());
-
-        return this.registrationGeneralInformationRepository.save(bodyCreate);
+        return null;
     }
 
     @Override

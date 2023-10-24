@@ -12,4 +12,5 @@ public interface RegistrationPathsService {
     List<RegistrationPaths> indexByTypeRegistrationPaths(FormPurchaseType type);
     RegistrationPaths update(Integer id, RegistrationPaths bodyUpdate);
     void delete(Integer id);
+
 }
