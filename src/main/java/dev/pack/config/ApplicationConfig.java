@@ -1,5 +1,6 @@
 package dev.pack.config;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import dev.pack.modules.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -51,4 +52,9 @@ public class ApplicationConfig {
 
   @Bean
   public ModelMapper modelMapper() {return new ModelMapper();}
+
+  @Bean
+  public ObjectMapper objectMapper(){
+    return new ObjectMapper();
+  }
 }

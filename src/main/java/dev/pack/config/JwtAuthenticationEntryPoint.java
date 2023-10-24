@@ -6,8 +6,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.Builder;
 import lombok.Data;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -20,15 +18,13 @@ import java.io.IOException;
 @Component
 public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
 
-    private static final Logger log = LoggerFactory.getLogger(JwtAuthenticationEntryPoint.class);
-
-    private final ObjectMapper objectMapper = new ObjectMapper();
+    ObjectMapper objectMapper = new ObjectMapper();
 
     @Override
     public void commence(HttpServletRequest request,
                          HttpServletResponse response,
                          AuthenticationException authException) throws IOException, ServletException {
-        if (authException instanceof BadCredentialsException) {
+        if (authException instanceof BadCredentialsException ) {
             handleBadCredentialsException(request, response, (BadCredentialsException) authException);
         } else {
             handleDefaultException(request, response, authException);
@@ -51,7 +47,6 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
                                  HttpServletResponse response,
                                  int httpStatus,
                                  String message) throws IOException {
-        log.error("Unauthorized error: {}", message);
 
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         response.setStatus(httpStatus);

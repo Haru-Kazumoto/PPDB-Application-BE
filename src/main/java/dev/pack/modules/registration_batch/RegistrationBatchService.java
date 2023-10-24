@@ -11,6 +11,6 @@ public interface RegistrationBatchService {
     Map<String, String> delete(Integer id);
 //    List<Object[]> getTotalPendaftarPerBatch(Integer batchId);
 //    Long getTotalPendaftar(Integer batchId);
-    List<RegistrationBatch> countStudents();
+    List<RegistrationBatch> countStudents(Integer regisPathsId);
     List<RegistrationBatch> getAllGelombangByPathsId(Integer pathsId);
 }

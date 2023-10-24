@@ -3,6 +3,7 @@ package dev.pack.modules.registration_batch;
 import dev.pack.modules.student.Student;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -39,6 +40,14 @@ public interface RegistrationBatchRepository extends JpaRepository<RegistrationB
             GROUP BY rb.id\s
     """)
     List<RegistrationBatch> findTotalPendaftarPerBatchModel(@Param("regisPathId") Integer regisPathId);
+
+    @Modifying
+    @Query(value = """
+        UPDATE RegistrationBatch rb\s
+        SET rb.countStudent = (SELECT COUNT(s) FROM rb.students s WHERE rb.registrationPaths.id = :regisPathsId)
+        WHERE rb.registrationPaths.id = :regisPathsId
+    """)
+    void updateCountStudent(@Param("regisPathsId") Integer regisPathsId);
 
     @Query("SELECT rb FROM RegistrationBatch rb WHERE rb.registrationPaths.id = :regisPathsId")
     List<RegistrationBatch> findByRegistrationPathsId(@Param("regisPathsId") Integer regisPathsId);

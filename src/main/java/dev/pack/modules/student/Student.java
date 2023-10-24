@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import dev.pack.modules.enums.Genders;
 import dev.pack.modules.registration_batch.RegistrationBatch;
+import dev.pack.modules.registration_paths.RegistrationPaths;
 import dev.pack.modules.user.User;
 import dev.pack.utils.Timestamps;
 import jakarta.persistence.*;
@@ -71,4 +72,8 @@ public class Student extends Timestamps implements Serializable {
     private User userId;
 
     //one to many ke student_payments
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "regis_path")
+    private RegistrationPaths registrationPaths;
 }

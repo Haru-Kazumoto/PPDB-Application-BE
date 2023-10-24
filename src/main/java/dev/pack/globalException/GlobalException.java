@@ -1,9 +1,9 @@
 package dev.pack.globalException;
 
 import dev.pack.exception.DataNotFoundException;
-import dev.pack.exception.UserNotFoundException;
 import dev.pack.payloads.ErrorResponse;
 import dev.pack.payloads.ValidationErrorResponse;
+import lombok.NonNull;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -18,65 +18,50 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.multipart.support.MissingServletRequestPartException;
+import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
 @ControllerAdvice
 public class GlobalException extends ResponseEntityExceptionHandler {
 
-    private ErrorResponse errorResponse(String message, Date timestamps, Integer statusCode){
-        return ErrorResponse.builder()
-                .message(message)
-                .timestamps(timestamps)
-                .statusCode(statusCode)
-                .build();
-    }
-
-    @ExceptionHandler(BadCredentialsException.class)
-    public ResponseEntity<Object> handleBadCredentialsException(BadCredentialsException ex) {
-        ErrorResponse err = errorResponse(ex.getMessage(), new Date(), HttpStatus.BAD_REQUEST.value());
-        return new ResponseEntity<>(err, HttpStatus.BAD_REQUEST);
-    }
-
-    @ExceptionHandler(UserNotFoundException.class)
-    public ResponseEntity<Object> handleUserNotFound(UserNotFoundException err) {
-        ErrorResponse error = errorResponse(err.getMessage(),new Date(), HttpStatus.BAD_REQUEST.value());
-        return new ResponseEntity<>(error,HttpStatus.BAD_REQUEST);
-    }
-
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
-    @ExceptionHandler(AuthenticationException.class)
-    public ResponseEntity<Object> handleAuthenticationException(AuthenticationException ex, HttpHeaders headers, HttpStatusCode statusCode, WebRequest request) {
-        ErrorResponse err = errorResponse(ex.getMessage(), new Date(), statusCode.value());
-        return new ResponseEntity<>(err, headers, statusCode);
+    @ExceptionHandler(BadCredentialsException.class)
+    public ResponseEntity<ErrorResponse> handleBadCredentialError(BadCredentialsException ex){
+        ErrorResponse errorResponse = ErrorResponse.builder()
+                .statusResponse(HttpStatus.UNAUTHORIZED.name())
+                .message("Username or password invalid")
+                .build();
+        return new ResponseEntity<>(errorResponse, HttpStatus.UNAUTHORIZED);
+    }
+
+    @Override
+    protected ResponseEntity<Object> handleHttpMessageNotReadable(
+            HttpMessageNotReadableException ex,
+            HttpHeaders headers,
+            HttpStatusCode status,
+            WebRequest request
+    ) {
+        ErrorResponse errorResponse = ErrorResponse.builder()
+                .statusResponse(status.toString())
+                .message(ex.getMessage())
+                .build();
+        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
 
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(DataNotFoundException.class)
-    public ResponseEntity<ErrorResponse> handleDataNotFound(DataNotFoundException ex, HttpHeaders headers, HttpStatusCode statusCode){
-        ErrorResponse err = errorResponse(ex.getMessage(), new Date(), statusCode.value());
-        return new ResponseEntity<>(err, statusCode);
-    }
-
-    @Override
-    protected ResponseEntity<Object> handleHttpRequestMethodNotSupported(HttpRequestMethodNotSupportedException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
-        ErrorResponse err = errorResponse(ex.getMessage(), new Date(), status.value());
-        return new ResponseEntity<>(err, headers, status);
-    }
-
-    @Override
-    protected ResponseEntity<Object> handleMissingPathVariable(MissingPathVariableException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
-        ErrorResponse err = errorResponse(ex.getMessage(), new Date(), status.value());
-        return new ResponseEntity<>(err, headers, status);
-    }
-
-    @Override
-    protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
-        ErrorResponse err = errorResponse(ex.getMessage(), new Date(), status.value());
-        return new ResponseEntity<>(err, headers, status);
+    public ResponseEntity<ErrorResponse> handleObjectNotFound(DataNotFoundException ex) {
+        ErrorResponse errorResponse = ErrorResponse.builder()
+                .statusResponse("NOT FOUND")
+                .message(ex.getMessage())
+                .build();
+        return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
     }
 
     @Override
@@ -95,5 +80,31 @@ public class GlobalException extends ResponseEntityExceptionHandler {
                 .build();
 
         return new ResponseEntity<>(result, headers, status);
+    }
+
+    @Override
+    protected ResponseEntity<Object> handleMissingServletRequestPart(
+            MissingServletRequestPartException ex,
+            @NonNull HttpHeaders headers,
+            @NonNull HttpStatusCode status,
+            @NonNull WebRequest request) {
+        ValidationErrorResponse response = new ValidationErrorResponse(
+                HttpStatus.NOT_FOUND.value(),
+                Collections.singletonList(ex.getMessage())
+        );
+        return new ResponseEntity<>(response, headers, status);
+    }
+
+    @Override
+    protected ResponseEntity<Object> handleNoHandlerFoundException(
+            NoHandlerFoundException ex,
+            @NonNull HttpHeaders headers,
+            @NonNull HttpStatusCode status,
+            @NonNull WebRequest request) {
+        ValidationErrorResponse response = new ValidationErrorResponse(
+                HttpStatus.NOT_FOUND.value(),
+                Collections.singletonList(ex.getMessage())
+        );
+        return new ResponseEntity<>(response, headers, status);
     }
 }

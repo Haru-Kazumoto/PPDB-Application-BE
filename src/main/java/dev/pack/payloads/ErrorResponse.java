@@ -17,6 +17,8 @@ public class ErrorResponse {
     @JsonSerialize(using = CustomDateSerializer.class)
     private Date timestamps;
 
+    private String statusResponse;
+
     private String message;
 
 }
