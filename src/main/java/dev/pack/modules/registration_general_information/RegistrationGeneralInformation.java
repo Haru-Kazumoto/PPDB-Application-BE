@@ -27,20 +27,8 @@ public class RegistrationGeneralInformation extends Timestamps {
     private TypeGeneral type; //kalo pembelian datanya isi yang additinoal prices
 
     private String name;
-
     private String description;
-
     private Integer index;
-
-    private Integer path_id;
-
-    //one to many regis path
-    @OneToMany(
-            cascade = CascadeType.ALL,
-            orphanRemoval = true,
-            mappedBy = "registrationGeneralInformation"
-    )
-    private List<AdditionalPrices> additionalPrices;
 
     @ManyToOne(fetch = FetchType.LAZY)
     private RegistrationPaths registrationPaths;

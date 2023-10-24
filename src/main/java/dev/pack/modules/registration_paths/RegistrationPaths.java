@@ -49,6 +49,18 @@ public class RegistrationPaths implements Serializable {
 
     private Double price;
 
+    private Long countStudent;
+
+    public RegistrationPaths(Integer id, String name, FormPurchaseType type, Date start_date, Date end_date, Double price, Long countStudent) {
+        this.id = id;
+        this.name = name;
+        this.type = type;
+        this.start_date = start_date;
+        this.end_date = end_date;
+        this.price = price;
+        this.countStudent = countStudent;
+    }
+
     @OneToMany(
             cascade = CascadeType.ALL,
             orphanRemoval = true,
