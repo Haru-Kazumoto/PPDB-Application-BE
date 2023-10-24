@@ -1,6 +1,7 @@
 package dev.pack.globalException;
 
 import dev.pack.exception.DataNotFoundException;
+import dev.pack.exception.UserNotFoundException;
 import dev.pack.payloads.ErrorResponse;
 import dev.pack.payloads.ValidationErrorResponse;
 import org.springframework.http.HttpHeaders;
@@ -34,11 +35,16 @@ public class GlobalException extends ResponseEntityExceptionHandler {
                 .build();
     }
 
-    @ResponseStatus(HttpStatus.UNAUTHORIZED)
     @ExceptionHandler(BadCredentialsException.class)
-    public ResponseEntity<Object> handleBadCredentialsException(BadCredentialsException ex, HttpHeaders headers, HttpStatusCode statusCode, WebRequest request) {
-        ErrorResponse err = errorResponse(ex.getMessage(), new Date(), statusCode.value());
-        return new ResponseEntity<>(err, statusCode);
+    public ResponseEntity<Object> handleBadCredentialsException(BadCredentialsException ex) {
+        ErrorResponse err = errorResponse(ex.getMessage(), new Date(), HttpStatus.BAD_REQUEST.value());
+        return new ResponseEntity<>(err, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(UserNotFoundException.class)
+    public ResponseEntity<Object> handleUserNotFound(UserNotFoundException err) {
+        ErrorResponse error = errorResponse(err.getMessage(),new Date(), HttpStatus.BAD_REQUEST.value());
+        return new ResponseEntity<>(error,HttpStatus.BAD_REQUEST);
     }
 
     @ResponseStatus(HttpStatus.UNAUTHORIZED)

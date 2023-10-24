@@ -1,15 +1,18 @@
 package dev.pack.modules.auth;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import dev.pack.config.JwtService;
 import dev.pack.exception.DataNotFoundException;
 import dev.pack.exception.DuplicateDataException;
+import dev.pack.exception.UserNotFoundException;
+import dev.pack.modules.role.RoleRepository;
+import dev.pack.modules.role.Roles;
 import dev.pack.modules.student.Student;
 import dev.pack.modules.student.StudentRepository;
 import dev.pack.modules.token.Token;
 import dev.pack.modules.token.TokenRepository;
 import dev.pack.modules.token.TokenType;
 import dev.pack.modules.user.User;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import dev.pack.modules.user.UserRepository;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -36,6 +39,7 @@ public class AuthenticationService {
   private final UserRepository userRepository;
   private final StudentRepository studentRepository;
   private final TokenRepository tokenRepository;
+  private final RoleRepository roleRepository;
 
   @Value("${application.security.jwt.secret-key}")
   private String SIGNING_KEY;
@@ -65,10 +69,13 @@ public class AuthenticationService {
       throw new DuplicateDataException("Nomor whatsapp telah di registerasi.");
     });
 
+    Roles role = this.roleRepository.findRolesByName("User");
+
     User user = User.builder()
             .username(request.getUsername())
             .password(passwordEncoder.encode(request.getPassword()))
             .role(request.getRole())
+            .role_id(role)
             .build();
 
     user = this.userRepository.save(user); // Simpan User terlebih dahulu
@@ -101,9 +108,11 @@ public class AuthenticationService {
             request.getPassword()
         )
     );
-    var user = userRepository
-            .findByUsername(request.getUsername())
-            .orElseThrow();
+
+    var user = userRepository.
+            findByUsername(request.getUsername()).
+            orElseThrow(() -> new UserNotFoundException("Username / Password Salah"));
+
 
     var jwtToken = jwtService.generateToken(user);
     var refreshToken = jwtService.generateRefreshToken(user);
