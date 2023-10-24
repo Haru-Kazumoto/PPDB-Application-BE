@@ -1,5 +1,6 @@
 package dev.pack.modules.student;
 
+import dev.pack.modules.registration_batch.ChooseBatchDto;
 import dev.pack.modules.user.User;
 import dev.pack.payloads.HttpResponse;
 import jakarta.validation.Valid;
@@ -27,6 +28,11 @@ public class StudentController {
     ){
         Student student = this.modelMapper.map(dto, Student.class);
         return http.response(HttpStatus.OK.value(), new Date(), this.studentService.createStudent(student, id));
+    }
+
+    @PutMapping(path = "/choose-batch")
+    public ResponseEntity<?> chooseBatch(@RequestBody @Valid ChooseBatchDto chooseBatchDto) {
+        return this.http.response(HttpStatus.OK.value(),new Date(),this.studentService.chooseRegistrationBatch(chooseBatchDto));
     }
 
 }

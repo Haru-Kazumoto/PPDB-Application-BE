@@ -1,5 +1,6 @@
 package dev.pack.modules.registration_batch;
 
+import dev.pack.modules.enums.FormPurchaseType;
 import dev.pack.payloads.HttpResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -34,6 +35,11 @@ public class RegistrationBatchController {
     @GetMapping(path = "/index")
     public ResponseEntity<?> index(@RequestParam(name = "pathId", defaultValue = "") int pathId){
         return this.http.response(OK.value(), new Date(), this.registrationBatchService.index(pathId));
+    }
+
+    @GetMapping(path = "/getByType")
+    public ResponseEntity<?> getByType(@RequestParam(name = "type")FormPurchaseType type) {
+        return this.http.response(OK.value(),new Date(),this.registrationBatchService.getAllBatchByType(type));
     }
 
     @PatchMapping(path = "/update")

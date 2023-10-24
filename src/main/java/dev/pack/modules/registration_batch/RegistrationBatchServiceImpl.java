@@ -1,6 +1,7 @@
 package dev.pack.modules.registration_batch;
 
 import dev.pack.exception.DataNotFoundException;
+import dev.pack.modules.enums.FormPurchaseType;
 import dev.pack.modules.registration_paths.RegistrationPaths;
 import dev.pack.modules.registration_paths.RegistrationPathsRepository;
 import dev.pack.utils.Validator;
@@ -42,6 +43,11 @@ public class RegistrationBatchServiceImpl implements RegistrationBatchService{
         this.registrationPathsRepository.findById(regisPathsId)
                 .orElseThrow(() -> new DataNotFoundException("Id not found."));
         return this.registrationBatchRepository.findTotalPendaftarPerBatchModel(regisPathsId);
+    }
+
+    @Override
+    public List<RegistrationBatch> getAllBatchByType(FormPurchaseType type) {
+        return this.registrationBatchRepository.getAllByType(type);
     }
 
     @Override

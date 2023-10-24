@@ -2,7 +2,14 @@ package dev.pack.modules.student;
 
 import dev.pack.exception.DataNotFoundException;
 import dev.pack.exception.DuplicateDataException;
+import dev.pack.modules.auth.AuthenticationService;
 import dev.pack.modules.lookup.LookupRepository;
+import dev.pack.modules.registration_batch.ChooseBatchDto;
+import dev.pack.modules.registration_batch.RegistrationBatch;
+import dev.pack.modules.registration_batch.RegistrationBatchRepository;
+import dev.pack.modules.user.User;
+import dev.pack.modules.user.UserService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +21,9 @@ public class StudentServiceImpl implements StudentService{
 
     private final StudentRepository studentRepository;
     private final LookupRepository lookupRepository;
+    private final RegistrationBatchRepository registrationBatchRepo;
+
+    private final AuthenticationService authenticationService;
 
     @Override
     public Student createStudent(Student bodyStudent, Integer idStudent) {
@@ -32,5 +42,23 @@ public class StudentServiceImpl implements StudentService{
     @Override
     public List<Student> getAll() {
         return null;
+    }
+
+    @Override
+    @Transactional
+    public RegistrationBatch chooseRegistrationBatch(ChooseBatchDto batchDto) {
+        RegistrationBatch registrationBatch = this.registrationBatchRepo.findById(batchDto.getBatch_id()).orElseThrow(() -> new DataNotFoundException("Gelombang tidak ditemukan"));
+
+        User user = this.authenticationService.decodeJwt();
+
+        this.studentRepository.save(
+            Student.builder()
+                    .id(user.getStudent().getId())
+                    .batch_id(batchDto.getBatch_id())
+                    .path_id(registrationBatch.getRegistrationPaths().getId())
+                    .build()
+        );
+
+        return registrationBatch;
     }
 }

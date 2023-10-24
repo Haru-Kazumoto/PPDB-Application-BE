@@ -49,5 +49,6 @@ public class RegistrationBatchDto {
     @NotNull()
     private String bank_account; //nomor rekening
 
-
 }
+
+

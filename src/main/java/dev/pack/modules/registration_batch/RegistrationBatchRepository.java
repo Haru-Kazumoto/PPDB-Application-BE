@@ -1,5 +1,6 @@
 package dev.pack.modules.registration_batch;
 
+import dev.pack.modules.enums.FormPurchaseType;
 import dev.pack.modules.student.Student;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -19,6 +20,13 @@ public interface RegistrationBatchRepository extends JpaRepository<RegistrationB
             LEFT JOIN rb.students s GROUP BY rb.id\s
     """)
     List<CountBatchRegistrar> findTotalPendaftarPerBatch();
+
+    @Query("""
+        select s from RegistrationBatch s
+        inner join s.registrationPaths d
+        where d.type = :type
+""")
+    List<RegistrationBatch> getAllByType(FormPurchaseType type);
 
     @Query(value = """
             SELECT new dev.pack.modules.registration_batch.RegistrationBatch(
