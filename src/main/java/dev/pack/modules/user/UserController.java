@@ -1,7 +1,9 @@
 package dev.pack.modules.user;
 
+import dev.pack.modules.auth.AuthenticationService;
 import dev.pack.modules.enums.Role;
 import dev.pack.payloads.HttpResponse;
+import dev.pack.payloads.PayloadsResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -14,6 +16,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
 
+import static org.springframework.http.HttpStatus.OK;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(path = "/api/v${application.version}/admin")
@@ -22,7 +26,7 @@ public class UserController {
 
     private final UserService userService;
     private final ModelMapper model;
-
+    private final AuthenticationService authenticationService;
     private final HttpResponse http;
 
     @GetMapping(path = "/index-all-user")
@@ -44,6 +48,17 @@ public class UserController {
         Pageable pageable = PageRequest.of(page, size);
         return ResponseEntity.status(HttpStatus.OK).body(
                 this.userService.getAllUserByRole(role, pageable));
+    }
+
+    @GetMapping(path = "/session")
+    public ResponseEntity<?> decodeJWT(){
+        return ResponseEntity.status(OK).body(
+                new PayloadsResponse(
+                        OK.value(),
+                        new Date(),
+                        authenticationService.decodeJwt()
+                )
+        );
     }
 
     @PostMapping("/post")

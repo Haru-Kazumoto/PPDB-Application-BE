@@ -7,6 +7,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
+import java.util.function.DoubleToIntFunction;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.lang.NonNull;
@@ -23,7 +24,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
   private final JwtService jwtService;
-  private final UserDetailsService userDetailsService;
+  private final CustomUserDetailsService userDetailsService;
   private final ApplicationConfig config;
   private final TokenRepository tokenRepository;
 
@@ -33,6 +34,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
       @NonNull HttpServletResponse response,
       @NonNull FilterChain filterChain
   ) throws ServletException, IOException {
+
     if (request.getServletPath().contains(String.format("/api/v%d/auth",config.APP_VERSION))) {
       filterChain.doFilter(request, response);
       return;

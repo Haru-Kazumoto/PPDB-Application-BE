@@ -14,8 +14,6 @@ import dev.pack.modules.token.TokenRepository;
 import dev.pack.modules.token.TokenType;
 import dev.pack.modules.user.User;
 import dev.pack.modules.user.UserRepository;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +21,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -69,7 +69,7 @@ public class AuthenticationService {
       throw new DuplicateDataException("Nomor whatsapp telah di registerasi.");
     });
 
-    Roles role = this.roleRepository.findRolesByName("User");
+    Roles role = this.roleRepository.findRolesByName("User").orElseThrow(() -> new DataNotFoundException("Error"));
 
     User user = User.builder()
             .username(request.getUsername())
@@ -152,15 +152,21 @@ public class AuthenticationService {
     tokenRepository.saveAll(validUserTokens);
   }
 
-  public User decodeJwt(String token){
-    Claims claims = Jwts.parserBuilder()
-            .setSigningKey(this.jwtService.getSignInKey())
-            .build()
-            .parseClaimsJws(token)
-            .getBody();
+  public User decodeJwt(){
 
-    return this.userRepository.findByUsername(claims.getSubject())
-            .orElse(null);
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+    var userData =  (org.springframework.security.core.userdetails.User)authentication.getPrincipal();
+    var user = userRepository.findByUsername(userData.getUsername()).orElseThrow(() -> new DataNotFoundException("Sesi tidak ditemukan, harap login kembali"));
+
+
+    return User.builder()
+            .id(user.getId())
+            .role_id(user.getRole_id())
+            .username(user.getUsername())
+            .student(user.getStudent())
+            .build();
+
   }
 
   public User findUserByUsername(String username){

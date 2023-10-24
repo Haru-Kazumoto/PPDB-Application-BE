@@ -25,8 +25,7 @@ public class RolesMenus {
     private String path;
 
 
-    @JoinColumn(name = "role_id",nullable = false)
-    @ManyToOne(cascade = CascadeType.MERGE)
+    @ManyToOne(fetch = FetchType.LAZY)
     private Roles role_id;
 
 }

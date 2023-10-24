@@ -54,14 +54,14 @@ public class GlobalException extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
 
-    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(DataNotFoundException.class)
     public ResponseEntity<ErrorResponse> handleObjectNotFound(DataNotFoundException ex) {
         ErrorResponse errorResponse = ErrorResponse.builder()
                 .statusResponse("NOT FOUND")
                 .message(ex.getMessage())
                 .build();
-        return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
 
     @Override

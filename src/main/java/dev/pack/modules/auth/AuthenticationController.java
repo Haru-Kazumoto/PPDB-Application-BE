@@ -7,6 +7,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -56,16 +57,16 @@ public class AuthenticationController {
     );
   }
 
-  @GetMapping(path = "/session")
-  public ResponseEntity<?> decodeJWT(@RequestParam(name = "token", defaultValue = "") String token){
-    return ResponseEntity.status(OK).body(
-            new PayloadsResponse(
-                    OK.value(),
-                    new Date(),
-                    service.decodeJwt(token)
-            )
-    );
-  }
+//  @GetMapping(path = "/session")
+//  public ResponseEntity<?> decodeJWT(){
+//    return ResponseEntity.status(OK).body(
+//            new PayloadsResponse(
+//                    OK.value(),
+//                    new Date(),
+//                    service.decodeJwt()
+//            )
+//    );
+//  }
 
   @PostMapping("/refresh-token")
   public void refreshToken(HttpServletRequest request, HttpServletResponse response) throws IOException {

@@ -1,5 +1,6 @@
 package dev.pack.config;
 
+import dev.pack.modules.user.User;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -44,8 +45,29 @@ public class JwtService {
     return buildToken(extraClaims, userDetails, jwtExpiration);
   }
 
+  public String generateToken(User user){
+    return createToken(user,jwtExpiration);
+  }
+
+  public String generateRefreshToken(User user) {
+    return createToken(user,jwtExpiration);
+  }
+
   public String generateRefreshToken(UserDetails userDetails) {
     return buildToken(new HashMap<>(), userDetails, refreshExpiration);
+  }
+
+  public String createToken(User user,long expiration) {
+    Claims claims = Jwts.claims().setSubject(user.getUsername());
+    claims.put("id",user.getId());
+    claims.put("username",user.getUsername());
+    return Jwts
+            .builder()
+            .setClaims(claims)
+            .setIssuedAt(new Date(System.currentTimeMillis()))
+            .setExpiration(new Date(System.currentTimeMillis() + expiration))
+            .signWith(getSignInKey(), SignatureAlgorithm.HS256)
+            .compact();
   }
 
   private String buildToken(Map<String, Object> extraClaims, UserDetails userDetails, long expiration) {

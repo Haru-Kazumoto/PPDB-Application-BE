@@ -1,5 +1,6 @@
 package dev.pack.modules.role;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import dev.pack.modules.user.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -25,17 +26,18 @@ public class Roles implements Serializable {
     private String role_name;
 
     @OneToMany(
-            cascade = CascadeType.MERGE,
+            cascade = CascadeType.ALL,
             orphanRemoval = true,
             mappedBy = "role_id"
     )
     private List<RolesMenus> rolesMenus;
 
     @OneToMany(
-            cascade = CascadeType.MERGE,
             orphanRemoval = true,
-            mappedBy = "role_id"
+            mappedBy = "role_id",
+            fetch = FetchType.LAZY
     )
+    @JsonIgnore
     private List<User> users;
 
 }
