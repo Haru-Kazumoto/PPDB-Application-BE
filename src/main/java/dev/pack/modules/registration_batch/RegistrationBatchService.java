@@ -7,6 +7,7 @@ public interface RegistrationBatchService {
 
     RegistrationBatch store(RegistrationBatch bodyCreate, Integer regisId);
     List<RegistrationBatch> index(Integer regisPathsId);
+
     RegistrationBatch update(Integer id, RegistrationBatch bodyUpdate);
     Map<String, String> delete(Integer id);
 //    List<Object[]> getTotalPendaftarPerBatch(Integer batchId);

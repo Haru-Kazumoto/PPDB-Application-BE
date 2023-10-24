@@ -35,6 +35,8 @@ public class RegistrationBatchServiceImpl implements RegistrationBatchService{
         return this.registrationBatchRepository.save(bodyCreate);
     }
 
+
+
     @Override
     public List<RegistrationBatch> index(Integer regisPathsId) {
         this.registrationPathsRepository.findById(regisPathsId)
