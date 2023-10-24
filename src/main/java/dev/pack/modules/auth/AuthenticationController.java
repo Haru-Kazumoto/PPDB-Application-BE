@@ -57,17 +57,6 @@ public class AuthenticationController {
     );
   }
 
-//  @GetMapping(path = "/session")
-//  public ResponseEntity<?> decodeJWT(){
-//    return ResponseEntity.status(OK).body(
-//            new PayloadsResponse(
-//                    OK.value(),
-//                    new Date(),
-//                    service.decodeJwt()
-//            )
-//    );
-//  }
-
   @PostMapping("/refresh-token")
   public void refreshToken(HttpServletRequest request, HttpServletResponse response) throws IOException {
     service.refreshToken(request, response);
