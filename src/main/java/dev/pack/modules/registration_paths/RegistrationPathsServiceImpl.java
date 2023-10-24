@@ -1,6 +1,7 @@
 package dev.pack.modules.registration_paths;
 
 import dev.pack.exception.DataNotFoundException;
+import dev.pack.modules.enums.FormPurchaseType;
 import dev.pack.modules.registration_batch.RegistrationBatch;
 import dev.pack.modules.registration_batch.RegistrationBatchRepository;
 import dev.pack.utils.Validator;
@@ -88,5 +89,10 @@ public class RegistrationPathsServiceImpl implements RegistrationPathsService {
     @Override
     public void delete(Integer id) {
         this.registrationPathsRepository.deleteById(id);
+    }
+
+    @Override
+    public List<RegistrationPaths> indexByTypeRegistrationPaths(FormPurchaseType type) {
+        return this.registrationPathsRepository.findAllByType(type);
     }
 }

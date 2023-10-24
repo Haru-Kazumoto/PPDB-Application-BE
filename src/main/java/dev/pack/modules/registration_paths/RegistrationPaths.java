@@ -7,6 +7,9 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import dev.pack.modules.registration_batch.RegistrationBatch;
 import dev.pack.modules.enums.FormPurchaseType;
 import dev.pack.modules.registration_general_information.RegistrationGeneralInformation;
+import dev.pack.modules.student.Student;
+import dev.pack.modules.student_logs.StudentLogs;
+import dev.pack.modules.student_payments.StudentPayments;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Future;
 import lombok.AllArgsConstructor;
@@ -51,6 +54,7 @@ public class RegistrationPaths implements Serializable {
             orphanRemoval = true,
             mappedBy = "registrationPaths"
     )
+    @JsonIgnore
     private List<RegistrationBatch> registrationBatches;
 
     @JsonIgnoreProperties(
@@ -67,5 +71,12 @@ public class RegistrationPaths implements Serializable {
     private List<RegistrationGeneralInformation> registrationGeneralInformations;
 
     //one to many ke 3 model student, student_logs, student_payments
+    @OneToMany(
+            cascade = CascadeType.ALL,
+            orphanRemoval = true,
+            mappedBy = "registrationPaths"
+    )
+    @JsonIgnore
+    private List<Student> students;
 
 }

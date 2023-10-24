@@ -25,6 +25,7 @@ public class SecurityConfiguration {
 
   private final JwtAuthenticationFilter jwtAuthFilter;
   private final AuthenticationProvider authenticationProvider;
+  private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
   private final LogoutHandler logoutHandler;
   private final ApplicationConfig config;
 
@@ -66,6 +67,7 @@ public class SecurityConfiguration {
                         request.anyRequest().fullyAuthenticated();
                     }
             );
+        http.exceptionHandling((ex) -> ex.authenticationEntryPoint(jwtAuthenticationEntryPoint));
         http.sessionManagement(
                         (sessionManagementConfigurer) -> {
                             sessionManagementConfigurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS);

@@ -51,11 +51,11 @@ public class RegistrationBatchController {
     }
 
     @GetMapping(path = "/count")
-    public ResponseEntity<?> countStudentsByBatch(){
+    public ResponseEntity<?> countStudentsByBatch(@RequestParam("regisPathsId")Integer regisPathsId){
         return this.http.response(
                 OK.value(),
                 new Date(),
-                this.registrationBatchService.countStudents()
+                this.registrationBatchService.countStudents(regisPathsId)
         );
     }
 

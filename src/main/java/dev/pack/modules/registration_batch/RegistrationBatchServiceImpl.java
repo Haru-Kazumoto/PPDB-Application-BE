@@ -4,6 +4,7 @@ import dev.pack.exception.DataNotFoundException;
 import dev.pack.modules.registration_paths.RegistrationPaths;
 import dev.pack.modules.registration_paths.RegistrationPathsRepository;
 import dev.pack.utils.Validator;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -78,8 +79,15 @@ public class RegistrationBatchServiceImpl implements RegistrationBatchService{
     }
 
     @Override
-    public List<RegistrationBatch> countStudents() {
-        return null;
+    public List<RegistrationBatch> countStudents(Integer regisPathsId) {
+        List<RegistrationBatch> resultData = this.registrationBatchRepository.findTotalPendaftarPerBatchModel(regisPathsId);
+        updateCountStudent(regisPathsId);
+        return resultData;
+    }
+
+    @Transactional
+    public void updateCountStudent(Integer regisPathsId){
+        this.registrationBatchRepository.updateCountStudent(regisPathsId);
     }
 
     @Override
