@@ -14,4 +14,3 @@ public class ChooseBatchDto {
     @NotNull
     private Integer batch_id;
 }
-

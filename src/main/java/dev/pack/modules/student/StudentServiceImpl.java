@@ -7,6 +7,10 @@ import dev.pack.modules.lookup.LookupRepository;
 import dev.pack.modules.registration_batch.ChooseBatchDto;
 import dev.pack.modules.registration_batch.RegistrationBatch;
 import dev.pack.modules.registration_batch.RegistrationBatchRepository;
+import dev.pack.modules.staging.Staging;
+import dev.pack.modules.staging.StagingRepository;
+import dev.pack.modules.student_logs.StudentLogs;
+import dev.pack.modules.student_logs.StudentLogsRepository;
 import dev.pack.modules.user.User;
 import dev.pack.modules.user.UserService;
 import jakarta.transaction.Transactional;
@@ -22,7 +26,8 @@ public class StudentServiceImpl implements StudentService{
     private final StudentRepository studentRepository;
     private final LookupRepository lookupRepository;
     private final RegistrationBatchRepository registrationBatchRepo;
-
+    private final StudentLogsRepository studentLogsRepository;
+    private final StagingRepository stagingRepository;
     private final AuthenticationService authenticationService;
 
     @Override
@@ -51,13 +56,22 @@ public class StudentServiceImpl implements StudentService{
 
         User user = this.authenticationService.decodeJwt();
 
-        this.studentRepository.save(
-            Student.builder()
-                    .id(user.getStudent().getId())
-                    .batch_id(batchDto.getBatch_id())
-                    .path_id(registrationBatch.getRegistrationPaths().getId())
-                    .build()
+        Staging staging = this.stagingRepository.findByName("Pilih Gelombang PPDB").orElseThrow(() -> new DataNotFoundException("Data yang diinput invalid"));
+
+        this.studentLogsRepository.save(
+                StudentLogs.builder()
+                        .batch_id(batchDto.getBatch_id())
+                        .path_id(registrationBatch.getRegistrationPaths().getId())
+                        .remark("Melakukan Pendaftaran")
+                        .staging(staging)
+                        .build()
         );
+
+        Student student = this.studentRepository.findById(user.getStudent().getId()).orElseThrow(() -> new DataNotFoundException("Data not found"));
+        student.setBatch_id(batchDto.getBatch_id());
+        student.setPath_id(registrationBatch.getRegistrationPaths().getId());
+
+        this.studentRepository.save(student);
 
         return registrationBatch;
     }
