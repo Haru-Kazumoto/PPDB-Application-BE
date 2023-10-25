@@ -1,5 +1,6 @@
 package dev.pack.modules.prices;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import dev.pack.modules.additional_prices.AdditionalPrices;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -22,6 +23,7 @@ public class Prices {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "additional_prices_id")
+    @JsonIgnore
     private AdditionalPrices additionalPrices;
 
 }

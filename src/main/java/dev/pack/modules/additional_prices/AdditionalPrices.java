@@ -1,7 +1,7 @@
 package dev.pack.modules.additional_prices;
 
 import dev.pack.modules.prices.Prices;
-import dev.pack.modules.registration_general_information.RegistrationGeneralInformation;
+import dev.pack.modules.registration_paths.RegistrationPaths;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -20,9 +20,11 @@ public class AdditionalPrices {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+    private String namePrice;
     private Double price;
     private Integer index;
-    private Integer info_id;
+
+    private Integer path_id;
 
     @OneToMany(
             cascade = CascadeType.ALL,
@@ -30,4 +32,7 @@ public class AdditionalPrices {
             mappedBy = "additionalPrices"
     )
     private List<Prices> prices;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    private RegistrationPaths registrationPaths;
 }

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import dev.pack.modules.additional_prices.AdditionalPrices;
 import dev.pack.modules.registration_batch.RegistrationBatch;
 import dev.pack.modules.enums.FormPurchaseType;
 import dev.pack.modules.registration_general_information.RegistrationGeneralInformation;
@@ -81,6 +82,13 @@ public class RegistrationPaths implements Serializable {
     )
     @JsonIgnore
     private List<RegistrationGeneralInformation> registrationGeneralInformations;
+
+    @OneToMany(
+            cascade = CascadeType.ALL,
+            orphanRemoval = true,
+            mappedBy = "registrationPaths"
+    )
+    private List<AdditionalPrices> additionalPrices;
 
     //one to many ke 3 model student, student_logs, student_payments
     @OneToMany(
