@@ -12,7 +12,7 @@ import java.util.Date;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping(path = "/api/v${application.version}/registration-info")
+@RequestMapping(path = "/api/v${application.version}/admin/registration-info")
 public class RegistrationGeneralInformationController {
 
     private final RegistrationGeneralInformationService registrationGeneralInformationService;
@@ -29,4 +29,33 @@ public class RegistrationGeneralInformationController {
         );
     }
 
+    @GetMapping(path = "/index")
+    public ResponseEntity<?> index(@RequestParam("regisPathsId") Integer regisPathsId){
+        return this.http.response(
+                HttpStatus.OK.value(),
+                new Date(),
+                this.registrationGeneralInformationService.index(regisPathsId)
+        );
+    }
+
+    @PatchMapping(path = "/update")
+    public ResponseEntity<?> update(
+            @RequestParam("id") Integer id,
+            @RequestBody @Valid RegistrationGeneralInformationDto.onCreate dto
+    ){
+        RegistrationGeneralInformation entity = this.modelMapper.map(dto, RegistrationGeneralInformation.class);
+
+        return this.http.response(
+                HttpStatus.OK.value(),
+                new Date(),
+                this.registrationGeneralInformationService.update(id, entity)
+        );
+    }
+
+    @DeleteMapping(path = "/delete")
+    public void delete(
+            @RequestParam("id") Integer id
+    ){
+        this.registrationGeneralInformationService.delete(id);
+    }
 }

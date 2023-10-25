@@ -15,8 +15,6 @@ public class RegistrationGeneralInformationDto {
     @AllArgsConstructor
     @NoArgsConstructor
     public static class onCreate{
-        @Enumerated(EnumType.STRING)
-        private TypeGeneral type; //kalo pembelian datanya isi yang additinoal prices
 
         @NotEmpty()
         private String name;

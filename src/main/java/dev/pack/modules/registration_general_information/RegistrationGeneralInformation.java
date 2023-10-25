@@ -23,12 +23,14 @@ public class RegistrationGeneralInformation extends Timestamps {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Enumerated(EnumType.STRING)
-    private TypeGeneral type; //kalo pembelian datanya isi yang additinoal prices
+//    @Enumerated(EnumType.STRING)
+//    private TypeGeneral type; //kalo pembelian datanya isi yang additinoal prices
 
     private String name;
     private String description;
     private Integer index;
+
+    private Integer regis_path_id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     private RegistrationPaths registrationPaths;

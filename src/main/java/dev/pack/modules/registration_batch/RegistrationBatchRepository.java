@@ -45,7 +45,15 @@ public interface RegistrationBatchRepository extends JpaRepository<RegistrationB
             FROM RegistrationBatch rb\s
             LEFT JOIN rb.students s\s
             WHERE rb.registrationPaths.id = :regisPathId
-            GROUP BY rb.id\s
+            GROUP BY rb.id,rb.name,
+            rb.index,
+            rb.max_quota,
+            rb.start_date,
+            rb.end_date,
+            rb.bank_name,
+            rb.bank_user,
+            rb.price,
+            rb.bank_account
     """)
     List<RegistrationBatch> findTotalPendaftarPerBatchModel(@Param("regisPathId") Integer regisPathId);
 
