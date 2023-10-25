@@ -36,12 +36,18 @@ public class RegistrationBatchServiceImpl implements RegistrationBatchService{
         return this.registrationBatchRepository.save(bodyCreate);
     }
 
-
+    @Override
+    public List<RegistrationBatch> getAllGelombangWhereIsOpen(Boolean condition) {
+        return this.registrationBatchRepository.findRegistrationBatchByIsOpen(condition);
+    }
 
     @Override
     public List<RegistrationBatch> index(Integer regisPathsId) {
         this.registrationPathsRepository.findById(regisPathsId)
                 .orElseThrow(() -> new DataNotFoundException("Id not found."));
+
+
+
         return this.registrationBatchRepository.findTotalPendaftarPerBatchModel(regisPathsId);
     }
 

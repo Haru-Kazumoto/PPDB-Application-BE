@@ -29,4 +29,19 @@ public class RegistrationGeneralInformationDto {
         private Integer path_id;
     }
 
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class onUpdate{
+
+        @NotEmpty()
+        private String name;
+
+        @NotEmpty()
+        private String description;
+
+        @NotNull()
+        private Integer index;
+    }
+
 }

@@ -43,7 +43,7 @@ public class RegistrationBatch implements Serializable {
     private Double price;
     private String bank_account; //nomor rekening
 
-    private Boolean isOpen = true; //buat cron schedule service
+    private Boolean isOpen = true;
 
     private Long countStudent; //read only, not stored to column table
 

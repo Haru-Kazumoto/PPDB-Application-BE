@@ -1,5 +1,6 @@
 package dev.pack.modules.registration_general_information;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import dev.pack.modules.additional_prices.AdditionalPrices;
 import dev.pack.modules.enums.TypeGeneral;
 import dev.pack.modules.registration_paths.RegistrationPaths;
@@ -23,16 +24,14 @@ public class RegistrationGeneralInformation extends Timestamps {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-//    @Enumerated(EnumType.STRING)
-//    private TypeGeneral type; //kalo pembelian datanya isi yang additinoal prices
-
     private String name;
     private String description;
     private Integer index;
 
-    private Integer regis_path_id;
+    private Integer path_id;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnore
     private RegistrationPaths registrationPaths;
 
 }

@@ -51,6 +51,11 @@ public class RegistrationBatchController {
         return this.http.response(OK.value(), new Date(), this.registrationBatchService.update(id, entity));
     }
 
+    @GetMapping(path = "/index-path")
+    public ResponseEntity<?> indexByGelombangIsOpen(@RequestParam("is")Boolean is){
+        return this.http.response(OK.value(), new Date(), this.registrationBatchService.getAllGelombangWhereIsOpen(is));
+    }
+
     @DeleteMapping(path = "/delete")
     public Map<String, String> delete(@RequestParam(name = "id", defaultValue = "0")int id){
         return this.registrationBatchService.delete(id);

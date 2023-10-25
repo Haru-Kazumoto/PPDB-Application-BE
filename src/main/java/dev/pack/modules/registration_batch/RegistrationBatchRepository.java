@@ -68,6 +68,6 @@ public interface RegistrationBatchRepository extends JpaRepository<RegistrationB
     @Query("SELECT rb FROM RegistrationBatch rb WHERE rb.registrationPaths.id = :regisPathsId")
     List<RegistrationBatch> findByRegistrationPathsId(@Param("regisPathsId") Integer regisPathsId);
 
-    @Query("SELECT s FROM Student s WHERE s.batch_id = :batchId")
-    List<Student> findStudentFromBatchId(@Param("batchId") Integer batchId, Pageable pageable);
+    @Query("SELECT rb FROM RegistrationBatch rb WHERE rb.isOpen = :condition")
+    List<RegistrationBatch> findRegistrationBatchByIsOpen(@Param("condition") Boolean condition);
 }

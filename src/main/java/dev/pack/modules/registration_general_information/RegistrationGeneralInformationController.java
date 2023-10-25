@@ -41,7 +41,7 @@ public class RegistrationGeneralInformationController {
     @PatchMapping(path = "/update")
     public ResponseEntity<?> update(
             @RequestParam("id") Integer id,
-            @RequestBody @Valid RegistrationGeneralInformationDto.onCreate dto
+            @RequestBody @Valid RegistrationGeneralInformationDto.onUpdate dto
     ){
         RegistrationGeneralInformation entity = this.modelMapper.map(dto, RegistrationGeneralInformation.class);
 

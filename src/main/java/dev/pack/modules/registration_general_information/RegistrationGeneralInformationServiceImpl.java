@@ -18,7 +18,7 @@ public class RegistrationGeneralInformationServiceImpl implements RegistrationGe
     @Override
     public RegistrationGeneralInformation create(RegistrationGeneralInformation bodyCreate) {
         RegistrationPaths dataPath = this.registrationPathsRepository
-                .findById(bodyCreate.getRegis_path_id())
+                .findById(bodyCreate.getPath_id())
                 .orElseThrow(() -> new DataNotFoundException("Id registration paths is not found."));
 
         bodyCreate.setRegistrationPaths(dataPath);
@@ -37,8 +37,6 @@ public class RegistrationGeneralInformationServiceImpl implements RegistrationGe
 
     @Override
     public RegistrationGeneralInformation update(Integer id, RegistrationGeneralInformation bodyUpdate) {
-        RegistrationPaths dataPath = this.registrationPathsRepository.findById(bodyUpdate.getRegis_path_id())
-                .orElseThrow(() -> new DataNotFoundException("Id regis paths not found."));
 
         RegistrationGeneralInformation dataNew = this.registrationGeneralInformationRepository.findById(id)
                 .orElseThrow(() -> new DataNotFoundException("Id general information not found."));
@@ -46,8 +44,6 @@ public class RegistrationGeneralInformationServiceImpl implements RegistrationGe
         dataNew.setName(bodyUpdate.getName());
         dataNew.setDescription(bodyUpdate.getDescription());
         dataNew.setIndex(bodyUpdate.getIndex());
-        dataNew.setRegis_path_id(bodyUpdate.getRegis_path_id());
-        dataNew.setRegistrationPaths(dataPath);
 
         return this.registrationGeneralInformationRepository.save(dataNew);
     }
