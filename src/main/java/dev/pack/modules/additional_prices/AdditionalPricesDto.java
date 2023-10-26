@@ -1,7 +1,6 @@
 package dev.pack.modules.additional_prices;
 
-import dev.pack.modules.prices.Prices;
-import jakarta.validation.Valid;
+import dev.pack.modules.prices.PriceDetailsDto;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -20,14 +19,21 @@ public class AdditionalPricesDto {
         private String namePrice;
 
         @NotNull()
-        private Double price;
+        private Integer path_id;
 
         @NotNull()
-        private Integer index;
+        private List<PriceDetailsDto> priceDetails;
+    }
 
-        @Valid()
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class onUpdate{
+        @NotEmpty()
+        private String namePrice;
+
         @NotNull()
-        private List<Prices> prices;
+        private List<PriceDetailsDto> priceDetails;
     }
 
 }

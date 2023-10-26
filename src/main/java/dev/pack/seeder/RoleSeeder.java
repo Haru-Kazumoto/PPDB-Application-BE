@@ -47,7 +47,6 @@ public class RoleSeeder implements CommandLineRunner {
         userPath.add("/ppdb/main/pembelian");
         userPath.add("/ppdb/main/pengembalian");
 
-
         adminPath.add("/ppdb/main/dashboard");
         adminPath.add("/ppdb/main/alur");
         adminPath.add("/ppdb/main/jalur-pendaftaran");

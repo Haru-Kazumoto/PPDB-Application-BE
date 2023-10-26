@@ -11,6 +11,8 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 
+import static dev.pack.constraint.ErrorMessage.*;
+
 @Service
 @RequiredArgsConstructor
 public class RegistrationPathsServiceImpl implements RegistrationPathsService {
@@ -75,7 +77,7 @@ public class RegistrationPathsServiceImpl implements RegistrationPathsService {
     @Override
     public RegistrationPaths update(Integer id, RegistrationPaths bodyUpdate) {
         RegistrationPaths data = this.registrationPathsRepository.findById(id)
-                .orElseThrow(() -> new DataNotFoundException("Id registration path not found."));
+                .orElseThrow(() -> new DataNotFoundException(REGISTRATION_PATHS_ID_NOT_FOUND));
 
         data.setName(bodyUpdate.getName());
         data.setType(bodyUpdate.getType());
@@ -88,7 +90,10 @@ public class RegistrationPathsServiceImpl implements RegistrationPathsService {
 
     @Override
     public void delete(Integer id) {
-        this.registrationPathsRepository.deleteById(id);
+        RegistrationPaths registrationPathsData = this.registrationPathsRepository.findById(id)
+                .orElseThrow(() -> new DataNotFoundException(REGISTRATION_PATHS_ID_NOT_FOUND));
+
+        this.registrationPathsRepository.delete(registrationPathsData);
     }
 
     @Override

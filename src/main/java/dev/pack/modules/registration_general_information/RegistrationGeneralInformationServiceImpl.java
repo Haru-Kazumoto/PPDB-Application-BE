@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+import static dev.pack.constraint.ErrorMessage.*;
+
 @RequiredArgsConstructor
 @Service
 public class RegistrationGeneralInformationServiceImpl implements RegistrationGeneralInformationService {
@@ -19,7 +21,7 @@ public class RegistrationGeneralInformationServiceImpl implements RegistrationGe
     public RegistrationGeneralInformation create(RegistrationGeneralInformation bodyCreate) {
         RegistrationPaths dataPath = this.registrationPathsRepository
                 .findById(bodyCreate.getPath_id())
-                .orElseThrow(() -> new DataNotFoundException("Id registration paths is not found."));
+                .orElseThrow(() -> new DataNotFoundException(REGISTRATION_PATHS_ID_NOT_FOUND));
 
         bodyCreate.setRegistrationPaths(dataPath);
 
@@ -30,7 +32,7 @@ public class RegistrationGeneralInformationServiceImpl implements RegistrationGe
     public List<RegistrationGeneralInformation> index(Integer regisPathsId) {
         this.registrationPathsRepository
                 .findById(regisPathsId)
-                .orElseThrow(() -> new DataNotFoundException("Id regis paths not found."));
+                .orElseThrow(() -> new DataNotFoundException(REGISTRATION_PATHS_ID_NOT_FOUND));
 
         return this.registrationGeneralInformationRepository.findAllByRegisPathId(regisPathsId);
     }
@@ -39,7 +41,7 @@ public class RegistrationGeneralInformationServiceImpl implements RegistrationGe
     public RegistrationGeneralInformation update(Integer id, RegistrationGeneralInformation bodyUpdate) {
 
         RegistrationGeneralInformation dataNew = this.registrationGeneralInformationRepository.findById(id)
-                .orElseThrow(() -> new DataNotFoundException("Id general information not found."));
+                .orElseThrow(() -> new DataNotFoundException(GENERAL_INFORMATION_ID_NOT_FOUND));
 
         dataNew.setName(bodyUpdate.getName());
         dataNew.setDescription(bodyUpdate.getDescription());
@@ -50,7 +52,7 @@ public class RegistrationGeneralInformationServiceImpl implements RegistrationGe
 
     @Override
     public void delete(Integer id) {
-        this.registrationGeneralInformationRepository.findById(id).orElseThrow(() -> new DataNotFoundException("Id general information not found."));
+        this.registrationGeneralInformationRepository.findById(id).orElseThrow(() -> new DataNotFoundException(GENERAL_INFORMATION_ID_NOT_FOUND));
         this.registrationGeneralInformationRepository.deleteById(id);
 
     }

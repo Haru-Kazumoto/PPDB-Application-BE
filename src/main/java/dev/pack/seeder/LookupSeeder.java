@@ -30,24 +30,19 @@ public class LookupSeeder implements CommandLineRunner {
     private void seedMajor(){
         List<List<String>> lookups = new ArrayList<>();
 
-
         lookups.add(List.of("Teknik Jaringan dan Komputer Telekomunikasi","TJKT","MAJOR"));
         lookups.add(List.of("Teknik Kendaraan Ringan","TKR","MAJOR"));
         lookups.add(List.of("Teknik Audio dan Video","TAV","MAJOR"));
-
+        lookups.add(List.of("Akuntansi Keuangan Lembaga","AKL","MAJOR"));
 
         for(var lookup : lookups) {
             this.lookupRepository.save(Lookup.builder()
                         .name(lookup.get(0))
-                        .type(lookup.get(2))
                         .value(lookup.get(1))
+                        .type(lookup.get(2))
                         .build()
             );
         }
-
-
         log.info("Success Run seeder lookup");
-
-
     }
 }

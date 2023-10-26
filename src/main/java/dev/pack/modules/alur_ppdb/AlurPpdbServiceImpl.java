@@ -1,7 +1,6 @@
 package dev.pack.modules.alur_ppdb;
 
 import dev.pack.exception.DataNotFoundException;
-import dev.pack.exception.DuplicateDataException;
 import dev.pack.exception.ErrorSoftDelete;
 import dev.pack.modules.user.User;
 import dev.pack.modules.user.UserRepository;
@@ -10,6 +9,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+
+import static dev.pack.constraint.ErrorMessage.*;
 
 @Service
 @RequiredArgsConstructor
@@ -33,7 +34,7 @@ public class AlurPpdbServiceImpl implements AlurPpdbService {
     public AlurPpdb updateFlow(Integer id, AlurPpdb bodyUpdate) {
         AlurPpdb data = this.alurPpdbRepository
                 .findById(id)
-                .orElseThrow(() -> new DataNotFoundException("Id not found."));
+                .orElseThrow(() -> new DataNotFoundException(PPDB_FLOW_ID_NOT_FOUND));
 
         data.setTitle(bodyUpdate.getTitle());
         data.setContent(bodyUpdate.getContent());
@@ -48,7 +49,7 @@ public class AlurPpdbServiceImpl implements AlurPpdbService {
 
     @Override
     public void softDeleteById(Integer id) {
-        User data = this.userRepository.findById(id).orElseThrow(() -> new DataNotFoundException("Id not found."));
+        User data = this.userRepository.findById(id).orElseThrow(() -> new DataNotFoundException(USER_ID_NOT_FOUND));
         if(data.getDeletedAt() != null) throw new ErrorSoftDelete("Data has been deactive.");
 
         this.alurPpdbRepository.softDeleteById(id);

@@ -47,9 +47,7 @@ public class StagingSeeder implements CommandLineRunner {
                     Staging.builder().name(staging).index(index).is_visible(true).build()
             );
 
-
             log.info("Success run RoleSeeder {}",stagings.get(index));
-
 
             index++;
         }

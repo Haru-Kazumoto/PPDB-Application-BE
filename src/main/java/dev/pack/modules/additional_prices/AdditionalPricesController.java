@@ -30,4 +30,16 @@ public class AdditionalPricesController {
     public ResponseEntity<?> index(@RequestParam("pathId") Integer pathId){
         return this.http.response(HttpStatus.OK.value(), new Date(), this.additionalPricesService.index(pathId));
     }
+
+    @PatchMapping(path = "/update")
+    public ResponseEntity<?> update(@RequestParam("id") Integer dataId, @RequestBody @Valid AdditionalPricesDto.onUpdate dto){
+        AdditionalPrices entity = this.modelMapper.map(dto, AdditionalPrices.class);
+        return this.http.response(HttpStatus.OK.value(), new Date(), this.additionalPricesService.update(dataId, entity));
+    }
+
+    @DeleteMapping(path = "/delete")
+    public void delete(@RequestParam("id") Integer dataId){
+        this.additionalPricesService.delete(dataId);
+    }
+
 }

@@ -13,6 +13,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static dev.pack.constraint.ErrorMessage.*;
+
 @Service
 @RequiredArgsConstructor
 public class RegistrationBatchServiceImpl implements RegistrationBatchService{
@@ -29,7 +31,7 @@ public class RegistrationBatchServiceImpl implements RegistrationBatchService{
         );
 
         RegistrationPaths registrationPaths = registrationPathsRepository.findById(regisId)
-                .orElseThrow(() -> new DataNotFoundException("RegistrationPaths not found"));
+                .orElseThrow(() -> new DataNotFoundException(REGISTRATION_PATHS_ID_NOT_FOUND));
 
         bodyCreate.setRegistrationPaths(registrationPaths);
 
@@ -44,9 +46,7 @@ public class RegistrationBatchServiceImpl implements RegistrationBatchService{
     @Override
     public List<RegistrationBatch> index(Integer regisPathsId) {
         this.registrationPathsRepository.findById(regisPathsId)
-                .orElseThrow(() -> new DataNotFoundException("Id not found."));
-
-
+                .orElseThrow(() -> new DataNotFoundException(REGISTRATION_PATHS_ID_NOT_FOUND));
 
         return this.registrationBatchRepository.findTotalPendaftarPerBatchModel(regisPathsId);
     }
@@ -59,7 +59,7 @@ public class RegistrationBatchServiceImpl implements RegistrationBatchService{
     @Override
     public RegistrationBatch update(Integer id, RegistrationBatch bodyUpdate) {
         RegistrationBatch data = this.registrationBatchRepository.findById(id)
-                .orElseThrow(() -> new DataNotFoundException("Id not found."));
+                .orElseThrow(() -> new DataNotFoundException(BATCH_ID_NOT_FOUND));
 
         this.validate.dateValidate(
                 bodyUpdate.getStart_date(),
@@ -84,7 +84,7 @@ public class RegistrationBatchServiceImpl implements RegistrationBatchService{
         Map<String, String> res = new HashMap<>();
 
         this.registrationBatchRepository.findById(id)
-                .orElseThrow(() -> new DataNotFoundException("Id not found."));
+                .orElseThrow(() -> new DataNotFoundException(BATCH_ID_NOT_FOUND));
         this.registrationBatchRepository.deleteById(id);
 
         res.put("status","SUCCESS");
@@ -107,7 +107,7 @@ public class RegistrationBatchServiceImpl implements RegistrationBatchService{
     @Override
     public List<RegistrationBatch> getAllGelombangByPathsId(Integer pathsId) {
         this.registrationPathsRepository.findById(pathsId)
-                .orElseThrow(() -> new DataNotFoundException("Id paths not found."));
+                .orElseThrow(() -> new DataNotFoundException(REGISTRATION_PATHS_ID_NOT_FOUND));
 
         return this.registrationBatchRepository.findByRegistrationPathsId(pathsId);
     }
