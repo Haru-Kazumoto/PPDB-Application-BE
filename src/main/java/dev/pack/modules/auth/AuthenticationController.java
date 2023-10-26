@@ -58,8 +58,14 @@ public class AuthenticationController {
   }
 
   @PostMapping("/refresh-token")
-  public void refreshToken(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    service.refreshToken(request, response);
+  public ResponseEntity<?> refreshToken(@RequestBody AuthenticationRequest.RefreshToken token) {
+    return ResponseEntity.status(ACCEPTED).body(
+            new PayloadsResponse(
+                    ACCEPTED.value(),
+                    new Date(),
+                    service.refreshToken(token)
+            )
+    );
   }
 
   @GetMapping(path = "/findByUsername")

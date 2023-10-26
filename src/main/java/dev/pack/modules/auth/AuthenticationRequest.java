@@ -20,4 +20,15 @@ public class AuthenticationRequest {
   @NotEmpty()
   @NotNull()
   String password;
+
+
+  @Data
+  @Builder
+  @AllArgsConstructor
+  @NoArgsConstructor
+  public static class RefreshToken {
+    @NotEmpty
+    @NotNull
+    String refresh_token;
+  }
 }

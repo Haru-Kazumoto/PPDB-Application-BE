@@ -1,12 +1,10 @@
 package dev.pack.modules.registration_batch;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.annotation.*;
 import dev.pack.modules.registration_paths.RegistrationPaths;
 import dev.pack.modules.enums.Banks;
 import dev.pack.modules.student.Student;
+import dev.pack.modules.student_logs.StudentLogs;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -80,5 +78,12 @@ public class RegistrationBatch implements Serializable {
     )
     @JsonIgnore
     private List<Student> students;
+
+
+    @OneToMany(
+            mappedBy = "registrationBatch"
+    )
+    @JsonBackReference
+    private List<StudentLogs> studentLogs;
 
 }

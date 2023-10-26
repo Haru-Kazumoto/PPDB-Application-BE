@@ -12,13 +12,12 @@ import org.springframework.context.annotation.Configuration;
 import java.util.ArrayList;
 import java.util.List;
 
-@Configuration
+//@Configuration
 @Transactional
 @RequiredArgsConstructor
 public class LookupSeeder implements CommandLineRunner {
 
     private final LookupRepository lookupRepository;
-
 
     private static final Logger log = LoggerFactory.getLogger(RoleSeeder.class);
 
@@ -34,6 +33,17 @@ public class LookupSeeder implements CommandLineRunner {
         lookups.add(List.of("Teknik Jaringan dan Komputer Telekomunikasi","TJKT","MAJOR"));
         lookups.add(List.of("Teknik Kendaraan Ringan","TKR","MAJOR"));
         lookups.add(List.of("Teknik Audio dan Video","TAV","MAJOR"));
+
+        lookups.add(List.of("Terdaftar","REGISTERED","STATUS"));
+        lookups.add(List.of("Menunggu Seleksi Berkas","FILE_SELECTION","STATUS"));
+        lookups.add(List.of("Menunggu Konfirmasi Pembayaran","WAITING_PAYMENT","STATUS"));
+        lookups.add(List.of("Menunggu Seleksi Ujian","TEST_SELECTION","STATUS"));
+        lookups.add(List.of("Menunggu Hasil Pengumuman","WAITING_ANNOUNCEMENT","STATUS"));
+        lookups.add(List.of("Berkas Terkonfirmasi","FILE_CONFIRMED","STATUS"));
+        lookups.add(List.of("Lulus Seleksi","SELECTION_PASSED","STATUS"));
+        lookups.add(List.of("Tidak Lulus Seleksi","SELECTION_NOT_PASSED","STATUS"));
+
+
 
 
         for(var lookup : lookups) {

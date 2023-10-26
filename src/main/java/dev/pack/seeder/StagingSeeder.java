@@ -1,5 +1,6 @@
 package dev.pack.seeder;
 
+import dev.pack.modules.enums.FormPurchaseType;
 import dev.pack.modules.staging.Staging;
 import dev.pack.modules.staging.StagingRepository;
 import lombok.RequiredArgsConstructor;
@@ -25,30 +26,35 @@ public class StagingSeeder implements CommandLineRunner {
         seedStagings();
     }
     private void seedStagings(){
-        List<String> stagings = new ArrayList<>();
+        List<List<Object>> stagings = new ArrayList<>();
 
-        stagings.add("Pilih Gelombang PPDB");
-        stagings.add("Transaksi Pembelian");
-        stagings.add("Pilih Jurusan");
-        stagings.add("Cetak Kartu Peserta");
+        stagings.add(List.of("Pilih Gelombang PPDB",1, FormPurchaseType.PEMBELIAN));
+        stagings.add(List.of("Transaksi Pembelian",2, FormPurchaseType.PEMBELIAN));
+        stagings.add(List.of("Pilih Jurusan",3, FormPurchaseType.PEMBELIAN));
+        stagings.add(List.of("Cetak Kartu Peserta",4, FormPurchaseType.PEMBELIAN));
 
-        stagings.add("Pilih Jalur PPDB");
-        stagings.add("Transaksi Pengembalian");
-        stagings.add("Isi Biodata");
-        stagings.add("Pilih Jurusan");
-        stagings.add("Isi data prestasi");
-        stagings.add("Cetak Kartu Peserta");
+        stagings.add(List.of("Pilih Jalur PPDB",1, FormPurchaseType.PENGEMBALIAN));
+        stagings.add(List.of("Transaksi Pengembalian",2, FormPurchaseType.PENGEMBALIAN));
+        stagings.add(List.of("Isi Biodata",3, FormPurchaseType.PENGEMBALIAN));
+        stagings.add(List.of("Pilih Jurusan",4, FormPurchaseType.PENGEMBALIAN));
+        stagings.add(List.of("Isi data prestasi",5, FormPurchaseType.PENGEMBALIAN));
+        stagings.add(List.of("Cetak Kartu Peserta",6, FormPurchaseType.PENGEMBALIAN));
 
 
         var index = 0;
         for (var staging : stagings ) {
 
             this.stagingRepository.save(
-                    Staging.builder().name(staging).index(index).is_visible(true).build()
+                    Staging.builder()
+                            .name((String)staging.get(0))
+                            .index((Integer) staging.get(1))
+                            .type((FormPurchaseType) staging.get(2))
+                            .is_visible(true)
+                            .build()
             );
 
 
-            log.info("Success run RoleSeeder {}",stagings.get(index));
+            log.info("Success run StagingSeeder {}",stagings.get(index));
 
 
             index++;

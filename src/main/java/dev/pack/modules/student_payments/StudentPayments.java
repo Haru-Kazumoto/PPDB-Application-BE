@@ -1,5 +1,6 @@
 package dev.pack.modules.student_payments;
 
+import dev.pack.modules.enums.FormPurchaseType;
 import dev.pack.modules.enums.PaymentMethod;
 import dev.pack.utils.Timestamps;
 import jakarta.persistence.*;
@@ -23,7 +24,8 @@ public class StudentPayments extends Timestamps {
     private String status;
     private Integer path_id;
     private Integer batch_id;
-    private Integer pict_id;
+    private String image;
+    private FormPurchaseType type;
 
     //many to one dari student
 

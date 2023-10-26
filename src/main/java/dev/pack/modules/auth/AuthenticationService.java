@@ -21,6 +21,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -28,6 +29,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.util.Arrays;
 
 @Service
 @RequiredArgsConstructor
@@ -88,6 +90,7 @@ public class AuthenticationService {
     var refreshToken = jwtService.generateRefreshToken(user);
 
     saveUserToken(user, jwtToken);
+    saveUserToken(user,refreshToken);
 
     return AuthenticationResponse.builder()
             .accessToken(jwtToken)
@@ -113,6 +116,8 @@ public class AuthenticationService {
     var refreshToken = jwtService.generateRefreshToken(user);
 
     revokeAllUserTokens(user);
+
+    saveUserToken(user,refreshToken);
     saveUserToken(user, jwtToken);
 
     return AuthenticationResponse.builder()
@@ -170,36 +175,38 @@ public class AuthenticationService {
             .orElseThrow(() -> new DataNotFoundException("Username not found."));
   }
 
-  public void refreshToken(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    final String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
-    final String refreshToken;
-    final String userEmail;
+  public AuthenticationResponse refreshToken(AuthenticationRequest.RefreshToken token)  {
+    tokenRepository.findByToken(token.getRefresh_token()).orElseThrow(() -> new DataNotFoundException("Unauthenticated"));
 
-    if (authHeader == null ||!authHeader.startsWith("Bearer ")) {
-      return;
+    var userEmail = jwtService.extractUsername(token.getRefresh_token());
+
+    // if token not resulting a username
+    if(userEmail.isEmpty()) {
+      throw new BadCredentialsException("Unauthenticated");
     }
 
-    refreshToken = authHeader.substring(7);
-    userEmail = jwtService.extractUsername(refreshToken);
+    var user = this.userRepository
+            .findByUsername(userEmail)
+            .orElseThrow(() -> new DataNotFoundException("Unauthenticated"));
 
-    if (userEmail != null) {
-      var user = this.userRepository
-              .findByUsername(userEmail)
-              .orElseThrow();
-
-      if (jwtService.isTokenValid(refreshToken, user)) {
-        var accessToken = jwtService.generateToken(user);
-
-        revokeAllUserTokens(user);
-        saveUserToken(user, accessToken);
-
-        var authResponse = AuthenticationResponse.builder()
-                .accessToken(accessToken)
-                .refreshToken(refreshToken)
-                .build();
-
-        new ObjectMapper().writeValue(response.getOutputStream(), authResponse);
-      }
+    // if token not valid
+    if (!jwtService.isTokenValid(token.getRefresh_token(), user)) {
+      throw new BadCredentialsException("Unauthenticated");
     }
+
+    var accessToken = jwtService.generateToken(user);
+    var refreshToken = jwtService.generateRefreshToken(user);
+
+    // cabut dulu kabeh
+    revokeAllUserTokens(user);
+
+    saveUserToken(user, accessToken);
+    saveUserToken(user,refreshToken);
+
+    return AuthenticationResponse.builder()
+            .accessToken(accessToken)
+            .refreshToken(refreshToken)
+            .role(String.valueOf(user.getRole()))
+            .build();
   }
 }

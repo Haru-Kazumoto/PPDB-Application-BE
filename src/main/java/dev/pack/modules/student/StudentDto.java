@@ -14,7 +14,6 @@ import lombok.NoArgsConstructor;
 import java.util.Date;
 
 public class StudentDto {
-
     @Data
     @AllArgsConstructor
     @NoArgsConstructor

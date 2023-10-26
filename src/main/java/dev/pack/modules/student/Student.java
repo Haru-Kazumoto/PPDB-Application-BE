@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import dev.pack.modules.enums.Genders;
 import dev.pack.modules.registration_batch.RegistrationBatch;
 import dev.pack.modules.registration_paths.RegistrationPaths;
+import dev.pack.modules.student_logs.StudentLogs;
 import dev.pack.modules.user.User;
 import dev.pack.utils.Timestamps;
 import jakarta.persistence.*;
@@ -15,6 +16,7 @@ import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -70,6 +72,13 @@ public class Student extends Timestamps implements Serializable {
 
     @OneToOne(fetch = FetchType.LAZY)
     private User userId;
+
+    @OneToMany(
+            orphanRemoval = true,
+            fetch = FetchType.LAZY,
+            mappedBy = "student"
+    )
+    private List<StudentLogs> studentLogs;
 
     //one to many ke student_payments
 

@@ -1,5 +1,6 @@
 package dev.pack.modules.staging;
 
+import dev.pack.modules.enums.FormPurchaseType;
 import dev.pack.modules.student_logs.StudentLogs;
 import dev.pack.utils.Timestamps;
 import jakarta.persistence.*;
@@ -9,6 +10,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
+
 
 @Data
 @AllArgsConstructor
@@ -26,6 +28,8 @@ public class Staging extends Timestamps {
     private Integer index; // urutan
 
     private Boolean is_visible = Boolean.TRUE;
+
+    private FormPurchaseType type;
 
     @OneToMany(
             cascade = CascadeType.ALL,

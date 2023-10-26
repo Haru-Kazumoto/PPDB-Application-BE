@@ -50,7 +50,7 @@ public class JwtService {
   }
 
   public String generateRefreshToken(User user) {
-    return createToken(user,jwtExpiration);
+    return createToken(user,refreshExpiration);
   }
 
   public String generateRefreshToken(UserDetails userDetails) {
