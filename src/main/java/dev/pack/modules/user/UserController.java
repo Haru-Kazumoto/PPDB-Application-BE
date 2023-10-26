@@ -21,7 +21,6 @@ import static org.springframework.http.HttpStatus.OK;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(path = "/api/v${application.version}/admin")
-@PreAuthorize("hasAnyRole('ADMIN')")
 public class UserController {
 
     private final UserService userService;
@@ -30,7 +29,6 @@ public class UserController {
     private final HttpResponse http;
 
     @GetMapping(path = "/index-all-user")
-    @PreAuthorize("hasAnyAuthority('admin:read')")
     public ResponseEntity<Iterable<?>> index(
             @RequestParam(name = "page", defaultValue = "0") int page,
             @RequestParam(name = "size", defaultValue = "10") int size) {
@@ -40,7 +38,6 @@ public class UserController {
     }
 
     @GetMapping(path = "/index")
-    @PreAuthorize("hasAnyAuthority('admin:read')")
     public ResponseEntity<?> index(
             @RequestParam(name = "page", defaultValue = "0") int page,
             @RequestParam(name = "size", defaultValue = "10") int size,
@@ -61,8 +58,16 @@ public class UserController {
         );
     }
 
+    @GetMapping(path = "/get-by")
+    public ResponseEntity<?> getByUsername(@RequestParam("username")String username){
+        return this.http.response(
+                HttpStatus.OK.value(),
+                new Date(),
+                this.userService.getUserByUsername(username)
+        );
+    }
+
     @PostMapping("/post")
-    @PreAuthorize("hasAnyAuthority('admin:create')")
     public ResponseEntity<?> store(@RequestBody @Valid UserDto bodyDto) {
         User mapData = model.map(bodyDto, User.class);
         User result = userService.createAdmin(mapData);

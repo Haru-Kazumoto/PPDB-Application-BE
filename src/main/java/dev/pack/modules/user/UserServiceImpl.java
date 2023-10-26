@@ -10,6 +10,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import static dev.pack.constraint.ErrorMessage.*;
+
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService{
@@ -17,24 +19,10 @@ public class UserServiceImpl implements UserService{
     private final UserRepository userRepository;
     private final PasswordEncoder password;
 
-    //Creating student
-    @Override
-    public User createStudent(User bodyUserCreate) {
-        this.userRepository.findByUsername(bodyUserCreate.getUsername()).ifPresent((username) -> {
-            throw new DuplicateDataException("Nomor whatsapp telah ada!");
-        });
-
-        return null;
-    }
-
     @Override
     public User createAdmin(User bodyAdminCreate) {
         //Validating
-        this.userRepository
-                .findByUsername(bodyAdminCreate.getUsername())
-                .ifPresent(username -> {
-                    throw new DuplicateDataException("Username has already exists.");
-                });
+        checkDuplicateUsername(bodyAdminCreate.getUsername());
 
         String hashedPassword = this.password.encode(bodyAdminCreate.getPassword());
         bodyAdminCreate.setPassword(hashedPassword);
@@ -51,7 +39,7 @@ public class UserServiceImpl implements UserService{
     public Iterable<User> getAllUserByRole(Role role, Pageable pageable) {
         var roles = this.userRepository
                 .findByRole(role)
-                .orElseThrow(() -> new DataNotFoundException(String.format("Role only have : %s", role.getAuthorities())));
+                .orElseThrow(() -> new DataNotFoundException(String.format(USER_ROLE_ERROR, role.getAuthorities())));
 
         return this.userRepository.findAllByRole(roles.getRole());
     }
@@ -59,7 +47,7 @@ public class UserServiceImpl implements UserService{
     @Override
     public User getUserByUsername(String username) {
         return this.userRepository.findByUsername(username)
-                .orElseThrow(() -> new DataNotFoundException("Username not found."));
+                .orElseThrow(() -> new DataNotFoundException(USERNAME_NOT_FOUND));
     }
 
     @Override
@@ -67,27 +55,28 @@ public class UserServiceImpl implements UserService{
         User user = this.userRepository
                 .findById(id)
                 .orElseThrow(
-                        () -> new DataNotFoundException(String.format("Data with id %d is not found.", id))
+                        () -> new DataNotFoundException(String.format(USER_ID_NOT_FOUND, id))
                 );
 
-        this.userRepository
-                .findByUsername(bodyUpdate.getUsername())
-                .ifPresent(username -> {
-                    throw new DuplicateDataException("Username has already exists.");
-                });
-
+        checkDuplicateUsernameForUpdate(user.getUsername(), bodyUpdate.getUsername());
 
         user.setUsername(bodyUpdate.getUsername());
         user.setPassword(password.encode(bodyUpdate.getPassword()));
-//        user.setRole(bodyUpdate.getRole()); <- once has set role, cannot update.
 
         return this.userRepository.save(user);
     }
 
-    @Override
-    public void softDelete(Integer id) {
-        User data = this.userRepository.findById(id).orElseThrow(() -> new DataNotFoundException("Id not found."));
-        if(data.getDeletedAt() != null) throw new ErrorSoftDelete("Data has been deactive.");
-//        this.softDeleteRepository.softDeleteById(data.getId());
+    private void checkDuplicateUsername(String username){
+        this.userRepository
+                .findByUsername(username)
+                .ifPresent(user -> {
+                    throw new DuplicateDataException(USERNAME_EXISTS);
+                });
+    }
+
+    private void checkDuplicateUsernameForUpdate(String currentUsername, String newUsername) {
+        if (!currentUsername.equals(newUsername)) {
+            checkDuplicateUsername(newUsername);
+        }
     }
 }

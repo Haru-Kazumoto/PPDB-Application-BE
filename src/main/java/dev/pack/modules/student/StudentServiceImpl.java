@@ -5,6 +5,7 @@ import dev.pack.exception.DuplicateDataException;
 import dev.pack.modules.auth.AuthenticationService;
 import dev.pack.modules.enums.FormPurchaseType;
 import dev.pack.modules.enums.PaymentMethod;
+import dev.pack.modules.lookup.Lookup;
 import dev.pack.modules.lookup.LookupRepository;
 import dev.pack.modules.registration_batch.ChooseBatchDto;
 import dev.pack.modules.registration_batch.GetStagingStatusDto;
@@ -40,22 +41,23 @@ public class StudentServiceImpl implements StudentService{
     private final FilesStorageService filesStorageService;
 
     @Override
+    @Transactional
     public Student createStudent(Student bodyStudent, Integer idStudent) {
-        this.studentRepository.findByNisn(bodyStudent.getNisn()).ifPresent((nisn) -> {
-            throw new DuplicateDataException("NISN has already exists");
-        });
+        checkIfNISNExists(bodyStudent.getNisn());
 
-        this.studentRepository.findById(idStudent).orElseThrow(() -> new DataNotFoundException("Id student not found."));
+        Student existingStudent = studentRepository.findById(idStudent)
+                .orElseThrow(() -> new DataNotFoundException(STUDENT_ID_NOT_FOUND));
 
-        var dataLookup = this.lookupRepository.getLookupByType(bodyStudent.getMajor());
-        if(dataLookup.isEmpty()) throw new DataNotFoundException(String.format("Data lookup [%s] not found.", bodyStudent.getMajor()));
+        Lookup dataLookup = getLookupByType(bodyStudent.getMajor());
 
-        return this.studentRepository.save(bodyStudent);
+        existingStudent.setMajor(dataLookup.getType());
+
+        return studentRepository.save(existingStudent);
     }
 
     @Override
     public List<Student> getAll() {
-        return null;
+        return studentRepository.findAll();
     }
 
     @Override
@@ -87,6 +89,28 @@ public class StudentServiceImpl implements StudentService{
         this.studentRepository.save(student);
 
         return registrationBatch;
+    }
+
+    private void checkIfNISNExists(String nisn) {
+        studentRepository.findByNisn(nisn)
+                .ifPresent(nisnResult -> {
+                    throw new DuplicateDataException(NISN_EXISTS);
+                });
+    }
+
+    private Lookup getLookupByType(String major) {
+        return lookupRepository.getLookupByType(major)
+                .orElseThrow(() -> new DataNotFoundException(String.format(LOOOKUP_NOT_FOUND,major)));
+    }
+
+    private RegistrationBatch getRegistrationBatchById(Integer batchId) {
+        return registrationBatchRepo.findById(batchId)
+                .orElseThrow(() -> new DataNotFoundException(BATCH_ID_NOT_FOUND));
+    }
+
+    private Staging getStagingByName(String name) {
+        return stagingRepository.findByName(name)
+                .orElseThrow(() -> new DataNotFoundException(STAGING_NAME_NOT_FOUND));
     }
 
     @Override

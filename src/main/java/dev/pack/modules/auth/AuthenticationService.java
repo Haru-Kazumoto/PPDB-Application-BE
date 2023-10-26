@@ -31,6 +31,8 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.util.Arrays;
 
+import static dev.pack.constraint.ErrorMessage.*;
+
 @Service
 @RequiredArgsConstructor
 public class AuthenticationService {
@@ -43,6 +45,8 @@ public class AuthenticationService {
   private final StudentRepository studentRepository;
   private final TokenRepository tokenRepository;
   private final RoleRepository roleRepository;
+
+
 
   @Value("${application.security.jwt.secret-key}")
   private String SIGNING_KEY;
@@ -63,10 +67,10 @@ public class AuthenticationService {
 
   public AuthenticationResponse registerStudent(RegisterRequest.User request){
     this.userRepository.findByUsername(request.getUsername()).ifPresent((username) -> {
-      throw new DuplicateDataException("Nomor whatsapp telah di registerasi.");
+      throw new DuplicateDataException(NUMBER_ALREADY_EXISTS);
     });
 
-    Roles role = this.roleRepository.findRolesByName("User").orElseThrow(() -> new DataNotFoundException("Error"));
+    Roles role = this.roleRepository.findRolesByName("User").orElseThrow(() -> new DataNotFoundException(ROLE_NOT_FOUND));
 
     User user = User.builder()
             .username(request.getUsername())
@@ -109,7 +113,7 @@ public class AuthenticationService {
 
     var user = userRepository.
             findByUsername(request.getUsername()).
-            orElseThrow(() -> new UserNotFoundException("Username / Password Salah"));
+            orElseThrow(() -> new UserNotFoundException(AUTHENTICATION_BAD_CREDENTIAL));
 
 
     var jwtToken = jwtService.generateToken(user);
@@ -157,7 +161,7 @@ public class AuthenticationService {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
     var userData =  (org.springframework.security.core.userdetails.User)authentication.getPrincipal();
-    var user = userRepository.findByUsername(userData.getUsername()).orElseThrow(() -> new DataNotFoundException("Sesi tidak ditemukan, harap login kembali"));
+    var user = userRepository.findByUsername(userData.getUsername()).orElseThrow(() -> new DataNotFoundException(AUTHENTICATION_BAD_SESSION));
 
 
     return User.builder()
@@ -172,7 +176,7 @@ public class AuthenticationService {
 
   public User findUserByUsername(String username){
     return this.userRepository.findByUsername(username)
-            .orElseThrow(() -> new DataNotFoundException("Username not found."));
+            .orElseThrow(() -> new DataNotFoundException(USERNAME_NOT_FOUND));
   }
 
   public AuthenticationResponse refreshToken(AuthenticationRequest.RefreshToken token)  {

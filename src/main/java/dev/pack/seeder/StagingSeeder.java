@@ -54,7 +54,7 @@ public class StagingSeeder implements CommandLineRunner {
             );
 
 
-            log.info("Success run StagingSeeder {}",stagings.get(index));
+            log.info("Success run RoleSeeder {}",stagings.get(index));
 
 
             index++;

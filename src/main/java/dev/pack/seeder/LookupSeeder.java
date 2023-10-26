@@ -19,6 +19,7 @@ public class LookupSeeder implements CommandLineRunner {
 
     private final LookupRepository lookupRepository;
 
+
     private static final Logger log = LoggerFactory.getLogger(RoleSeeder.class);
 
     @Override
@@ -33,6 +34,7 @@ public class LookupSeeder implements CommandLineRunner {
         lookups.add(List.of("Teknik Jaringan dan Komputer Telekomunikasi","TJKT","MAJOR"));
         lookups.add(List.of("Teknik Kendaraan Ringan","TKR","MAJOR"));
         lookups.add(List.of("Teknik Audio dan Video","TAV","MAJOR"));
+        lookups.add(List.of("Akuntansi Keuangan Lembaga","AKL","MAJOR"));
 
         lookups.add(List.of("Terdaftar","REGISTERED","STATUS"));
         lookups.add(List.of("Menunggu Seleksi Berkas","FILE_SELECTION","STATUS"));
