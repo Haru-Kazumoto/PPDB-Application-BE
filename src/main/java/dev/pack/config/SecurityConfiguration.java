@@ -3,6 +3,7 @@ package dev.pack.config;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.Customizer;
@@ -35,15 +36,14 @@ public class SecurityConfiguration {
     @Bean
   public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.cors(Customizer.withDefaults());
-        http
-            .csrf(AbstractHttpConfigurer::disable)
+        http.csrf(AbstractHttpConfigurer::disable)
             .authorizeHttpRequests(
                     (request) -> {
+                        request.requestMatchers(String.format("/api/v%d/auth/**",config.APP_VERSION)).permitAll();
+                        request.requestMatchers(String.format("/api/v%d/**",config.APP_VERSION)).fullyAuthenticated();
+
                         //Public path
                         request.requestMatchers("/api/public/**").permitAll();
-
-                        //Authentication
-                        request.requestMatchers(String.format("/api/v%d/auth/**",config.APP_VERSION)).permitAll();
 
                         //Role admin
                         request.requestMatchers(String.format("/api/v%d/admin/**", config.APP_VERSION)).hasRole(ADMIN.name());
@@ -57,9 +57,6 @@ public class SecurityConfiguration {
 
                         //Role user
                         request.requestMatchers(String.format("/api/v%d/user/**",config.APP_VERSION)).hasAnyRole(USER.name(), ADMIN.name());
-
-                        // request.requestMatchers("/api/v1/user/findByUsername").permitAll();
-
                         //User authority
                         request.requestMatchers(GET, String.format("/api/v%d/user/**", config.APP_VERSION)).hasAnyRole(USER.name(), ADMIN.name());
                         request.requestMatchers(POST, String.format("/api/v%d/user/**", config.APP_VERSION)).hasAnyRole(USER.name(), ADMIN.name());
@@ -67,7 +64,7 @@ public class SecurityConfiguration {
                         request.requestMatchers(PATCH, String.format("/api/v%d/user/**", config.APP_VERSION)).hasAnyRole(USER.name(), ADMIN.name());
                         request.requestMatchers(DELETE, String.format("/api/v%d/user/**", config.APP_VERSION)).hasAnyRole(USER.name(), ADMIN.name());
 
-                        request.anyRequest().fullyAuthenticated();
+                        request.anyRequest().permitAll();
                     }
             );
         http.exceptionHandling((ex) -> ex.authenticationEntryPoint(jwtAuthenticationEntryPoint));

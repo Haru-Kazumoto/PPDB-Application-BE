@@ -1,5 +1,6 @@
 package dev.pack.modules.student;
 
+import dev.pack.constraint.ErrorMessage;
 import dev.pack.exception.DataNotFoundException;
 import dev.pack.exception.DuplicateDataException;
 import dev.pack.modules.auth.AuthenticationService;
@@ -46,7 +47,7 @@ public class StudentServiceImpl implements StudentService{
         checkIfNISNExists(bodyStudent.getNisn());
 
         Student existingStudent = studentRepository.findById(idStudent)
-                .orElseThrow(() -> new DataNotFoundException(STUDENT_ID_NOT_FOUND));
+                .orElseThrow(() -> new DataNotFoundException(ErrorMessage.STUDENT_ID_NOT_FOUND));
 
         Lookup dataLookup = getLookupByType(bodyStudent.getMajor());
 
@@ -94,23 +95,23 @@ public class StudentServiceImpl implements StudentService{
     private void checkIfNISNExists(String nisn) {
         studentRepository.findByNisn(nisn)
                 .ifPresent(nisnResult -> {
-                    throw new DuplicateDataException(NISN_EXISTS);
+                    throw new DuplicateDataException(ErrorMessage.NISN_EXISTS);
                 });
     }
 
     private Lookup getLookupByType(String major) {
         return lookupRepository.getLookupByType(major)
-                .orElseThrow(() -> new DataNotFoundException(String.format(LOOOKUP_NOT_FOUND,major)));
+                .orElseThrow(() -> new DataNotFoundException(String.format(ErrorMessage.LOOOKUP_NOT_FOUND,major)));
     }
 
     private RegistrationBatch getRegistrationBatchById(Integer batchId) {
         return registrationBatchRepo.findById(batchId)
-                .orElseThrow(() -> new DataNotFoundException(BATCH_ID_NOT_FOUND));
+                .orElseThrow(() -> new DataNotFoundException(ErrorMessage.BATCH_ID_NOT_FOUND));
     }
 
     private Staging getStagingByName(String name) {
         return stagingRepository.findByName(name)
-                .orElseThrow(() -> new DataNotFoundException(STAGING_NAME_NOT_FOUND));
+                .orElseThrow(() -> new DataNotFoundException(ErrorMessage.STAGING_NAME_NOT_FOUND));
     }
 
     @Override
