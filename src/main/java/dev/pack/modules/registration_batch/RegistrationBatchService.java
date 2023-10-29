@@ -1,6 +1,7 @@
 package dev.pack.modules.registration_batch;
 
 import dev.pack.modules.enums.FormPurchaseType;
+import jakarta.servlet.Registration;
 
 import java.util.List;
 import java.util.Map;
@@ -25,4 +26,5 @@ public interface RegistrationBatchService {
 
     List<RegistrationBatch> getAllGelombangByPathsId(Integer pathsId);
 
+    List<RegistrationBatch> getRegisBatchByType(FormPurchaseType type);
 }
