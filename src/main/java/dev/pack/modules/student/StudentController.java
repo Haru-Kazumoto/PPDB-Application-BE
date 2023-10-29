@@ -49,14 +49,16 @@ public class StudentController {
     public ResponseEntity<?> getStagingStatus(@RequestParam(name = "stagingId") Integer stagingId) {
         User user = this.authenticationService.decodeJwt();
 
-        Optional<StudentLogs> result = this.studentService.getCurrentRegistrationStatus(
-                GetStagingStatusDto.builder()
-                        .stagingId(stagingId)
-                        .StudentId(user.getStudent().getId())
-                        .build()
+        return this.http.response(
+                HttpStatus.OK.value(),
+                new Date(),
+                this.studentService.getCurrentRegistrationStatus(
+                        GetStagingStatusDto.builder()
+                                .stagingId(stagingId)
+                                .StudentId(user.getStudent().getId())
+                                .build()
+                )
         );
-
-        return this.http.response(HttpStatus.OK.value(),new Date(), result.orElse(null));
     }
 
     @PostMapping(path = "/upload-payment")

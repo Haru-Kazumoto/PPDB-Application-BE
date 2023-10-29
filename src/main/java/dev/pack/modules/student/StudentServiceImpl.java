@@ -115,11 +115,25 @@ public class StudentServiceImpl implements StudentService{
     }
 
     @Override
-    public Optional<StudentLogs> getCurrentRegistrationStatus(GetStagingStatusDto stagingStatusDto) {
+    public StudentOffsetResponse getCurrentRegistrationStatus(GetStagingStatusDto stagingStatusDto) {
         Staging staging = this.stagingRepository.findById(stagingStatusDto.getStagingId()).orElseThrow(() -> new DataNotFoundException("Data tidak ditemukan"));
         Student student = this.studentRepository.findById(stagingStatusDto.getStudentId()).orElseThrow(() -> new DataNotFoundException("Data tidak ditemukan"));
 
-        return this.studentLogsRepository.findByStudentAndStaging(student,staging);
+        StudentLogs studentLogs =  this.studentLogsRepository.findByStudentAndStaging(student,staging).get();
+        StudentLogs currentState = this.studentLogsRepository.findCurrentStaging(student).get();
+
+        StudentPayments paymentStatus = this.studentPaymentRepository
+                .findStudentPaymentStatusByType(
+                        student,
+                        currentState.getType()
+                ).orElse(null);
+
+
+        return StudentOffsetResponse.builder()
+                .studentLogs(studentLogs)
+                .registrationBatch(currentState.getRegistrationBatch())
+                .studentPayments(paymentStatus)
+                .build();
     }
 
     @Override
@@ -141,6 +155,7 @@ public class StudentServiceImpl implements StudentService{
                         .status("WAITING_PAYMENT")
                         .method(PaymentMethod.valueOf(uploadPaymentDto.payment_method))
                         .image(newFileName)
+                        .student(user.getStudent())
                         .type(FormPurchaseType.PEMBELIAN)
                         .total(Double.valueOf(uploadPaymentDto.amount))
                         .build()

@@ -1,7 +1,10 @@
 package dev.pack.modules.student_payments;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import dev.pack.modules.enums.FormPurchaseType;
 import dev.pack.modules.enums.PaymentMethod;
+import dev.pack.modules.lookup.Lookup;
+import dev.pack.modules.student.Student;
 import dev.pack.utils.Timestamps;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -28,5 +31,9 @@ public class StudentPayments extends Timestamps {
     private FormPurchaseType type;
 
     //many to one dari student
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnore
+    private Student student;
 
 }

@@ -1,11 +1,13 @@
 package dev.pack.modules.student;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import dev.pack.modules.enums.Genders;
 import dev.pack.modules.registration_batch.RegistrationBatch;
 import dev.pack.modules.registration_paths.RegistrationPaths;
 import dev.pack.modules.student_logs.StudentLogs;
+import dev.pack.modules.student_payments.StudentPayments;
 import dev.pack.modules.user.User;
 import dev.pack.utils.Timestamps;
 import jakarta.persistence.*;
@@ -78,11 +80,18 @@ public class Student extends Timestamps implements Serializable {
             fetch = FetchType.LAZY,
             mappedBy = "student"
     )
+    @JsonIgnore
     private List<StudentLogs> studentLogs;
-
-    //one to many ke student_payments
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "regis_path")
     private RegistrationPaths registrationPaths;
+
+    @OneToMany(
+            orphanRemoval = true,
+            fetch = FetchType.LAZY,
+            mappedBy = "student"
+    )
+    @JsonIgnore
+    private List<StudentPayments> studentPayments;
 }

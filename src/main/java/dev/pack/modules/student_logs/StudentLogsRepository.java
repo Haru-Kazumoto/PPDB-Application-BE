@@ -16,8 +16,16 @@ public interface StudentLogsRepository extends JpaRepository<StudentLogs, Intege
         select d from StudentLogs d
         where d.id = (
             select MAX(s.id) from StudentLogs s where s.student = :student and s.staging = :staging
-        ) 
+        )
 """,nativeQuery = false)
     Optional<StudentLogs> findByStudentAndStaging(Student student, Staging staging);
+
+    @Query("""
+        select d from StudentLogs d
+        where d.id = (
+            select MAX(s.id) from StudentLogs s where s.student = :student
+        )
+""")
+    Optional<StudentLogs> findCurrentStaging(Student student);
 
 }

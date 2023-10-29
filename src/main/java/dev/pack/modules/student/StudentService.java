@@ -15,7 +15,7 @@ public interface StudentService {
 
     RegistrationBatch chooseRegistrationBatch(ChooseBatchDto batchDto);
 
-    Optional<StudentLogs> getCurrentRegistrationStatus(GetStagingStatusDto stagingStatusDto);
+    StudentOffsetResponse getCurrentRegistrationStatus(GetStagingStatusDto stagingStatusDto);
 
     StudentLogs uploadPayment(UploadPaymentDto dto);
 

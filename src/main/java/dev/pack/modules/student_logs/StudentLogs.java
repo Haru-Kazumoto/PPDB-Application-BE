@@ -1,6 +1,7 @@
 package dev.pack.modules.student_logs;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import dev.pack.modules.enums.FormPurchaseType;
 import dev.pack.modules.registration_batch.RegistrationBatch;
 import dev.pack.modules.staging.Staging;
@@ -36,11 +37,12 @@ public class StudentLogs extends Timestamps {
     private RegistrationBatch registrationBatch;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JsonBackReference
+    @JoinColumn(name = "student_id")
+    @JsonIgnore
     private Student student;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JsonBackReference
+    @JsonIgnore
     private Staging staging;
 
 }
