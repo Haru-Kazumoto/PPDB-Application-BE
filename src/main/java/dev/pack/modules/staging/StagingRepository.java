@@ -21,6 +21,11 @@ public interface StagingRepository extends JpaRepository<Staging, Integer> {
 """)
     Optional<Staging> findByName(String name);
 
+    @Query("""
+        select s from Staging s where s.name like CONCAT('%', CONCAT(:name, '%')) and s.type = :type
+""")
+    Optional<Staging> findByNameAndStagingType(String name, FormPurchaseType type);
+
     @Query(value = """
         select
             s.id as id,

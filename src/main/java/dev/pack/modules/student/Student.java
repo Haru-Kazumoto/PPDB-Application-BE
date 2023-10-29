@@ -15,6 +15,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.UuidGenerator;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -34,6 +35,10 @@ public class Student extends Timestamps implements Serializable {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
+
+    @UuidGenerator
+    private String uniqueId;
 
     @Column(unique = true)
     private String nisn;

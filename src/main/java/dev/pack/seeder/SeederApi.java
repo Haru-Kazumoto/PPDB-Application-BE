@@ -7,14 +7,17 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.boot.ApplicationArguments;
+import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.context.annotation.Configuration;
 
 import static dev.pack.modules.enums.Role.*;
 
+@Configuration
 @Transactional
-//@Configuration
 @RequiredArgsConstructor
-public class SeederApi implements CommandLineRunner {
+public class SeederApi implements ApplicationRunner {
 
     private final ActionRepository repository;
     private final ApplicationConfig config;
@@ -22,8 +25,13 @@ public class SeederApi implements CommandLineRunner {
     private static final Logger log = LoggerFactory.getLogger(SeederApi.class);
 
     @Override
-    public void run(String... args) throws Exception {
-        seedUserAction();
+    public void run(ApplicationArguments args) throws Exception {
+        if(args.getOptionValues("seeder") != null && args.getOptionValues("seeder").contains("api")){
+            seedUserAction();
+            log.info("Success run api seeder");
+        }else{
+            log.info("api seeder skipped");
+        }
     }
 
     private void seedUserAction(){

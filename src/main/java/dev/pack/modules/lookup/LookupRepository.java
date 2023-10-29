@@ -18,6 +18,6 @@ public interface LookupRepository extends JpaRepository<Lookup, Integer> {
     @Query("""
         SELECT l from Lookup l where l.value = :value
 """)
-    List<Lookup> getByValue(String value);
+    Optional<Lookup> getByValue(String value);
 
 }

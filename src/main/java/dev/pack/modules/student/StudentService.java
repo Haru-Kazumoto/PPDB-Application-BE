@@ -19,4 +19,11 @@ public interface StudentService {
 
     StudentLogs uploadPayment(UploadPaymentDto dto);
 
+    StudentLogs confirmPayment(ConfirmPaymentDto dto);
+
+
+    StudentLogs chooseMajor(ChooseMajorDto major);
+
+    StudentLogs printCard(PrintCardDto printCardDto);
+
 }

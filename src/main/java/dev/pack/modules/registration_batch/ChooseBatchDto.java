@@ -1,5 +1,8 @@
 package dev.pack.modules.registration_batch;
 
+import dev.pack.modules.enums.FormPurchaseType;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -13,4 +16,7 @@ import lombok.NoArgsConstructor;
 public class ChooseBatchDto {
     @NotNull
     private Integer batch_id;
+
+    @Enumerated(EnumType.STRING)
+    private FormPurchaseType type;
 }

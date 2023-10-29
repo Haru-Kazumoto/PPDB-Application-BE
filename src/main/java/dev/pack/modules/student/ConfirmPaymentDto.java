@@ -1,4 +1,4 @@
-package dev.pack.modules.registration_batch;
+package dev.pack.modules.student;
 
 import dev.pack.modules.enums.FormPurchaseType;
 import jakarta.validation.constraints.NotNull;
@@ -8,13 +8,13 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
-public class GetStagingStatusDto {
-    @NotNull
-    private Integer stagingId;
+public class ConfirmPaymentDto {
 
     @NotNull
-    private FormPurchaseType type;
+    public Integer payment_id;
+
+
 }

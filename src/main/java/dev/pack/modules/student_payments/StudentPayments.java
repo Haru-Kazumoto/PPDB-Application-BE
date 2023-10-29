@@ -30,6 +30,10 @@ public class StudentPayments extends Timestamps {
     private String image;
     private FormPurchaseType type;
 
+    private String bank_name;
+    private String bank_account;
+    private String bank_user;
+
     //many to one dari student
 
     @ManyToOne(fetch = FetchType.LAZY)
