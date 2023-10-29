@@ -30,13 +30,11 @@ import org.springframework.security.core.userdetails.UserDetails;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "users")
 @JsonIdentityInfo(
         generator = ObjectIdGenerators.PropertyGenerator.class,
         property = "id"
 )
-//@SQLDelete(sql = "UPDATE users SET deletedAt = CURRENT_TIMESTAMP WHERE id = ?") //bug gabisa table nya
-//@Where(clause = "deletedAt = null")
+@Table(name = "users")
 public class User extends Timestamps implements UserDetails{
 
   @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -45,7 +43,6 @@ public class User extends Timestamps implements UserDetails{
   @Column(unique = true)
   private String username; //ini jadi nomor whatsapp
 
-  @Column(nullable = true)
   private String fullname;
 
   @JsonIgnore

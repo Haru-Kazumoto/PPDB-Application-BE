@@ -32,8 +32,7 @@ public class SecurityConfiguration {
   private final LogoutHandler logoutHandler;
   private final ApplicationConfig config;
 
-
-    @Bean
+  @Bean
   public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.cors(Customizer.withDefaults());
         http.csrf(AbstractHttpConfigurer::disable)

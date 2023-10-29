@@ -10,4 +10,5 @@ public class SpaController {
     public String forward() {
         return "forward:/";
     }
+
 }

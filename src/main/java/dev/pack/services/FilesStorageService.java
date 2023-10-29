@@ -1,5 +1,6 @@
 package dev.pack.services;
 
+import java.io.IOException;
 import java.nio.file.Path;
 import java.util.stream.Stream;
 
@@ -15,5 +16,5 @@ public interface FilesStorageService {
 
     public void deleteAll();
 
-    public Stream<Path> loadAll();
+    public Stream<Path> loadAll() throws IOException;
 }

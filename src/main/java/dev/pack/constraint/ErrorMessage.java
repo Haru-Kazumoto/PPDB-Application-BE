@@ -33,6 +33,11 @@ public class ErrorMessage {
     public static final String AUTHENTICATION_BAD_CREDENTIAL = "Username or password incorrect";
     public static final String AUTHENTICATION_BAD_SESSION = "Session not found, please login again";
 
+    public static final String ERROR_CREATE_FOLDER = "Could not initialize folder for upload!";
+    public static final String FOLDER_IS_EXISTS = "A file of that name already exists.";
+    public static final String ERROR_READ_FILE = "Could not read the file";
+    public static final String ERROR_LOAD_FILE = "Could not load the files";
+
 
     public static final String STAGING_NAME_NOT_FOUND = "Staging name not found";
     public static final String LOOOKUP_NOT_FOUND = "Data lookup not found [%s]";

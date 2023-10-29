@@ -22,12 +22,23 @@ public interface RegistrationPathsRepository extends JpaRepository<RegistrationP
             rp.start_date,
             rp.end_date,
             rp.price,
-            SUM(rb.countStudent)
+            COUNT(rb.id)
         )
         FROM RegistrationPaths rp
         LEFT JOIN RegistrationBatch rb ON rp.id = rb.registrationPaths.id
         GROUP BY rp.id, rp.name, rp.type, rp.start_date, rp.end_date, rp.price
     """)
     List<RegistrationPaths> calculateTotalStudentInPaths();
+
+    @Query(value = """
+        select s.name,count(l.*)   as total_pendaftar
+        from registration_paths s
+        left join (
+            select path_id,student_id from student_logs
+            group by path_id,student_id
+        ) l on l.path_id = s.id
+        group by s.name
+    """, nativeQuery = true)
+    List<GetAllRegistrationPaths> getPathWithTotalStudents();
 
 }

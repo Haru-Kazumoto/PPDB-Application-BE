@@ -100,4 +100,9 @@ public class RegistrationPathsServiceImpl implements RegistrationPathsService {
     public List<RegistrationPaths> indexByTypeRegistrationPaths(FormPurchaseType type) {
         return this.registrationPathsRepository.findAllByType(type);
     }
+
+    @Override
+    public List<GetAllRegistrationPaths> getPathWithTotalStudents() {
+        return this.registrationPathsRepository.getPathWithTotalStudents();
+    }
 }

@@ -8,12 +8,13 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.stream.Stream;
 
-import dev.pack.services.FilesStorageService;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
 import org.springframework.util.FileSystemUtils;
 import org.springframework.web.multipart.MultipartFile;
+
+import static dev.pack.constraint.ErrorMessage.*;
 
 @Service
 public class FilesStorageServiceImpl implements FilesStorageService {
@@ -25,7 +26,7 @@ public class FilesStorageServiceImpl implements FilesStorageService {
         try {
             Files.createDirectories(root);
         } catch (IOException e) {
-            throw new RuntimeException("Could not initialize folder for upload!");
+            throw new RuntimeException(ERROR_CREATE_FOLDER);
         }
     }
 
@@ -64,7 +65,7 @@ public class FilesStorageServiceImpl implements FilesStorageService {
     }
 
     @Override
-    public Stream<Path> loadAll() {
+    public Stream<Path> loadAll(){
         try {
             return Files.walk(this.root, 1).filter(path -> !path.equals(this.root)).map(this.root::relativize);
         } catch (IOException e) {

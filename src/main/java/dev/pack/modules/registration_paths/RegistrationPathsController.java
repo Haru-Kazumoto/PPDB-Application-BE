@@ -42,6 +42,11 @@ public class RegistrationPathsController {
         return http.response(OK.value(), new Date(), this.registrationPathsService.indexByTypeRegistrationPaths(type));
     }
 
+    @GetMapping(path = "/count-registrar")
+    public ResponseEntity<?> getAllByType(){
+        return http.response(OK.value(), new Date(), this.registrationPathsService.getPathWithTotalStudents());
+    }
+
     @PatchMapping(path = "/update")
     public ResponseEntity<?> update(
             @RequestParam(name = "id", defaultValue = "0")int id,

@@ -6,5 +6,4 @@ public interface GetAllStaging {
     Integer getIndex();
 
     Integer getIs_done();
-
 }

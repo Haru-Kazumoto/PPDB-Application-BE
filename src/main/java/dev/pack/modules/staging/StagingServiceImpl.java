@@ -9,6 +9,7 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -22,10 +23,9 @@ public class StagingServiceImpl implements StagingService {
     public List<GetAllStaging> getAllByStudent(FormPurchaseType type) {
         User user = this.authenticationService.decodeJwt();
 
-        if(user.getRole_id().getRole_name() == "Admin") {
+        if( Objects.equals(user.getRole_id().getRole_name(), "Admin") ) {
             throw new BadCredentialsException("only user can access");
         }
-
 
         return this.stagingRepository.findStudentOffset(user.getStudent().getId(),type == FormPurchaseType.PEMBELIAN ? 0 : 1);
     }
