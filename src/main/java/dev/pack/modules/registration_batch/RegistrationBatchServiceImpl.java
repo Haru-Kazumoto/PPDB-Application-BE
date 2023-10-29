@@ -111,4 +111,10 @@ public class RegistrationBatchServiceImpl implements RegistrationBatchService{
 
         return this.registrationBatchRepository.findByRegistrationPathsId(pathsId);
     }
+
+    @Override
+    public RegistrationBatch getById(Integer id) {
+        return this.registrationBatchRepository.findById(id)
+                .orElseThrow(() -> new DataNotFoundException(BATCH_ID_NOT_FOUND));
+    }
 }

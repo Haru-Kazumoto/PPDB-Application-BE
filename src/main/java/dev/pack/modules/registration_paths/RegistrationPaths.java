@@ -80,7 +80,7 @@ public class RegistrationPaths implements Serializable {
             orphanRemoval = true,
             mappedBy = "registrationPaths"
     )
-    @JsonIgnore
+//    @JsonIgnore
     private List<RegistrationGeneralInformation> registrationGeneralInformations;
 
     @OneToMany(

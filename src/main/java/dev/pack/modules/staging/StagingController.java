@@ -14,7 +14,7 @@ import java.util.Date;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping(path = "/api/v${application.version}/staging")
+@RequestMapping(path = "/api/v${application.version}/user/staging")
 public class StagingController {
     private final StagingService stagingService;
     private final HttpResponse http;
@@ -22,8 +22,6 @@ public class StagingController {
 
     @GetMapping("/get-student-offset")
     ResponseEntity<?> getStudentOffset(@RequestParam(name = "type",required = true) FormPurchaseType type) {
-
-
         return this.http.response(
                 HttpStatus.OK.value(),
                 new Date(),

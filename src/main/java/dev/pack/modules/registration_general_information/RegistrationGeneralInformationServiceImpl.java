@@ -52,8 +52,15 @@ public class RegistrationGeneralInformationServiceImpl implements RegistrationGe
 
     @Override
     public void delete(Integer id) {
-        this.registrationGeneralInformationRepository.findById(id).orElseThrow(() -> new DataNotFoundException(GENERAL_INFORMATION_ID_NOT_FOUND));
-        this.registrationGeneralInformationRepository.deleteById(id);
+        RegistrationGeneralInformation data = this.registrationGeneralInformationRepository.findById(id)
+                .orElseThrow(() -> new DataNotFoundException(GENERAL_INFORMATION_ID_NOT_FOUND));
 
+        this.registrationGeneralInformationRepository.delete(data);
+    }
+
+    @Override
+    public RegistrationGeneralInformation getGeneralInformationByPathId(Integer pathId) {
+
+        return null;
     }
 }
