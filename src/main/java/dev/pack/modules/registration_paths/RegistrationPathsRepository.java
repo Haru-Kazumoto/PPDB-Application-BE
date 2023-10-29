@@ -31,14 +31,50 @@ public interface RegistrationPathsRepository extends JpaRepository<RegistrationP
     List<RegistrationPaths> calculateTotalStudentInPaths();
 
     @Query(value = """
-        select s.name,count(l.*)   as total_pendaftar
+        select 
+            s.id,
+            s.name,
+            s.type,
+            s.start_date,
+            s.end_date,
+            s.price,
+            count(l.*) as total_pendaftar
         from registration_paths s
         left join (
             select path_id,student_id from student_logs
             group by path_id,student_id
         ) l on l.path_id = s.id
-        group by s.name
+        group by  s.id,
+            s.name,
+            s.type,
+            s.start_date,
+            s.end_date,
+            s.price
     """, nativeQuery = true)
     List<GetAllRegistrationPaths> getPathWithTotalStudents();
+
+    @Query(value = """
+        select 
+            s.id,
+            s.name,
+            s.type,
+            s.start_date,
+            s.end_date,
+            s.price,
+            count(l.*) as total_pendaftar
+        from registration_paths s
+        left join (
+            select path_id,student_id from student_logs
+            group by path_id,student_id
+        ) l on l.path_id = s.id
+        where s.type = :type
+        group by  s.id,
+            s.name,
+            s.type,
+            s.start_date,
+            s.end_date,
+            s.price
+    """, nativeQuery = true)
+    List<GetAllRegistrationPaths> getPathWithTotalStudentsByType(String type);
 
 }

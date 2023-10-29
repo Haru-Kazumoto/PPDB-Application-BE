@@ -24,7 +24,7 @@ public class StudentSeeder implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
-        if(args.getOptionValues("seeder") != null && Objects.equals(args.getOptionValues("seeder").get(0), "student")){
+        if(args.getOptionValues("seeder") != null && args.getOptionValues("seeder").contains("student")){
             this.seedStudents();
             log.info("Success run student seeder");
         }else{
