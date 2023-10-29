@@ -12,6 +12,9 @@ import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
 
+import java.util.Arrays;
+import java.util.List;
+
 import static dev.pack.modules.enums.Role.*;
 
 @Configuration
@@ -26,7 +29,9 @@ public class SeederApi implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
-        if(args.getOptionValues("seeder") != null && args.getOptionValues("seeder").contains("api")){
+        List<String> seeder = Arrays.asList(args.getOptionValues("seeder").get(0).split(","));
+        
+        if(args.getOptionValues("seeder") != null && seeder.contains("api")){
             seedUserAction();
             log.info("Success run api seeder");
         }else{

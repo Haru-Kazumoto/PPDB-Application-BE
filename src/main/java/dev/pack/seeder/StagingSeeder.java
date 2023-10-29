@@ -11,6 +11,7 @@ import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.annotation.Configuration;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Configuration
@@ -24,7 +25,9 @@ public class StagingSeeder implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
-        if(args.getOptionValues("seeder") != null && args.getOptionValues("seeder").contains("staging")){
+        List<String> seeder = Arrays.asList(args.getOptionValues("seeder").get(0).split(","));
+
+        if(args.getOptionValues("seeder") != null && seeder.contains("staging")){
             seedStagings();
             log.info("Success run staging seeder");
         }else{

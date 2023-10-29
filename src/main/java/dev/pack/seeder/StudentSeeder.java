@@ -12,6 +12,8 @@ import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 
 @Component
@@ -23,7 +25,9 @@ public class StudentSeeder implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
-        if(args.getOptionValues("seeder") != null && args.getOptionValues("seeder").contains("student")){
+        List<String> seeder = Arrays.asList(args.getOptionValues("seeder").get(0).split(","));
+
+        if(args.getOptionValues("seeder") != null && seeder.contains("student")){
             this.seedStudents();
             log.info("Success run student seeder");
         }else{
