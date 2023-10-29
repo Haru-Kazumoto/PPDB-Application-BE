@@ -2,6 +2,7 @@ package dev.pack.modules.registration_batch;
 
 import dev.pack.modules.enums.FormPurchaseType;
 import dev.pack.modules.student.Student;
+import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -57,6 +58,7 @@ public interface RegistrationBatchRepository extends JpaRepository<RegistrationB
     """)
     List<RegistrationBatch> findTotalPendaftarPerBatchModel(@Param("regisPathId") Integer regisPathId);
 
+    @Transactional
     @Modifying
     @Query(value = """
         UPDATE RegistrationBatch rb\s
@@ -70,4 +72,9 @@ public interface RegistrationBatchRepository extends JpaRepository<RegistrationB
 
     @Query("SELECT rb FROM RegistrationBatch rb WHERE rb.isOpen = :condition")
     List<RegistrationBatch> findRegistrationBatchByIsOpen(@Param("condition") Boolean condition);
+
+    @Query("""
+        SELECT rb FROM RegistrationBatch rb WHERE rb.registrationPaths.type = :type
+    """)
+    List<RegistrationBatch> findRegistrationBatchByPathType(@Param("type") FormPurchaseType type);
 }
