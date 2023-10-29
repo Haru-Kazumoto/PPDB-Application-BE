@@ -21,7 +21,6 @@ public class StudentSeeder implements ApplicationRunner {
     private final AuthenticationService authenticationService;
     private static final Logger log = LoggerFactory.getLogger(RoleSeeder.class);
 
-
     @Override
     public void run(ApplicationArguments args) throws Exception {
         if(args.getOptionValues("seeder") != null && args.getOptionValues("seeder").contains("student")){
@@ -37,7 +36,12 @@ public class StudentSeeder implements ApplicationRunner {
 
         for (int i = 0; i < 1000; i++) {
             String name = faker.name().fullName();
-            String phonenumber = faker.phoneNumber().phoneNumber().replace("-","").replace("(","").replace(")","");
+            String phonenumber = faker.phoneNumber()
+                    .phoneNumber()
+                    .replace("-","")
+                    .replace("(","")
+                    .replace(")","");
+
             String address = faker.address().fullAddress();
 
             this.authenticationService.registerStudent(

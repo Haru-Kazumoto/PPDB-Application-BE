@@ -80,4 +80,13 @@ public class RegistrationBatchController {
                 this.registrationBatchService.getAllGelombangByPathsId(pathsId)
         );
     }
+
+    @GetMapping(path = "/get")
+    public ResponseEntity<?> getById(@RequestParam("id") Integer id){
+        return this.http.response(
+                OK.value(),
+                new Date(),
+                this.registrationBatchService.getById(id)
+        );
+    }
 }
