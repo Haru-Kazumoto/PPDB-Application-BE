@@ -1,8 +1,6 @@
 package dev.pack.modules.registration_general_information;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import dev.pack.modules.additional_prices.AdditionalPrices;
-import dev.pack.modules.enums.TypeGeneral;
 import dev.pack.modules.registration_paths.RegistrationPaths;
 import dev.pack.utils.Timestamps;
 import jakarta.persistence.*;
@@ -10,8 +8,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -33,6 +29,7 @@ public class RegistrationGeneralInformation extends Timestamps {
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnore
     private RegistrationPaths registrationPaths;
+
 
 }
 

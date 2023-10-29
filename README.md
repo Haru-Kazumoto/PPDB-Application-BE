@@ -23,6 +23,13 @@ To get started with this project, you will need to have the following installed 
 * JDK 17+
 * Maven 3+
 
+## RUNNING SEEDER
+
+### student
+```shell
+mvn clean spring-boot:run -Dspring-boot.run.arguments=--seeder=student
+```
+
 
 To build and run the project, follow these steps:
 
