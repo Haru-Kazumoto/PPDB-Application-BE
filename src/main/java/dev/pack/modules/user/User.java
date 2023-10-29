@@ -56,9 +56,7 @@ public class User extends Timestamps implements UserDetails{
 
   //Relasi role model
   @JoinColumn(name = "role_id",nullable = false)
-  @ManyToOne(
-          cascade = CascadeType.ALL
-  )
+  @ManyToOne()
   private Roles role_id;
   
   @JsonSerialize(using = CustomDateSerializer.class)
