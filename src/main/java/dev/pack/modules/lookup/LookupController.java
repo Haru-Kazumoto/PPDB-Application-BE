@@ -18,12 +18,12 @@ public class LookupController {
     private final HttpResponse http;
     private final LookupService lookupService;
 
-    @GetMapping(path = "/")
-    public ResponseEntity<?> index(@RequestParam("value") String value) {
+    @GetMapping(path = "")
+    public ResponseEntity<?> index(@RequestParam("type") String value) {
         return this.http.response(
                 HttpStatus.OK.value(),
                 new Date(),
-                this.lookupService.findByValue(value)
+                this.lookupService.findByType(value)
         );
     }
 

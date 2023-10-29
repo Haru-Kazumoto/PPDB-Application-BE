@@ -100,8 +100,9 @@ public class StudentServiceImpl implements StudentService{
     }
 
     private Lookup getLookupByType(String major) {
-        return lookupRepository.getLookupByType(major)
-                .orElseThrow(() -> new DataNotFoundException(String.format(ErrorMessage.LOOOKUP_NOT_FOUND,major)));
+//        return lookupRepository.getLookupByType(major);
+
+        return null;
     }
 
     private RegistrationBatch getRegistrationBatchById(Integer batchId) {
@@ -119,8 +120,8 @@ public class StudentServiceImpl implements StudentService{
         Staging staging = this.stagingRepository.findById(stagingStatusDto.getStagingId()).orElseThrow(() -> new DataNotFoundException("Data tidak ditemukan"));
         Student student = this.studentRepository.findById(stagingStatusDto.getStudentId()).orElseThrow(() -> new DataNotFoundException("Data tidak ditemukan"));
 
-        StudentLogs studentLogs =  this.studentLogsRepository.findByStudentAndStaging(student,staging).get();
-        StudentLogs currentState = this.studentLogsRepository.findCurrentStaging(student).get();
+        StudentLogs studentLogs =  this.studentLogsRepository.findByStudentAndStaging(student,staging).orElse(null);
+        StudentLogs currentState = this.studentLogsRepository.findCurrentStaging(student).orElseThrow(() -> new DataNotFoundException("Invalid data"));
 
         StudentPayments paymentStatus = this.studentPaymentRepository
                 .findStudentPaymentStatusByType(

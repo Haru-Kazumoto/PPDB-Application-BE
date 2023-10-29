@@ -21,6 +21,8 @@ public class RegistrationGeneralInformation extends Timestamps {
     private Integer id;
 
     private String name;
+
+    @Lob
     private String description;
     private Integer index;
 

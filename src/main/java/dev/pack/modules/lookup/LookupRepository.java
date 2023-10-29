@@ -12,7 +12,7 @@ import java.util.Optional;
 public interface LookupRepository extends JpaRepository<Lookup, Integer> {
 
     @Query("SELECT l FROM Lookup l WHERE l.type = :type")
-    Optional<Lookup> getLookupByType(@Param("type") String type);
+    List<Lookup> getLookupByType(@Param("type") String type);
 
 
     @Query("""

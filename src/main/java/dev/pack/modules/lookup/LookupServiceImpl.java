@@ -11,7 +11,7 @@ public class LookupServiceImpl implements LookupService{
     private final LookupRepository lookupRepository;
 
     @Override
-    public List<Lookup> findByValue(String value) {
-        return this.lookupRepository.getByValue(value);
+    public List<Lookup> findByType(String type) {
+        return this.lookupRepository.getLookupByType(type);
     }
 }

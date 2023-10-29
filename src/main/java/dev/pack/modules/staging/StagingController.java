@@ -14,7 +14,7 @@ import java.util.Date;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping(path = "/api/v${application.version}/user/staging")
+@RequestMapping(path = "/api/v${application.version}/staging")
 public class StagingController {
     private final StagingService stagingService;
     private final HttpResponse http;
