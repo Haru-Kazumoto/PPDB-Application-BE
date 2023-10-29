@@ -28,7 +28,7 @@ To get started with this project, you will need to have the following installed 
 * build frontend with command ```npm run build``` 
 * copy content of dist folder to frontend folder in backend folder
 * run ```mvn clean install``` to build a jar
-* copy jar to folder ```/taiasu```
+* copy jar to folder ```/folder```
 * run ```docker build -t pppdb-yatindo:1.0.0 .``` remember to change the version of 1.0.0 according to the latest version by ```docker images```
 * run ```docker compose down```
 * run ```docker compose up -d```
