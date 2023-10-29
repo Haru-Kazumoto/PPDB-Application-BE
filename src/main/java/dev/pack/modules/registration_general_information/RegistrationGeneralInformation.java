@@ -22,8 +22,9 @@ public class RegistrationGeneralInformation extends Timestamps {
 
     private String name;
 
-    @Lob
+    @Column(length = 10000)
     private String description;
+
     private Integer index;
 
     private Integer path_id;
