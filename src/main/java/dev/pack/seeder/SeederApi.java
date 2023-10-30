@@ -29,11 +29,12 @@ public class SeederApi implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
-        List<String> seeder = Arrays.asList(args.getOptionValues("seeder").get(0).split(","));
-        
-        if(args.getOptionValues("seeder") != null && seeder.contains("api")){
-            seedUserAction();
-            log.info("Success run api seeder");
+        if(args.getOptionValues("seeder") != null){
+            List<String> seeder = Arrays.asList(args.getOptionValues("seeder").get(0).split(","));
+            if(seeder.contains("api")) {
+                seedUserAction();
+                log.info("Success run api seeder");
+            }
         }else{
             log.info("api seeder skipped");
         }

@@ -25,11 +25,12 @@ public class StagingSeeder implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
-        List<String> seeder = Arrays.asList(args.getOptionValues("seeder").get(0).split(","));
-
-        if(args.getOptionValues("seeder") != null && seeder.contains("staging")){
-            seedStagings();
-            log.info("Success run staging seeder");
+        if(args.getOptionValues("seeder") != null){
+            List<String> seeder = Arrays.asList(args.getOptionValues("seeder").get(0).split(","));
+            if(seeder.contains("staging")) {
+                seedStagings();
+                log.info("Success run staging seeder");
+            }
         }else{
             log.info("staging seeder skipped");
         }

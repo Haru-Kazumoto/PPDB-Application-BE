@@ -25,11 +25,12 @@ public class StudentSeeder implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
-        List<String> seeder = Arrays.asList(args.getOptionValues("seeder").get(0).split(","));
-
-        if(args.getOptionValues("seeder") != null && seeder.contains("student")){
-            this.seedStudents();
-            log.info("Success run student seeder");
+        if(args.getOptionValues("seeder") != null){
+            List<String> seeder = Arrays.asList(args.getOptionValues("seeder").get(0).split(","));
+            if(seeder.contains("student")) {
+                this.seedStudents();
+                log.info("Success run student seeder");
+            }
         }else{
             log.info("Student seeder skipped");
         }
