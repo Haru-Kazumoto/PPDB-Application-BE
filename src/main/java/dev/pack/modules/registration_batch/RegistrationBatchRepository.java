@@ -112,4 +112,6 @@ public interface RegistrationBatchRepository extends JpaRepository<RegistrationB
         SELECT s FROM Student s WHERE s.batch_id = :batchId
     """)
     List<Student> findAllStudentByBatchId(Integer batchId);
+
+    //TODO : GET 2 VALUE (JUMLAH PENDAFTAR DAN JUMLAH PENDAFTAR DI TEIRMA BERDASARKAN STATUS DARI STUDENT) BY BATCH ID
 }

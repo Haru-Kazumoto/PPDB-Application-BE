@@ -4,9 +4,12 @@ import dev.pack.exception.DataNotFoundException;
 import dev.pack.modules.enums.FormPurchaseType;
 import dev.pack.modules.registration_paths.RegistrationPaths;
 import dev.pack.modules.registration_paths.RegistrationPathsRepository;
+import dev.pack.modules.student.CountStudents;
 import dev.pack.modules.student.Student;
+import dev.pack.modules.student.StudentRepository;
 import dev.pack.modules.user.UserRepository;
 import dev.pack.utils.Validator;
+import jakarta.servlet.Registration;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -23,6 +26,8 @@ public class RegistrationBatchServiceImpl implements RegistrationBatchService{
 
     private final RegistrationBatchRepository registrationBatchRepository;
     private final RegistrationPathsRepository registrationPathsRepository;
+    private final StudentRepository studentRepository;
+
     private final Validator validate;
 
     @Override
@@ -131,5 +136,19 @@ public class RegistrationBatchServiceImpl implements RegistrationBatchService{
         List<Student> dataStudents = this.registrationBatchRepository.findAllStudentByBatchId(batchId);
         if(dataStudents.isEmpty()) throw new DataNotFoundException(BATCH_ID_NOT_FOUND);
         return dataStudents;
+    }
+
+    @Override
+    public CountStudents countStudent(Integer batchId) {
+        RegistrationBatch data = this.registrationBatchRepository.findById(batchId)
+                .orElseThrow(() -> new DataNotFoundException(BATCH_ID_NOT_FOUND));
+
+        long total = this.studentRepository.countStudentsByBatchId(data.getId());
+        long accepted = this.studentRepository.countConfirmedPaymentStudentsByBatchId(data.getId());
+
+        return CountStudents.builder()
+                .totalStudents(total)
+                .studentAccepted(accepted)
+                .build();
     }
 }

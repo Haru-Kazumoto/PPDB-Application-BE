@@ -43,27 +43,31 @@ public class Student extends Timestamps implements Serializable {
     @Column(unique = true)
     private String nisn;
 
-    private String name;
+    private String name; //2
 
     @Column(unique = true)
-    private String phone;
+    private String phone; //1
 
     private String surname;
 
     private String gender;
     private String religion;
     private String birth_place;
-    private Date birth_date;
-    private String address;
+    private Date birth_date; //custom
+    private String address; //3
     private String province;
     private String city;
     private String district;
     private String sub_district;
     private String postal_code;
-    private String school_origin;
+    private String school_origin; //4
+
+    @Column(nullable = true)
     private String profile_picture;
+
     private String status;
-    private String major;
+
+    private String major; //mengambil data type dari lookup
 
     private Date registrationDate;
 
@@ -99,20 +103,4 @@ public class Student extends Timestamps implements Serializable {
     )
     @JsonIgnore
     private List<StudentPayments> studentPayments;
-
-//    Orang Tua
-
-    private String dad_name;
-    private String dad_phone;
-    private String dad_job;
-    private String dad_address;
-
-    private String mother_name;
-    private String mother_phone;
-    private String mother_job;
-    private String mother_address;
-
-    private String family_card;
-
-    private String birth_card;
 }

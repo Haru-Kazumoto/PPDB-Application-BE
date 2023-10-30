@@ -76,8 +76,7 @@ public class StudentServiceImpl implements StudentService{
         if(batchDto.getType() == FormPurchaseType.PEMBELIAN){
             staging = this.stagingRepository.findByName("Pilih Gelombang PPDB").orElseThrow(() -> new DataNotFoundException("Data yang diinput invalid"));;
         }
-
-
+        
         Student student = this.studentRepository.findById(user.getStudent().getId()).orElseThrow(() -> new DataNotFoundException("Data not found"));
 
         student.setRegistrationDate(new Date());
