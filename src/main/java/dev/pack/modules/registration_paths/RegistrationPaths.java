@@ -80,7 +80,7 @@ public class RegistrationPaths implements Serializable {
             orphanRemoval = true,
             mappedBy = "registrationPaths"
     )
-//    @JsonIgnore
+    @JsonIgnore
     private List<RegistrationGeneralInformation> registrationGeneralInformations;
 
     @OneToMany(
@@ -88,6 +88,7 @@ public class RegistrationPaths implements Serializable {
             orphanRemoval = true,
             mappedBy = "registrationPaths"
     )
+    @JsonIgnore
     private List<AdditionalPrices> additionalPrices;
 
     //one to many ke 3 model student, student_logs, student_payments

@@ -7,15 +7,18 @@ import dev.pack.modules.role.RolesMenus;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.boot.ApplicationArguments;
+import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
-//@Configuration
+@Configuration
 @RequiredArgsConstructor
-public class RoleSeeder implements CommandLineRunner {
+public class RoleSeeder implements ApplicationRunner {
 
     private final RoleRepository roleRepository;
     private final RoleMenusRepository roleMenusRepository;
@@ -24,8 +27,16 @@ public class RoleSeeder implements CommandLineRunner {
     private static final Logger log = LoggerFactory.getLogger(RoleSeeder.class);
 
     @Override
-    public void run(String... args) throws Exception {
-        seedRoles();
+    public void run(ApplicationArguments args) throws Exception {
+        List<String> seeder = Arrays.asList(args.getOptionValues("seeder").get(0).split(","));
+
+        if(args.getOptionValues("seeder") != null && seeder.contains("role")){
+            seedRoles();
+            log.info("Success run role seeder");
+        }else{
+            log.info("role seeder skipped");
+        }
+
     }
 
     private void seedRolesMenus() {

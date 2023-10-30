@@ -1,6 +1,5 @@
-package dev.pack.modules.staging;
+package dev.pack.modules.lookup;
 
-import dev.pack.modules.enums.FormPurchaseType;
 import dev.pack.payloads.HttpResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -14,18 +13,18 @@ import java.util.Date;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping(path = "/api/v${application.version}/staging")
-public class StagingController {
-    private final StagingService stagingService;
+@RequestMapping(path = "/api/v${application.version}/lookup")
+public class LookupController {
     private final HttpResponse http;
+    private final LookupService lookupService;
 
-
-    @GetMapping("/get-student-offset")
-    ResponseEntity<?> getStudentOffset(@RequestParam(name = "type",required = true) FormPurchaseType type) {
+    @GetMapping(path = "")
+    public ResponseEntity<?> index(@RequestParam("type") String value) {
         return this.http.response(
                 HttpStatus.OK.value(),
                 new Date(),
-                this.stagingService.getAllByStudent( type)
+                this.lookupService.findByType(value)
         );
     }
+
 }

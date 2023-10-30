@@ -99,7 +99,8 @@ public class RegistrationBatchServiceImpl implements RegistrationBatchService{
         return resultData;
     }
 
-    @Transactional
+    //TODO : GET ALL GELOMBANG BY TIPE JALUR
+
     public void updateCountStudent(Integer regisPathsId){
         this.registrationBatchRepository.updateCountStudent(regisPathsId);
     }
@@ -116,5 +117,10 @@ public class RegistrationBatchServiceImpl implements RegistrationBatchService{
     public RegistrationBatch getById(Integer id) {
         return this.registrationBatchRepository.findById(id)
                 .orElseThrow(() -> new DataNotFoundException(BATCH_ID_NOT_FOUND));
+    }
+
+    @Override
+    public List<RegistrationBatch> getRegisBatchByType(FormPurchaseType type) {
+        return this.registrationBatchRepository.findRegistrationBatchByPathType(type);
     }
 }

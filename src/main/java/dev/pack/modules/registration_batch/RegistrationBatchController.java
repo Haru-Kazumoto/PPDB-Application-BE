@@ -89,4 +89,13 @@ public class RegistrationBatchController {
                 this.registrationBatchService.getById(id)
         );
     }
+
+//    @GetMapping(path = "/get-type")
+//    public ResponseEntity<?> getByType(@RequestParam("type")FormPurchaseType type){
+//        return this.http.response(
+//                OK.value(),
+//                new Date(),
+//                this.registrationBatchService.getRegisBatchByType(type)
+//        );
+//    }
 }

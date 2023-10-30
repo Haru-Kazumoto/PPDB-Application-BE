@@ -1,5 +1,6 @@
 package dev.pack.modules.student;
 
+import dev.pack.modules.enums.FormPurchaseType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -17,4 +18,6 @@ public class UploadPaymentDto {
     String bank_name;
     String bank_account;
     String bank_user;
+
+    FormPurchaseType type;
 }

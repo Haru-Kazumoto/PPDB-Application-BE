@@ -6,15 +6,17 @@ import dev.pack.modules.staging.StagingRepository;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.boot.CommandLineRunner;
+import org.springframework.boot.ApplicationArguments;
+import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.annotation.Configuration;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
-//@Configuration
+@Configuration
 @RequiredArgsConstructor
-public class StagingSeeder implements CommandLineRunner {
+public class StagingSeeder implements ApplicationRunner {
 
     private final StagingRepository stagingRepository;
 
@@ -22,23 +24,30 @@ public class StagingSeeder implements CommandLineRunner {
     private static final Logger log = LoggerFactory.getLogger(RoleSeeder.class);
 
     @Override
-    public void run(String... args) throws Exception {
-        seedStagings();
+    public void run(ApplicationArguments args) throws Exception {
+        List<String> seeder = Arrays.asList(args.getOptionValues("seeder").get(0).split(","));
+
+        if(args.getOptionValues("seeder") != null && seeder.contains("staging")){
+            seedStagings();
+            log.info("Success run staging seeder");
+        }else{
+            log.info("staging seeder skipped");
+        }
+
     }
     private void seedStagings(){
         List<List<Object>> stagings = new ArrayList<>();
 
         stagings.add(List.of("Pilih Gelombang PPDB",1, FormPurchaseType.PEMBELIAN));
-        stagings.add(List.of("Transaksi Pembelian",2, FormPurchaseType.PEMBELIAN));
+        stagings.add(List.of("Pembelian Formulir Pendaftaran",2, FormPurchaseType.PEMBELIAN));
         stagings.add(List.of("Pilih Jurusan",3, FormPurchaseType.PEMBELIAN));
         stagings.add(List.of("Cetak Kartu Peserta",4, FormPurchaseType.PEMBELIAN));
 
         stagings.add(List.of("Pilih Jalur PPDB",1, FormPurchaseType.PENGEMBALIAN));
         stagings.add(List.of("Transaksi Pengembalian",2, FormPurchaseType.PENGEMBALIAN));
         stagings.add(List.of("Isi Biodata",3, FormPurchaseType.PENGEMBALIAN));
-        stagings.add(List.of("Pilih Jurusan",4, FormPurchaseType.PENGEMBALIAN));
-        stagings.add(List.of("Isi data prestasi",5, FormPurchaseType.PENGEMBALIAN));
-        stagings.add(List.of("Cetak Kartu Peserta",6, FormPurchaseType.PENGEMBALIAN));
+        stagings.add(List.of("Isi data prestasi",4, FormPurchaseType.PENGEMBALIAN));
+        stagings.add(List.of("Cetak Kartu Peserta",5, FormPurchaseType.PENGEMBALIAN));
 
 
         var index = 0;

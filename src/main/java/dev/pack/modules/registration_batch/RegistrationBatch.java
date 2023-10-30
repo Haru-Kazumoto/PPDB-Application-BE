@@ -20,10 +20,10 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 @Entity
-@JsonIdentityInfo(
-        generator = ObjectIdGenerators.PropertyGenerator.class,
-        property = "id"
-)
+//@JsonIdentityInfo(
+//        generator = ObjectIdGenerators.PropertyGenerator.class,
+//        property = "id"
+//)
 @Table(name = "registration_batch")
 public class RegistrationBatch implements Serializable {
 
@@ -81,9 +81,11 @@ public class RegistrationBatch implements Serializable {
 
 
     @OneToMany(
+            fetch = FetchType.LAZY,
+            orphanRemoval = true,
             mappedBy = "registrationBatch"
     )
-    @JsonBackReference
+    @JsonIgnore
     private List<StudentLogs> studentLogs;
 
 }

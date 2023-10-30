@@ -6,16 +6,19 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.boot.ApplicationArguments;
+import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
-//@Configuration
+@Configuration
 @Transactional
 @RequiredArgsConstructor
-public class LookupSeeder implements CommandLineRunner {
+public class LookupSeeder implements ApplicationRunner {
 
     private final LookupRepository lookupRepository;
 
@@ -23,8 +26,15 @@ public class LookupSeeder implements CommandLineRunner {
     private static final Logger log = LoggerFactory.getLogger(RoleSeeder.class);
 
     @Override
-    public void run(String... args) throws Exception {
-        seedMajor();
+    public void run(ApplicationArguments args) throws Exception {
+        List<String> seeder = Arrays.asList(args.getOptionValues("seeder").get(0).split(","));
+
+        if(args.getOptionValues("seeder") != null && seeder.contains("lookup")){
+            seedMajor();
+            log.info("Success run lookup seeder");
+        }else{
+            log.info("lookup seeder skipped");
+        }
     }
 
     private void seedMajor(){
@@ -42,6 +52,7 @@ public class LookupSeeder implements CommandLineRunner {
         lookups.add(List.of("Menunggu Seleksi Ujian","TEST_SELECTION","STATUS"));
         lookups.add(List.of("Menunggu Hasil Pengumuman","WAITING_ANNOUNCEMENT","STATUS"));
         lookups.add(List.of("Berkas Terkonfirmasi","FILE_CONFIRMED","STATUS"));
+        lookups.add(List.of("Pembayaran Terkonfirmasi","PAYMENT_CONFIRMED","STATUS"));
         lookups.add(List.of("Lulus Seleksi","SELECTION_PASSED","STATUS"));
         lookups.add(List.of("Tidak Lulus Seleksi","SELECTION_NOT_PASSED","STATUS"));
 

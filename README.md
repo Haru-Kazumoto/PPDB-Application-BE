@@ -23,7 +23,17 @@ To get started with this project, you will need to have the following installed 
 * JDK 17+
 * Maven 3+
 
-## RUNNING SEEDER
+## How To Deploy
+* set working directory to frontend folder
+* build frontend with command ```npm run build``` 
+* copy content of dist folder to frontend folder in backend folder
+* run ```mvn clean install``` to build a jar
+* copy jar to folder ```/folder```
+* run ```docker build -t ppdb-yatindo:1.0.0 .``` remember to change the version of 1.0.0 according to the latest version by ```docker images```
+* run ```docker compose down```
+* run ```docker compose up -d```
+
+## Running Seeder
 
 ### student
 ```shell

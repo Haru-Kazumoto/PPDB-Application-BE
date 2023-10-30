@@ -51,6 +51,7 @@ public class StudentServiceImpl implements StudentService{
 
         Lookup dataLookup = getLookupByType(bodyStudent.getMajor());
 
+        assert dataLookup != null;
         existingStudent.setMajor(dataLookup.getType());
 
         return studentRepository.save(existingStudent);
@@ -68,7 +69,11 @@ public class StudentServiceImpl implements StudentService{
 
         User user = this.authenticationService.decodeJwt();
 
-        Staging staging = this.stagingRepository.findByName("Pilih Gelombang PPDB").orElseThrow(() -> new DataNotFoundException("Data yang diinput invalid"));
+        Staging staging = this.stagingRepository.findByName("Pilih Jalur PPDB").orElseThrow(() -> new DataNotFoundException("Data yang diinput invalid"));
+        if(batchDto.getType() == FormPurchaseType.PEMBELIAN){
+            staging = this.stagingRepository.findByName("Pilih Gelombang PPDB").orElseThrow(() -> new DataNotFoundException("Data yang diinput invalid"));;
+        }
+
 
         Student student = this.studentRepository.findById(user.getStudent().getId()).orElseThrow(() -> new DataNotFoundException("Data not found"));
         student.setBatch_id(batchDto.getBatch_id());
@@ -79,10 +84,10 @@ public class StudentServiceImpl implements StudentService{
                 StudentLogs.builder()
                         .registrationBatch(RegistrationBatch.builder().id(batchDto.getBatch_id()).build())
                         .path_id(registrationBatch.getRegistrationPaths().getId())
-                        .remark("Melakukan Pendaftaran")
+                        .remark("Melakukan Pendaftaran Proses Pengembalian")
                         .staging(staging)
                         .status("REGISTERED")
-                        .type(FormPurchaseType.PEMBELIAN)
+                        .type(batchDto.getType())
                         .student(student)
                         .build()
         );
@@ -100,8 +105,9 @@ public class StudentServiceImpl implements StudentService{
     }
 
     private Lookup getLookupByType(String major) {
-        return lookupRepository.getLookupByType(major)
-                .orElseThrow(() -> new DataNotFoundException(String.format(ErrorMessage.LOOOKUP_NOT_FOUND,major)));
+//        return lookupRepository.getLookupByType(major);
+
+        return null;
     }
 
     private RegistrationBatch getRegistrationBatchById(Integer batchId) {
@@ -115,18 +121,56 @@ public class StudentServiceImpl implements StudentService{
     }
 
     @Override
-    public Optional<StudentLogs> getCurrentRegistrationStatus(GetStagingStatusDto stagingStatusDto) {
-        Staging staging = this.stagingRepository.findById(stagingStatusDto.getStagingId()).orElseThrow(() -> new DataNotFoundException("Data tidak ditemukan"));
-        Student student = this.studentRepository.findById(stagingStatusDto.getStudentId()).orElseThrow(() -> new DataNotFoundException("Data tidak ditemukan"));
+    public StudentOffsetResponse getCurrentRegistrationStatus(GetStagingStatusDto stagingStatusDto) {
+        User user = this.authenticationService.decodeJwt();
+        Student student = user.getStudent();
 
-        return this.studentLogsRepository.findByStudentAndStaging(student,staging);
+        if(user.getStudent() == null) {
+            throw new DataNotFoundException("Data tidak ditemukan");
+        }
+
+
+        Staging staging = this.stagingRepository.findById(stagingStatusDto.getStagingId()).orElseThrow(() -> new DataNotFoundException("Data tidak ditemukan"));
+        Lookup major = this.lookupRepository.getByValue(student.getMajor()).orElse(null);
+        StudentLogs studentLogs =  this.studentLogsRepository.findByStudentAndStagingByType(student,staging,stagingStatusDto.getType()).orElse(null);
+        StudentLogs currentState = this.studentLogsRepository.findCurrentStaging(student).orElse(null);
+
+        StudentPayments paymentStatus = null;
+        RegistrationBatch registrationBatch = null;
+        if(currentState != null) {
+            paymentStatus = this.studentPaymentRepository
+                    .findStudentPaymentStatusByType(
+                            student,
+                            currentState.getType()
+                    ).orElse(null);
+            registrationBatch = currentState.getRegistrationBatch();
+        }
+
+
+
+        return StudentOffsetResponse.builder()
+                .studentLogs(studentLogs)
+                .currentState(currentState)
+                .major(major)
+                .registrationBatch(registrationBatch)
+                .studentPayments(paymentStatus)
+                .build();
     }
 
     @Override
     @Transactional
     public StudentLogs uploadPayment(UploadPaymentDto uploadPaymentDto) {
         User user = this.authenticationService.decodeJwt();
-        Staging staging = this.stagingRepository.findByName("Transaksi Pembelian").orElseThrow(() -> new DataNotFoundException("Data yang diinput invalid"));
+
+        // ganti disini kalo stagingnya berubah
+        Staging staging = this.stagingRepository.findByName("Pembelian Formulir Perndaftaran").orElseThrow(() -> new DataNotFoundException("Data yang diinput invalid"));
+        if(uploadPaymentDto.getType() == FormPurchaseType.PENGEMBALIAN){
+            staging = this.stagingRepository.findByName("Transaksi Pengembalian").orElseThrow(() -> new DataNotFoundException("Data yang diinput invalid"));;
+        }
+
+        this.studentPaymentRepository.findStudentPaymentStatusByType(user.getStudent(),uploadPaymentDto.getType()).ifPresent((d) -> {
+            throw new DuplicateDataException("Anda sudah pernah upload data pembayaran");
+        });
 
         // upload file
         String extension = Filenameutils.getExtensionByStringHandling(uploadPaymentDto.file.getOriginalFilename()).get();
@@ -141,7 +185,11 @@ public class StudentServiceImpl implements StudentService{
                         .status("WAITING_PAYMENT")
                         .method(PaymentMethod.valueOf(uploadPaymentDto.payment_method))
                         .image(newFileName)
-                        .type(FormPurchaseType.PEMBELIAN)
+                        .bank_account(uploadPaymentDto.bank_account)
+                        .bank_name(uploadPaymentDto.bank_name)
+                        .bank_user(uploadPaymentDto.bank_user)
+                        .student(user.getStudent())
+                        .type(uploadPaymentDto.type)
                         .total(Double.valueOf(uploadPaymentDto.amount))
                         .build()
         );
@@ -153,7 +201,83 @@ public class StudentServiceImpl implements StudentService{
                         .remark("Mengupload bukti pembayaran")
                         .staging(staging)
                         .status("WAITING_PAYMENT")
-                        .type(FormPurchaseType.PEMBELIAN)
+                        .type(uploadPaymentDto.type)
+                        .student(user.getStudent())
+                        .build()
+        );
+
+    }
+
+    public StudentLogs printCard(PrintCardDto printCardDto) {
+        User user = this.authenticationService.decodeJwt();
+        Staging staging = this.stagingRepository.findByNameAndStagingType("Cetak Kartu Peserta",printCardDto.getType()).orElseThrow(() -> new DataNotFoundException("Staging tidak ditemukan"));
+
+        StudentLogs studentLogs = this.studentLogsRepository.findByStudentAndStagingByType(user.getStudent(),staging,printCardDto.getType()).orElse(null);
+
+        if(studentLogs != null) {
+            return studentLogs;
+        }
+
+
+        return this.studentLogsRepository.save(
+                StudentLogs.builder()
+                        .registrationBatch(RegistrationBatch.builder().id(user.getStudent().getBatch_id()).build())
+                        .path_id(user.getStudent().getPath_id())
+                        .remark("Cetak Kartu Peserta Proses Pembelian")
+                        .staging(staging)
+                        .type(printCardDto.getType())
+                        .student(user.getStudent())
+                        .build()
+        );
+    }
+
+    public StudentLogs confirmPayment(ConfirmPaymentDto dto) {
+        User user = this.authenticationService.decodeJwt();
+        StudentPayments studentPayments = this.studentPaymentRepository.findById(dto.payment_id).orElseThrow(() -> new DataNotFoundException("Data tidak ditemukan"));
+
+        var stagingName = "Pembelian Formulir Pendaftaran";
+        if(studentPayments.getType() == FormPurchaseType.PENGEMBALIAN){
+            stagingName = "Transaksi Pengembalian";
+        }
+
+        Staging staging = this.stagingRepository.findByNameAndStagingType(stagingName,studentPayments.getType()).orElseThrow(() -> new DataNotFoundException("Staging tidak ditemukan"));
+
+        studentPayments.setStatus("PAYMENT_CONFIRMED");
+        this.studentPaymentRepository.save(studentPayments);
+
+        return this.studentLogsRepository.save(
+                StudentLogs.builder()
+                        .registrationBatch(RegistrationBatch.builder().id(user.getStudent().getBatch_id()).build())
+                        .path_id(user.getStudent().getPath_id())
+                        .remark("Pembayaran Terkonfirmasi Admin")
+                        .staging(staging)
+                        .status("PAYMENT_CONFIRMED")
+                        .type(studentPayments.getType())
+                        .student(user.getStudent())
+                        .build()
+        );
+    }
+
+    @Override
+    public StudentLogs chooseMajor(ChooseMajorDto majorDto) {
+        User user = this.authenticationService.decodeJwt();
+        Staging staging = this.stagingRepository
+                .findByNameAndStagingType("Pilih Jurusan",majorDto.type)
+                .orElseThrow(() -> new DataNotFoundException("Data yang diinput invalid"));
+
+        Student student = user.getStudent();
+        student.setMajor(majorDto.major);
+
+        this.studentRepository.save(student);
+
+
+        return this.studentLogsRepository.save(
+                StudentLogs.builder()
+                        .registrationBatch(RegistrationBatch.builder().id(user.getStudent().getBatch_id()).build())
+                        .path_id(user.getStudent().getPath_id())
+                        .remark("Memilih Jurusan")
+                        .staging(staging)
+                        .type(majorDto.type)
                         .student(user.getStudent())
                         .build()
         );
