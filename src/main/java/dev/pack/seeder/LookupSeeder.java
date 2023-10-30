@@ -27,11 +27,12 @@ public class LookupSeeder implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
-        List<String> seeder = Arrays.asList(args.getOptionValues("seeder").get(0).split(","));
-
-        if(args.getOptionValues("seeder") != null && seeder.contains("lookup")){
-            seedMajor();
-            log.info("Success run lookup seeder");
+        if(args.getOptionValues("seeder") != null){
+            List<String> seeder = Arrays.asList(args.getOptionValues("seeder").get(0).split(","));
+            if(seeder.contains("lookup")) {
+                seedMajor();
+                log.info("Success run lookup seeder");
+            }
         }else{
             log.info("lookup seeder skipped");
         }
@@ -45,6 +46,11 @@ public class LookupSeeder implements ApplicationRunner {
         lookups.add(List.of("Teknik Kendaraan Ringan","TKR","MAJOR"));
         lookups.add(List.of("Teknik Audio dan Video","TAV","MAJOR"));
         lookups.add(List.of("Akuntansi Keuangan Lembaga","AKL","MAJOR"));
+
+        lookups.add(List.of("Islam","ISLAM","RELIGION"));
+        lookups.add(List.of("Kristen","KRISTEN","RELIGION"));
+        lookups.add(List.of("Buddha","BUDDHA","RELIGION"));
+        lookups.add(List.of("Katolik","KATOLIK","RELIGION"));
 
         lookups.add(List.of("Terdaftar","REGISTERED","STATUS"));
         lookups.add(List.of("Menunggu Seleksi Berkas","FILE_SELECTION","STATUS"));

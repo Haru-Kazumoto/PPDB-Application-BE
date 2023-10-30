@@ -28,11 +28,12 @@ public class RoleSeeder implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
-        List<String> seeder = Arrays.asList(args.getOptionValues("seeder").get(0).split(","));
-
-        if(args.getOptionValues("seeder") != null && seeder.contains("role")){
-            seedRoles();
-            log.info("Success run role seeder");
+        if(args.getOptionValues("seeder") != null){
+            List<String> seeder = Arrays.asList(args.getOptionValues("seeder").get(0).split(","));
+            if(seeder.contains("role")) {
+                seedRoles();
+                log.info("Success run role seeder");
+            }
         }else{
             log.info("role seeder skipped");
         }
