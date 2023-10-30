@@ -26,6 +26,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -78,7 +79,10 @@ public class StudentServiceImpl implements StudentService{
 
 
         Student student = this.studentRepository.findById(user.getStudent().getId()).orElseThrow(() -> new DataNotFoundException("Data not found"));
+
+        student.setRegistrationDate(new Date());
         student.setBatch_id(batchDto.getBatch_id());
+        student.setStatus("REGISTERED");
         student.setPath_id(registrationBatch.getRegistrationPaths().getId());
 
         this.studentRepository.save(student);
@@ -148,7 +152,6 @@ public class StudentServiceImpl implements StudentService{
         }
 
 
-
         return StudentOffsetResponse.builder()
                 .studentLogs(studentLogs)
                 .currentState(currentState)
@@ -178,6 +181,12 @@ public class StudentServiceImpl implements StudentService{
         String extension = Filenameutils.getExtensionByStringHandling(uploadPaymentDto.file.getOriginalFilename()).get();
         String newFileName = Filenameutils.getRandomName() + "." + extension;
         this.filesStorageService.save(uploadPaymentDto.file,newFileName);
+
+        Student student = user.getStudent();
+        student.setStatus("WAITING_PAYMENT");
+
+
+        this.studentRepository.save(student);
 
 
         this.studentPaymentRepository.save(
@@ -241,6 +250,7 @@ public class StudentServiceImpl implements StudentService{
         }
 
         Student student = this.studentRepository.findById(dto.getStudent_id()).orElseThrow(() -> new DataNotFoundException("Siswa tidak ditemukan"));
+        student.setStatus("PAYMENT_CONFIRMED");
 
         StudentPayments studentPayments = this.studentPaymentRepository.findById(dto.getPayment_id()).orElseThrow(() -> new DataNotFoundException("Data tidak ditemukan"));
 

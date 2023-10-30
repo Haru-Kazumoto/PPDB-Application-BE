@@ -43,34 +43,31 @@ public class Student extends Timestamps implements Serializable {
     @Column(unique = true)
     private String nisn;
 
-    private String name; //2
+    private String name;
 
     @Column(unique = true)
-    private String phone; //1
+    private String phone;
 
     private String surname;
 
     private String gender;
     private String religion;
     private String birth_place;
-    private Date birth_date; //custom
-    private String address; //3
+    private Date birth_date;
+    private String address;
     private String province;
     private String city;
     private String district;
     private String sub_district;
     private String postal_code;
-    private String school_origin; //4
-
-    @Column(nullable = true)
+    private String school_origin;
     private String profile_picture;
-
     private String status;
+    private String major;
 
-    private String major; //mengambil data type dari lookup
+    private Date registrationDate;
 
     private Integer staging_id;
-
     private Integer path_id;
     private Integer batch_id;
 
