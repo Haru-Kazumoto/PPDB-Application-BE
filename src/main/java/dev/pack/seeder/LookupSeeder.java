@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-@Configuration
+//@Configuration
 @Transactional
 @RequiredArgsConstructor
 public class LookupSeeder implements ApplicationRunner {

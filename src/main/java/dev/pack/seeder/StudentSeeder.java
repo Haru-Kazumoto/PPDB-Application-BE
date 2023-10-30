@@ -16,7 +16,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
-@Component
+//@Component
 @RequiredArgsConstructor
 public class StudentSeeder implements ApplicationRunner {
 

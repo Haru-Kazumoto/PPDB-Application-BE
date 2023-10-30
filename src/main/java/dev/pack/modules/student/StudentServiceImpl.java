@@ -163,7 +163,7 @@ public class StudentServiceImpl implements StudentService{
         User user = this.authenticationService.decodeJwt();
 
         // ganti disini kalo stagingnya berubah
-        Staging staging = this.stagingRepository.findByName("Pembelian Formulir Perndaftaran").orElseThrow(() -> new DataNotFoundException("Data yang diinput invalid"));
+        Staging staging = this.stagingRepository.findByName("Pembelian Formulir Pendaftaran").orElseThrow(() -> new DataNotFoundException("Data yang diinput invalid"));
         if(uploadPaymentDto.getType() == FormPurchaseType.PENGEMBALIAN){
             staging = this.stagingRepository.findByName("Transaksi Pengembalian").orElseThrow(() -> new DataNotFoundException("Data yang diinput invalid"));;
         }
