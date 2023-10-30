@@ -27,6 +27,9 @@ public class StudentOffsetResponse {
     @JsonProperty("current_state")
     private StudentLogs currentState;
 
+    @JsonProperty("student")
+    private Student student;
+
     @JsonProperty("major")
     private Lookup major;
 

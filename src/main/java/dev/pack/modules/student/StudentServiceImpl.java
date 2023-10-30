@@ -23,9 +23,11 @@ import dev.pack.services.FilesStorageService;
 import dev.pack.utils.Filenameutils;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -79,6 +81,7 @@ public class StudentServiceImpl implements StudentService{
         student.setBatch_id(batchDto.getBatch_id());
         student.setPath_id(registrationBatch.getRegistrationPaths().getId());
 
+        this.studentRepository.save(student);
 
         this.studentLogsRepository.save(
                 StudentLogs.builder()
@@ -91,8 +94,6 @@ public class StudentServiceImpl implements StudentService{
                         .student(student)
                         .build()
         );
-
-        this.studentRepository.save(student);
 
         return registrationBatch;
     }
@@ -151,6 +152,7 @@ public class StudentServiceImpl implements StudentService{
         return StudentOffsetResponse.builder()
                 .studentLogs(studentLogs)
                 .currentState(currentState)
+                .student(student)
                 .major(major)
                 .registrationBatch(registrationBatch)
                 .studentPayments(paymentStatus)
@@ -163,7 +165,7 @@ public class StudentServiceImpl implements StudentService{
         User user = this.authenticationService.decodeJwt();
 
         // ganti disini kalo stagingnya berubah
-        Staging staging = this.stagingRepository.findByName("Pembelian Formulir Perndaftaran").orElseThrow(() -> new DataNotFoundException("Data yang diinput invalid"));
+        Staging staging = this.stagingRepository.findByName("Pembelian Formulir Pendaftaran").orElseThrow(() -> new DataNotFoundException("Data yang diinput invalid"));
         if(uploadPaymentDto.getType() == FormPurchaseType.PENGEMBALIAN){
             staging = this.stagingRepository.findByName("Transaksi Pengembalian").orElseThrow(() -> new DataNotFoundException("Data yang diinput invalid"));;
         }
@@ -233,7 +235,14 @@ public class StudentServiceImpl implements StudentService{
 
     public StudentLogs confirmPayment(ConfirmPaymentDto dto) {
         User user = this.authenticationService.decodeJwt();
-        StudentPayments studentPayments = this.studentPaymentRepository.findById(dto.payment_id).orElseThrow(() -> new DataNotFoundException("Data tidak ditemukan"));
+
+        if(Objects.equals(user.getRole_id().getRole_name(), "User")){
+            throw new BadCredentialsException("Konfirmasi hanya boleh dilakukan oleh admin");
+        }
+
+        Student student = this.studentRepository.findById(dto.getStudent_id()).orElseThrow(() -> new DataNotFoundException("Siswa tidak ditemukan"));
+
+        StudentPayments studentPayments = this.studentPaymentRepository.findById(dto.getPayment_id()).orElseThrow(() -> new DataNotFoundException("Data tidak ditemukan"));
 
         var stagingName = "Pembelian Formulir Pendaftaran";
         if(studentPayments.getType() == FormPurchaseType.PENGEMBALIAN){
@@ -247,13 +256,13 @@ public class StudentServiceImpl implements StudentService{
 
         return this.studentLogsRepository.save(
                 StudentLogs.builder()
-                        .registrationBatch(RegistrationBatch.builder().id(user.getStudent().getBatch_id()).build())
-                        .path_id(user.getStudent().getPath_id())
+                        .registrationBatch(RegistrationBatch.builder().id(student.getBatch_id()).build())
+                        .path_id(student.getPath_id())
                         .remark("Pembayaran Terkonfirmasi Admin")
                         .staging(staging)
                         .status("PAYMENT_CONFIRMED")
                         .type(studentPayments.getType())
-                        .student(user.getStudent())
+                        .student(student)
                         .build()
         );
     }

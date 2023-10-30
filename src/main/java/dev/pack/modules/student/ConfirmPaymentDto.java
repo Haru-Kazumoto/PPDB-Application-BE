@@ -14,7 +14,11 @@ import lombok.NoArgsConstructor;
 public class ConfirmPaymentDto {
 
     @NotNull
-    public Integer payment_id;
+    private Integer payment_id;
+
+
+    @NotNull
+    private Integer student_id;
 
 
 }

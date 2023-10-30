@@ -99,4 +99,20 @@ public class Student extends Timestamps implements Serializable {
     )
     @JsonIgnore
     private List<StudentPayments> studentPayments;
+
+//    Orang Tua
+
+    private String dad_name;
+    private String dad_phone;
+    private String dad_job;
+    private String dad_address;
+
+    private String mother_name;
+    private String mother_phone;
+    private String mother_job;
+    private String mother_address;
+
+    private String family_card;
+
+    private String birth_card;
 }
