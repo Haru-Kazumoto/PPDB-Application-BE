@@ -268,6 +268,11 @@ public class StudentServiceImpl implements StudentService{
     }
 
     @Override
+    public Student getStudentById(Integer studentId) {
+        return this.studentRepository.findById(studentId).orElseThrow(() -> new DataNotFoundException("Student id not found."));
+    }
+
+    @Override
     public StudentLogs chooseMajor(ChooseMajorDto majorDto) {
         User user = this.authenticationService.decodeJwt();
         Staging staging = this.stagingRepository
@@ -290,6 +295,8 @@ public class StudentServiceImpl implements StudentService{
                         .student(user.getStudent())
                         .build()
         );
+
+
 
     }
 }

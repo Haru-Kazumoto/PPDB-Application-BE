@@ -17,7 +17,7 @@ import java.util.List;
 
 import static dev.pack.modules.enums.Role.*;
 
-@Configuration
+//@Configuration
 @Transactional
 @RequiredArgsConstructor
 public class SeederApi implements ApplicationRunner {

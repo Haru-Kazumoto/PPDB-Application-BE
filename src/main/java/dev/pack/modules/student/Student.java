@@ -75,9 +75,11 @@ public class Student extends Timestamps implements Serializable {
     private Integer batch_id;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnore
     private RegistrationBatch registrationBatch;
 
     @OneToOne(fetch = FetchType.LAZY)
+    @JsonIgnore
     private User userId;
 
     @OneToMany(
@@ -90,6 +92,7 @@ public class Student extends Timestamps implements Serializable {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "regis_path")
+    @JsonIgnore
     private RegistrationPaths registrationPaths;
 
     @OneToMany(

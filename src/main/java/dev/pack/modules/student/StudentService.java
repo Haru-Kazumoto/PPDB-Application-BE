@@ -11,6 +11,7 @@ import java.util.Optional;
 public interface StudentService {
 
     Student createStudent(Student bodyStudent, Integer idStudent);
+
     List<Student> getAll(); //developing
 
     RegistrationBatch chooseRegistrationBatch(ChooseBatchDto batchDto);
@@ -21,6 +22,7 @@ public interface StudentService {
 
     StudentLogs confirmPayment(ConfirmPaymentDto dto);
 
+    Student getStudentById(Integer studentId);
 
     StudentLogs chooseMajor(ChooseMajorDto major);
 

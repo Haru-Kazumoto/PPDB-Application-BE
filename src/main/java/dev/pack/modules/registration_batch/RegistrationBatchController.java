@@ -1,6 +1,9 @@
 package dev.pack.modules.registration_batch;
 
 import dev.pack.modules.enums.FormPurchaseType;
+import dev.pack.modules.student.StudentRepository;
+import dev.pack.modules.student.StudentService;
+import dev.pack.modules.user.UserService;
 import dev.pack.payloads.HttpResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +23,8 @@ import static org.springframework.http.HttpStatus.*;
 public class RegistrationBatchController {
 
     private final RegistrationBatchService registrationBatchService;
+    private final StudentService studentService;
+
     private final HttpResponse http;
     private final ModelMapper modelMapper;
 
@@ -90,12 +95,22 @@ public class RegistrationBatchController {
         );
     }
 
-//    @GetMapping(path = "/get-type")
-//    public ResponseEntity<?> getByType(@RequestParam("type")FormPurchaseType type){
-//        return this.http.response(
-//                OK.value(),
-//                new Date(),
-//                this.registrationBatchService.getRegisBatchByType(type)
-//        );
-//    }
+    @GetMapping(path = "/get-students")
+    public ResponseEntity<?> getStudentsById(@RequestParam("batchId") Integer batchId){
+        return this.http.response(
+                OK.value(),
+                new Date(),
+                this.registrationBatchService.getStudentByBatchId(batchId)
+        );
+    }
+
+    @GetMapping(path = "/detail")
+    public ResponseEntity<?> getDetailStudentByStudentId(@RequestParam("studentId") Integer studentId){
+        return this.http.response(
+                OK.value(),
+                new Date(),
+                this.studentService.getStudentById(studentId)
+        );
+    }
+
 }

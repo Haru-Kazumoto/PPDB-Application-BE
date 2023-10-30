@@ -4,6 +4,8 @@ import dev.pack.exception.DataNotFoundException;
 import dev.pack.modules.enums.FormPurchaseType;
 import dev.pack.modules.registration_paths.RegistrationPaths;
 import dev.pack.modules.registration_paths.RegistrationPathsRepository;
+import dev.pack.modules.student.Student;
+import dev.pack.modules.user.UserRepository;
 import dev.pack.utils.Validator;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -122,5 +124,12 @@ public class RegistrationBatchServiceImpl implements RegistrationBatchService{
     @Override
     public List<RegistrationBatch> getRegisBatchByType(FormPurchaseType type) {
         return this.registrationBatchRepository.findRegistrationBatchByPathType(type);
+    }
+
+    @Override
+    public List<Student> getStudentByBatchId(Integer batchId) {
+        List<Student> dataStudents = this.registrationBatchRepository.findAllStudentByBatchId(batchId);
+        if(dataStudents.isEmpty()) throw new DataNotFoundException(BATCH_ID_NOT_FOUND);
+        return dataStudents;
     }
 }

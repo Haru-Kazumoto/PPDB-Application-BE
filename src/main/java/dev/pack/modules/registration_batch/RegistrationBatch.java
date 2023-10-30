@@ -20,10 +20,6 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 @Entity
-//@JsonIdentityInfo(
-//        generator = ObjectIdGenerators.PropertyGenerator.class,
-//        property = "id"
-//)
 @Table(name = "registration_batch")
 public class RegistrationBatch implements Serializable {
 
@@ -36,13 +32,14 @@ public class RegistrationBatch implements Serializable {
     private Date start_date;
     private Date end_date;
 
-    private Banks bank_name; //nama bank
-    private String bank_user; //nama punya akun
+    private Banks bank_name;
+    private String bank_user;
     private Double price;
-    private String bank_account; //nomor rekening
+    private String bank_account;
 
     private Boolean isOpen = true;
 
+//    @Transient
     private Long countStudent; //read only, not stored to column table
 
     public RegistrationBatch(Integer id, String name, Integer index, Integer max_quota, Date start_date, Date end_date, Banks bank_name, String bank_user, Double price, String bank_account, Long countStudent) {
