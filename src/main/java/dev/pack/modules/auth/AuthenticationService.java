@@ -84,6 +84,7 @@ public class AuthenticationService {
     var student = Student.builder()
             .name(request.getStudentData().getName())
             .address(request.getStudentData().getAddress())
+            .phone(request.getUsername())
             .school_origin(request.getStudentData().getSchool_origin())
             .userId(user)
             .build();
