@@ -26,7 +26,7 @@ public interface RegistrationBatchRepository extends JpaRepository<RegistrationB
         select s from RegistrationBatch s
         inner join s.registrationPaths d
         where d.type = :type
-""")
+    """)
     List<RegistrationBatch> getAllByType(FormPurchaseType type);
 
     @Query(value = """
@@ -77,4 +77,9 @@ public interface RegistrationBatchRepository extends JpaRepository<RegistrationB
         SELECT rb FROM RegistrationBatch rb WHERE rb.registrationPaths.type = :type
     """)
     List<RegistrationBatch> findRegistrationBatchByPathType(@Param("type") FormPurchaseType type);
+
+    @Query("""
+        SELECT s FROM Student s WHERE s.batch_id = :batchId
+    """)
+    List<Student> findAllStudentByBatchId(Integer batchId);
 }
