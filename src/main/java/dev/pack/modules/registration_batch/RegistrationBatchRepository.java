@@ -11,6 +11,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface RegistrationBatchRepository extends JpaRepository<RegistrationBatch, Integer> {
@@ -58,6 +59,35 @@ public interface RegistrationBatchRepository extends JpaRepository<RegistrationB
     """)
     List<RegistrationBatch> findTotalPendaftarPerBatchModel(@Param("regisPathId") Integer regisPathId);
 
+    @Query(value = """
+            SELECT new dev.pack.modules.registration_batch.RegistrationBatch(
+            rb.id,\s
+            rb.name,
+            rb.index,
+            rb.max_quota,
+            rb.start_date,
+            rb.end_date,
+            rb.bank_name,
+            rb.bank_user,
+            rb.price,
+            rb.bank_account,\s
+            COUNT(s)
+            )\s
+            FROM RegistrationBatch rb\s
+            LEFT JOIN rb.students s\s
+            WHERE rb.id = :regisBatchId
+            GROUP BY rb.id,rb.name,
+            rb.index,
+            rb.max_quota,
+            rb.start_date,
+            rb.end_date,
+            rb.bank_name,
+            rb.bank_user,
+            rb.price,
+            rb.bank_account
+    """)
+    Optional<RegistrationBatch> getRegistrationBatchById(@Param("regisBatchId") Integer regisBatchId);
+
     @Transactional
     @Modifying
     @Query(value = """
@@ -82,4 +112,6 @@ public interface RegistrationBatchRepository extends JpaRepository<RegistrationB
         SELECT s FROM Student s WHERE s.batch_id = :batchId
     """)
     List<Student> findAllStudentByBatchId(Integer batchId);
+
+    //TODO : GET 2 VALUE (JUMLAH PENDAFTAR DAN JUMLAH PENDAFTAR DI TEIRMA BERDASARKAN STATUS DARI STUDENT) BY BATCH ID
 }

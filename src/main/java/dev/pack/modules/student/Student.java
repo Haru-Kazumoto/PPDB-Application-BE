@@ -61,16 +61,13 @@ public class Student extends Timestamps implements Serializable {
     private String sub_district;
     private String postal_code;
     private String school_origin; //4
-
-    @Column(nullable = true)
     private String profile_picture;
-
     private String status;
-
     private String major; //mengambil data type dari lookup
 
-    private Integer staging_id;
+    private Date registrationDate;
 
+    private Integer staging_id;
     private Integer path_id;
     private Integer batch_id;
 

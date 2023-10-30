@@ -117,7 +117,7 @@ public class RegistrationBatchServiceImpl implements RegistrationBatchService{
 
     @Override
     public RegistrationBatch getById(Integer id) {
-        return this.registrationBatchRepository.findById(id)
+        return this.registrationBatchRepository.getRegistrationBatchById(id)
                 .orElseThrow(() -> new DataNotFoundException(BATCH_ID_NOT_FOUND));
     }
 

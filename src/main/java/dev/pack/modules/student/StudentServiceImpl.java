@@ -25,6 +25,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -73,9 +74,10 @@ public class StudentServiceImpl implements StudentService{
         if(batchDto.getType() == FormPurchaseType.PEMBELIAN){
             staging = this.stagingRepository.findByName("Pilih Gelombang PPDB").orElseThrow(() -> new DataNotFoundException("Data yang diinput invalid"));;
         }
-
-
+        
         Student student = this.studentRepository.findById(user.getStudent().getId()).orElseThrow(() -> new DataNotFoundException("Data not found"));
+
+        student.setRegistrationDate(new Date());
         student.setBatch_id(batchDto.getBatch_id());
         student.setPath_id(registrationBatch.getRegistrationPaths().getId());
 
