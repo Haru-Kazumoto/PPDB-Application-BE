@@ -88,35 +88,6 @@ public interface RegistrationBatchRepository extends JpaRepository<RegistrationB
     Optional<RegistrationBatch> getRegistrationBatchById(@Param("registBatchId") Integer registBatchId);
 
 
-    @Query(value = """
-            SELECT new dev.pack.modules.registration_batch.RegistrationBatch(
-            rb.id,\s
-            rb.name,
-            rb.index,
-            rb.max_quota,
-            rb.start_date,
-            rb.end_date,
-            rb.bank_name,
-            rb.bank_user,
-            rb.price,
-            rb.bank_account,\s
-            COUNT(s)
-            )\s
-            FROM RegistrationBatch rb\s
-            LEFT JOIN rb.students s\s
-            WHERE rb.id = :regisBatchId
-            GROUP BY rb.id,rb.name,
-            rb.index,
-            rb.max_quota,
-            rb.start_date,
-            rb.end_date,
-            rb.bank_name,
-            rb.bank_user,
-            rb.price,
-            rb.bank_account
-    """)
-    Optional<RegistrationBatch> getRegistrationBatchById(@Param("regisBatchId") Integer regisBatchId);
-
     @Transactional
     @Modifying
     @Query(value = """

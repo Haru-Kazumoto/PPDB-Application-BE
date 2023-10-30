@@ -1,6 +1,7 @@
 package dev.pack.modules.registration_batch;
 
 import dev.pack.modules.enums.FormPurchaseType;
+import dev.pack.modules.student.CountStudents;
 import dev.pack.modules.student.Student;
 import jakarta.servlet.Registration;
 
@@ -30,4 +31,6 @@ public interface RegistrationBatchService {
     List<RegistrationBatch> getRegisBatchByType(FormPurchaseType type);
 
     List<Student> getStudentByBatchId(Integer batchId);
+
+    CountStudents countStudent(Integer batchId);
 }
