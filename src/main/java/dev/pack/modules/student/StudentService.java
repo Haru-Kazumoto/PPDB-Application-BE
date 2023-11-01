@@ -28,4 +28,6 @@ public interface StudentService {
 
     StudentLogs printCard(PrintCardDto printCardDto);
 
+    void deleteById(Integer studentId);
+
 }

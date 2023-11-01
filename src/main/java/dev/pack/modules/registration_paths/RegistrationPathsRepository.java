@@ -76,5 +76,4 @@ public interface RegistrationPathsRepository extends JpaRepository<RegistrationP
             s.price
     """, nativeQuery = true)
     List<GetAllRegistrationPaths> getPathWithTotalStudentsByType(String type);
-
 }

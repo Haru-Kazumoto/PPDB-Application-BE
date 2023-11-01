@@ -109,7 +109,11 @@ public class StudentController {
                    .type(type)
                    .build()
         ));
+    }
 
+    @DeleteMapping(path = "/delete")
+    public void delete(@RequestParam("studentId") Integer studentId){
+        this.studentService.deleteById(studentId);
     }
 
 }
