@@ -24,6 +24,8 @@ public interface StudentService {
 
     Student getStudentById(Integer studentId);
 
+    StudentLogs updateBio(UpdateBioDto updateBioDto);
+
     StudentLogs chooseMajor(ChooseMajorDto major);
 
     StudentLogs printCard(PrintCardDto printCardDto);

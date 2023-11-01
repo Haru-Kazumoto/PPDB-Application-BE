@@ -292,6 +292,11 @@ public class StudentServiceImpl implements StudentService{
     }
 
     @Override
+    public StudentLogs updateBio(UpdateBioDto updateBioDto) {
+        return null;
+    }
+
+    @Override
     public StudentLogs chooseMajor(ChooseMajorDto majorDto) {
         User user = this.authenticationService.decodeJwt();
         Staging staging = this.stagingRepository
