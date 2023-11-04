@@ -5,6 +5,7 @@ import dev.pack.config.JwtService;
 import dev.pack.exception.DataNotFoundException;
 import dev.pack.exception.DuplicateDataException;
 import dev.pack.exception.UserNotFoundException;
+import dev.pack.modules.enums.Grade;
 import dev.pack.modules.enums.Role;
 import dev.pack.modules.role.RoleRepository;
 import dev.pack.modules.role.Roles;
@@ -17,6 +18,7 @@ import dev.pack.modules.user.User;
 import dev.pack.modules.user.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
@@ -27,6 +29,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpServerErrorException;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -46,11 +49,6 @@ public class AuthenticationService {
   private final TokenRepository tokenRepository;
   private final RoleRepository roleRepository;
 
-
-
-  @Value("${application.security.jwt.secret-key}")
-  private String SIGNING_KEY;
-
   public User registerAdmin(RegisterRequest.Admin request) {
     Roles role = this.roleRepository.findRolesByName("Admin").orElseThrow(() -> new DataNotFoundException("Data tidak ditemukan untuk Role Admin"));
 
@@ -65,6 +63,9 @@ public class AuthenticationService {
     return userRepository.save(user);
   }
 
+  @Transactional(rollbackOn = {
+          DataNotFoundException.class
+  })
   public AuthenticationResponse registerStudent(RegisterRequest.User request){
     this.userRepository.findByUsername(request.getUsername()).ifPresent((username) -> {
       throw new DuplicateDataException(NUMBER_ALREADY_EXISTS);
@@ -81,8 +82,15 @@ public class AuthenticationService {
 
     user = this.userRepository.save(user); // Simpan User terlebih dahulu
 
+    String grade = request.getStudentData().getGrade();
+
+    if(!grade.equals("SMP") && !grade.equals("SMK")){
+      throw new DataNotFoundException("Grade not valid");
+    }
+
     var student = Student.builder()
             .name(request.getStudentData().getName())
+            .grade(grade)
             .address(request.getStudentData().getAddress())
             .phone(request.getUsername())
             .school_origin(request.getStudentData().getSchool_origin())

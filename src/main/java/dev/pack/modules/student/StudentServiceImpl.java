@@ -292,7 +292,17 @@ public class StudentServiceImpl implements StudentService{
     }
 
     @Override
+    @Transactional
     public StudentLogs updateBio(UpdateBioDto updateBioDto) {
+        User user = this.authenticationService.decodeJwt();
+
+        Staging staging = this.stagingRepository.findByName("Isi Biodata")
+                .orElseThrow(() -> new DataNotFoundException("Staging name not found."));
+
+        //Upload file
+        String profilePictureExtension = Filenameutils.getExtensionByStringHandling(updateBioDto.getProfile_picture().getOriginalFilename()).get();
+
+
         return null;
     }
 
@@ -326,5 +336,12 @@ public class StudentServiceImpl implements StudentService{
         Student data = this.studentRepository.findById(studentId).orElseThrow(() -> new DataNotFoundException("Id not found"));
 
         this.studentRepository.delete(data);
+    }
+
+    @Override
+    public List<Student> getAllStudentByGrade(String grade) {
+        List<Student> datas = this.studentRepository.findAllStudentByGrade(grade);
+        if( !Objects.equals(grade, "SMK") && !Objects.equals(grade, "SMP") ) throw new DataNotFoundException("Grade is invalid");
+        return datas;
     }
 }

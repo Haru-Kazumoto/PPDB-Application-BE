@@ -1,6 +1,7 @@
 package dev.pack.modules.student;
 
 import dev.pack.modules.enums.Genders;
+import dev.pack.modules.enums.Grade;
 import jakarta.persistence.Column;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -22,6 +23,9 @@ public class StudentDto {
         @NotEmpty()
         @NotNull()
         private String name;
+        @NotNull()
+        @NotEmpty()
+        private String grade;
         @NotEmpty()
         @NotNull()
         private String address;

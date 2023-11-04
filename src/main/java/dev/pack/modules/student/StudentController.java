@@ -29,7 +29,6 @@ import java.util.StringTokenizer;
 public class StudentController {
 
     private final StudentService studentService;
-    private final AuthenticationService authenticationService;
     private final ModelMapper modelMapper;
     private final HttpResponse http;
 
@@ -116,4 +115,12 @@ public class StudentController {
         this.studentService.deleteById(studentId);
     }
 
+    @GetMapping(path = "/get-students-by")
+    public ResponseEntity<?> findAllStudentByGrade(@RequestParam("grade") String grade){
+        return this.http.response(
+                HttpStatus.OK.value(),
+                new Date(),
+                this.studentService.getAllStudentByGrade(grade)
+        );
+    }
 }

@@ -3,7 +3,6 @@ package dev.pack.modules.student;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-import dev.pack.modules.enums.Genders;
 import dev.pack.modules.registration_batch.RegistrationBatch;
 import dev.pack.modules.registration_paths.RegistrationPaths;
 import dev.pack.modules.student_logs.StudentLogs;
@@ -36,14 +35,17 @@ public class Student extends Timestamps implements Serializable {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-
     @UuidGenerator
     private String uniqueId;
+
+    private String formulirId;
 
     @Column(unique = true)
     private String nisn;
 
     private String name; //2
+
+    private String grade;
 
     @Column(unique = true)
     private String phone; //1

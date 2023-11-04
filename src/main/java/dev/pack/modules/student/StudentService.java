@@ -32,4 +32,6 @@ public interface StudentService {
 
     void deleteById(Integer studentId);
 
+    List<Student> getAllStudentByGrade(String grade);
+
 }
