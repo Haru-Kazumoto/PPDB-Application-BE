@@ -133,9 +133,7 @@ public class RegistrationBatchServiceImpl implements RegistrationBatchService{
 
     @Override
     public List<Student> getStudentByBatchId(Integer batchId) {
-        List<Student> dataStudents = this.registrationBatchRepository.findAllStudentByBatchId(batchId);
-        if(dataStudents.isEmpty()) throw new DataNotFoundException(BATCH_ID_NOT_FOUND);
-        return dataStudents;
+        return this.registrationBatchRepository.findAllStudentByBatchId(batchId);
     }
 
     @Override

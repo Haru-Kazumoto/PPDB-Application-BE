@@ -113,12 +113,12 @@ public class RegistrationBatchController {
         );
     }
 
-    @GetMapping(path = "/count-student")
-    public ResponseEntity<?> countDataStudents(@RequestParam("id") Integer id){
+    @GetMapping(path = "/count-data")
+    public ResponseEntity<?> countDataStudents(@RequestParam("batchId") Integer batchId){
         return this.http.response(
                 OK.value(),
                 new Date(),
-                this.registrationBatchService.countStudent(id)
+                this.registrationBatchService.countStudent(batchId)
         );
     }
 
