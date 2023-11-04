@@ -1,6 +1,7 @@
 package dev.pack.globalException;
 
 import dev.pack.exception.DataNotFoundException;
+import dev.pack.exception.DuplicateDataException;
 import dev.pack.payloads.ErrorResponse;
 import dev.pack.payloads.ValidationErrorResponse;
 import lombok.NonNull;
@@ -38,6 +39,16 @@ public class GlobalException extends ResponseEntityExceptionHandler {
                 .message("Username or password invalid")
                 .build();
         return new ResponseEntity<>(errorResponse, HttpStatus.UNAUTHORIZED);
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(DuplicateDataException.class)
+    public ResponseEntity<ErrorResponse> handleViolatesConstraints(DuplicateDataException ex){
+        ErrorResponse errorResponse = ErrorResponse.builder()
+                .statusResponse(HttpStatus.BAD_REQUEST.name())
+                .message(ex.getMessage())
+                .build();
+        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
 
     @Override

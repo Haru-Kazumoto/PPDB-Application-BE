@@ -30,4 +30,8 @@ public interface StudentService {
 
     StudentLogs printCard(PrintCardDto printCardDto);
 
+    void deleteById(Integer studentId);
+
+    List<Student> getAllStudentByGrade(String grade);
+
 }

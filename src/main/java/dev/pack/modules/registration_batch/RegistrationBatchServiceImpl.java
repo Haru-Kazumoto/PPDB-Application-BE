@@ -7,10 +7,7 @@ import dev.pack.modules.registration_paths.RegistrationPathsRepository;
 import dev.pack.modules.student.CountStudents;
 import dev.pack.modules.student.Student;
 import dev.pack.modules.student.StudentRepository;
-import dev.pack.modules.user.UserRepository;
 import dev.pack.utils.Validator;
-import jakarta.servlet.Registration;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -36,6 +33,10 @@ public class RegistrationBatchServiceImpl implements RegistrationBatchService{
                 bodyCreate.getStart_date(),
                 bodyCreate.getEnd_date()
         );
+
+        if(bodyCreate.getMax_quota() > 500){
+            throw new IllegalArgumentException("Max quota only have 500 set");
+        }
 
         RegistrationPaths registrationPaths = registrationPathsRepository.findById(regisId)
                 .orElseThrow(() -> new DataNotFoundException(REGISTRATION_PATHS_ID_NOT_FOUND));

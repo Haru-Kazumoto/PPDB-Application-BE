@@ -68,16 +68,21 @@ public class StudentServiceImpl implements StudentService{
     @Override
     @Transactional
     public RegistrationBatch chooseRegistrationBatch(ChooseBatchDto batchDto) {
-        RegistrationBatch registrationBatch = this.registrationBatchRepo.findById(batchDto.getBatch_id()).orElseThrow(() -> new DataNotFoundException("Gelombang tidak ditemukan"));
+        RegistrationBatch registrationBatch = this.registrationBatchRepo.findById(batchDto.getBatch_id())
+                .orElseThrow(() -> new DataNotFoundException("Gelombang tidak ditemukan"));
 
         User user = this.authenticationService.decodeJwt();
 
-        Staging staging = this.stagingRepository.findByName("Pilih Jalur PPDB").orElseThrow(() -> new DataNotFoundException("Data yang diinput invalid"));
+        Staging staging = this.stagingRepository.findByName("Pilih Jalur PPDB")
+                .orElseThrow(() -> new DataNotFoundException("Data yang diinput invalid"));
+
         if(batchDto.getType() == FormPurchaseType.PEMBELIAN){
-            staging = this.stagingRepository.findByName("Pilih Gelombang PPDB").orElseThrow(() -> new DataNotFoundException("Data yang diinput invalid"));;
+            staging = this.stagingRepository.findByName("Pilih Gelombang PPDB")
+                    .orElseThrow(() -> new DataNotFoundException("Data yang diinput invalid"));;
         }
         
-        Student student = this.studentRepository.findById(user.getStudent().getId()).orElseThrow(() -> new DataNotFoundException("Data not found"));
+        Student student = this.studentRepository.findById(user.getStudent().getId())
+                .orElseThrow(() -> new DataNotFoundException("Data not found"));
 
         student.setRegistrationDate(new Date());
         student.setBatch_id(batchDto.getBatch_id());
@@ -167,18 +172,23 @@ public class StudentServiceImpl implements StudentService{
         User user = this.authenticationService.decodeJwt();
 
         // ganti disini kalo stagingnya berubah
-        Staging staging = this.stagingRepository.findByName("Pembelian Formulir Pendaftaran").orElseThrow(() -> new DataNotFoundException("Data yang diinput invalid"));
+        Staging staging = this.stagingRepository.findByName("Pembelian Formulir Pendaftaran")
+                .orElseThrow(() -> new DataNotFoundException("Data yang diinput invalid"));
+
         if(uploadPaymentDto.getType() == FormPurchaseType.PENGEMBALIAN){
-            staging = this.stagingRepository.findByName("Transaksi Pengembalian").orElseThrow(() -> new DataNotFoundException("Data yang diinput invalid"));;
+            staging = this.stagingRepository.findByName("Transaksi Pengembalian")
+                    .orElseThrow(() -> new DataNotFoundException("Data yang diinput invalid"));
         }
 
-        this.studentPaymentRepository.findStudentPaymentStatusByType(user.getStudent(),uploadPaymentDto.getType()).ifPresent((d) -> {
-            throw new DuplicateDataException("Anda sudah pernah upload data pembayaran");
-        });
+        this.studentPaymentRepository.findStudentPaymentStatusByType(user.getStudent(),uploadPaymentDto.getType())
+                .ifPresent((d) -> {
+                    throw new DuplicateDataException("Anda sudah pernah upload data pembayaran");
+                });
 
         // upload file
         String extension = Filenameutils.getExtensionByStringHandling(uploadPaymentDto.file.getOriginalFilename()).get();
         String newFileName = Filenameutils.getRandomName() + "." + extension;
+
         this.filesStorageService.save(uploadPaymentDto.file,newFileName);
 
         Student student = user.getStudent();
@@ -282,7 +292,17 @@ public class StudentServiceImpl implements StudentService{
     }
 
     @Override
+    @Transactional
     public StudentLogs updateBio(UpdateBioDto updateBioDto) {
+        User user = this.authenticationService.decodeJwt();
+
+        Staging staging = this.stagingRepository.findByName("Isi Biodata")
+                .orElseThrow(() -> new DataNotFoundException("Staging name not found."));
+
+        //Upload file
+        String profilePictureExtension = Filenameutils.getExtensionByStringHandling(updateBioDto.getProfile_picture().getOriginalFilename()).get();
+
+
         return null;
     }
 
@@ -309,8 +329,19 @@ public class StudentServiceImpl implements StudentService{
                         .student(user.getStudent())
                         .build()
         );
+    }
 
+    @Override
+    public void deleteById(Integer studentId) {
+        Student data = this.studentRepository.findById(studentId).orElseThrow(() -> new DataNotFoundException("Id not found"));
 
+        this.studentRepository.delete(data);
+    }
 
+    @Override
+    public List<Student> getAllStudentByGrade(String grade) {
+        List<Student> datas = this.studentRepository.findAllStudentByGrade(grade);
+        if( !Objects.equals(grade, "SMK") && !Objects.equals(grade, "SMP") ) throw new DataNotFoundException("Grade is invalid");
+        return datas;
     }
 }
