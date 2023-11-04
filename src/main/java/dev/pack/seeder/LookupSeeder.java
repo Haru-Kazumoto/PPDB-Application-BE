@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-//@Configuration
+@Configuration
 @Transactional
 @RequiredArgsConstructor
 public class LookupSeeder implements ApplicationRunner {
@@ -57,6 +57,9 @@ public class LookupSeeder implements ApplicationRunner {
         lookups.add(List.of("Menunggu Konfirmasi Pembayaran","WAITING_PAYMENT","STATUS"));
         lookups.add(List.of("Menunggu Seleksi Ujian","TEST_SELECTION","STATUS"));
         lookups.add(List.of("Menunggu Hasil Pengumuman","WAITING_ANNOUNCEMENT","STATUS"));
+        lookups.add(List.of("Memilih Peminatan/Jurusan Awal","CHOOSING_FIRST_MAJORS","STATUS"));
+        lookups.add(List.of("Memilih Jurusan Tetap","CHOOSING_FIX_MAJOR","STATUS"));
+        lookups.add(List.of("Mengisi Biodata","FILLING_BIO","STATUS"));
         lookups.add(List.of("Berkas Terkonfirmasi","FILE_CONFIRMED","STATUS"));
         lookups.add(List.of("Pembayaran Terkonfirmasi","PAYMENT_CONFIRMED","STATUS"));
         lookups.add(List.of("Lulus Seleksi","SELECTION_PASSED","STATUS"));

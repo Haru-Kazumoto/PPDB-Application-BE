@@ -19,17 +19,17 @@ import dev.pack.modules.student_logs.StudentLogsRepository;
 import dev.pack.modules.student_payments.StudentPaymentRepository;
 import dev.pack.modules.student_payments.StudentPayments;
 import dev.pack.modules.user.User;
-import dev.pack.services.FilesStorageService;
+import dev.pack.filestorage.FilesStorageService;
 import dev.pack.utils.Filenameutils;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -138,6 +138,8 @@ public class StudentServiceImpl implements StudentService{
             throw new DataNotFoundException("Data tidak ditemukan");
         }
 
+        student.setPhone(user.getUsername());
+
 
         Staging staging = this.stagingRepository.findById(stagingStatusDto.getStagingId()).orElseThrow(() -> new DataNotFoundException("Data tidak ditemukan"));
         Lookup major = this.lookupRepository.getByValue(student.getMajor()).orElse(null);
@@ -166,6 +168,14 @@ public class StudentServiceImpl implements StudentService{
                 .build();
     }
 
+    protected String saveFileToDisk(MultipartFile file) {
+        String extension = Filenameutils.getExtensionByStringHandling(file.getOriginalFilename()).get();
+        String newFileName = Filenameutils.getRandomName() + "." + extension;
+        this.filesStorageService.save(file,newFileName);
+
+        return newFileName;
+    }
+
     @Override
     @Transactional
     public StudentLogs uploadPayment(UploadPaymentDto uploadPaymentDto) {
@@ -186,10 +196,7 @@ public class StudentServiceImpl implements StudentService{
                 });
 
         // upload file
-        String extension = Filenameutils.getExtensionByStringHandling(uploadPaymentDto.file.getOriginalFilename()).get();
-        String newFileName = Filenameutils.getRandomName() + "." + extension;
-
-        this.filesStorageService.save(uploadPaymentDto.file,newFileName);
+        String newFileName = this.saveFileToDisk(uploadPaymentDto.file);
 
         Student student = user.getStudent();
         student.setStatus("WAITING_PAYMENT");
@@ -295,27 +302,79 @@ public class StudentServiceImpl implements StudentService{
     @Transactional
     public StudentLogs updateBio(UpdateBioDto updateBioDto) {
         User user = this.authenticationService.decodeJwt();
-
         Staging staging = this.stagingRepository.findByName("Isi Biodata")
-                .orElseThrow(() -> new DataNotFoundException("Staging name not found."));
+                .orElseThrow(() -> new DataNotFoundException("Data yang diinput invalid"));
 
-        //Upload file
-        String profilePictureExtension = Filenameutils.getExtensionByStringHandling(updateBioDto.getProfile_picture().getOriginalFilename()).get();
+        String profile_pictire = this.saveFileToDisk(updateBioDto.getProfile_picture());
+        String birth_card = this.saveFileToDisk(updateBioDto.getBirth_card());
+        String family_card = this.saveFileToDisk(updateBioDto.getFamily_card());
 
 
-        return null;
+        Student student = user.getStudent();
+        if(student == null){
+            throw new DataNotFoundException("Akses hanya diberikan untuk Siswa pendaftar");
+        }
+
+        student.setProfile_picture(profile_pictire);
+        student.setFamily_card(family_card);
+        student.setBirth_card(birth_card);
+        student.setNisn(updateBioDto.getNisn());
+        student.setName(updateBioDto.getName());
+        student.setPhone(updateBioDto.getPhone());
+        student.setSurname(updateBioDto.getSurname());
+        student.setGender(updateBioDto.getGender());
+        student.setReligion(updateBioDto.getReligion());
+        student.setBirth_place(updateBioDto.getBirth_place());
+        student.setBirth_date(updateBioDto.getBirth_date());
+        student.setAddress(updateBioDto.getAddress());
+        student.setProvince(updateBioDto.getProvince());
+        student.setCity(updateBioDto.getCity());
+        student.setDistrict(updateBioDto.getDistrict());
+        student.setSub_district(updateBioDto.getSub_district());
+        student.setPostal_code(updateBioDto.getPostal_code());
+        student.setSchool_origin(updateBioDto.getSchool_origin());
+        student.setDad_name(updateBioDto.getDad_name());
+        student.setDad_phone(updateBioDto.getDad_phone());
+        student.setDad_job(updateBioDto.getDad_job());
+        student.setDad_address(updateBioDto.getDad_address());
+        student.setMother_name(updateBioDto.getMother_name());
+        student.setMother_phone(updateBioDto.getMother_phone());
+        student.setMother_job(updateBioDto.getMother_job());
+        student.setMother_address(updateBioDto.getMother_address());
+        student.setStatus("FILLING_BIO");
+
+
+        this.studentRepository.save(student);
+
+        return this.studentLogsRepository.save(
+                StudentLogs.builder()
+                        .registrationBatch(RegistrationBatch.builder().id(student.getBatch_id()).build())
+                        .path_id(student.getPath_id())
+                        .remark("Pengisian Biodata")
+                        .staging(staging)
+                        .status("FILLING_BIO")
+                        .type(FormPurchaseType.PENGEMBALIAN)
+                        .student(student)
+                        .build()
+        );
+
     }
 
     @Override
     public StudentLogs chooseMajor(ChooseMajorDto majorDto) {
         User user = this.authenticationService.decodeJwt();
         Staging staging = this.stagingRepository
-                .findByNameAndStagingType("Pilih Jurusan",majorDto.type)
+                .findByNameAndStagingType("Pilih Jurusan",majorDto.getType())
                 .orElseThrow(() -> new DataNotFoundException("Data yang diinput invalid"));
 
+        String status = "CHOOSING_FIRST_MAJORS";
         Student student = user.getStudent();
-        student.setMajor(majorDto.major);
+        if(majorDto.getType() == FormPurchaseType.PENGEMBALIAN){
+            status = "CHOOSING_FIX_MAJOR";
+        }
 
+        student.setStatus(status);
+        student.setMajor(majorDto.getMajor());
         this.studentRepository.save(student);
 
 
@@ -324,8 +383,10 @@ public class StudentServiceImpl implements StudentService{
                         .registrationBatch(RegistrationBatch.builder().id(user.getStudent().getBatch_id()).build())
                         .path_id(user.getStudent().getPath_id())
                         .remark("Memilih Jurusan")
+                        .majors(majorDto.getMajor())
                         .staging(staging)
-                        .type(majorDto.type)
+                        .status(status)
+                        .type(majorDto.getType())
                         .student(user.getStudent())
                         .build()
         );

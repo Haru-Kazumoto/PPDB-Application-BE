@@ -32,6 +32,8 @@ public class StudentLogs extends Timestamps {
 
     private FormPurchaseType type;
 
+    private String majors;
+
     @ManyToOne()
     @JoinColumn(name = "batch_id")
     private RegistrationBatch registrationBatch;

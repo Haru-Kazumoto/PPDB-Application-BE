@@ -1,4 +1,4 @@
-package dev.pack.services;
+package dev.pack.filestorage;
 
 import java.io.IOException;
 import java.net.MalformedURLException;

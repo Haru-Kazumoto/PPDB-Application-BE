@@ -77,6 +77,19 @@ public class Student extends Timestamps implements Serializable {
     private Integer path_id;
     private Integer batch_id;
 
+    private String birth_card;
+    private String family_card;
+
+    private String dad_name;
+    private String dad_phone;
+    private String dad_job;
+    private String dad_address;
+
+    private String mother_name;
+    private String mother_phone;
+    private String mother_job;
+    private String mother_address;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnore
     private RegistrationBatch registrationBatch;

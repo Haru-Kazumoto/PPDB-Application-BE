@@ -13,11 +13,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ChooseMajorDto {
     @NotNull
-    String major;
+    private String major;
 
     @NotNull
-    FormPurchaseType type;
+    private FormPurchaseType type;
 
     @NotNull
-    Integer stagingId;
+    private Integer stagingId;
 }
