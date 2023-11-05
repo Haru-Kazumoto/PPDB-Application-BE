@@ -29,6 +29,10 @@ public class RegistrationBatchDto {
     @NotNull()
     private Integer max_quota;
 
+    @NotEmpty()
+    @NotNull()
+    private String batchCode;
+
     @NotNull()
     private Date start_date;
 

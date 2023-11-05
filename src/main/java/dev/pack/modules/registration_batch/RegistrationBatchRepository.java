@@ -2,9 +2,11 @@ package dev.pack.modules.registration_batch;
 
 import dev.pack.modules.enums.FormPurchaseType;
 import dev.pack.modules.student.Student;
+import jakarta.persistence.LockModeType;
 import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -29,6 +31,11 @@ public interface RegistrationBatchRepository extends JpaRepository<RegistrationB
         where d.type = :type
     """)
     List<RegistrationBatch> getAllByType(FormPurchaseType type);
+
+
+    @Lock(LockModeType.OPTIMISTIC_FORCE_INCREMENT)
+    @Query("SELECT COUNT(s) FROM Student s WHERE s.batch_id = :batchId")
+    long countStudentsForRunningNumber(@Param("batchId") Integer batchId);
 
     @Query(value = """
             SELECT new dev.pack.modules.registration_batch.RegistrationBatch(
