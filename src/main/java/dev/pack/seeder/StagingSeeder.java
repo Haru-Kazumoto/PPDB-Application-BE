@@ -20,7 +20,6 @@ public class StagingSeeder implements ApplicationRunner {
 
     private final StagingRepository stagingRepository;
 
-
     private static final Logger log = LoggerFactory.getLogger(RoleSeeder.class);
 
     @Override

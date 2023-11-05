@@ -38,6 +38,7 @@ public class Student extends Timestamps implements Serializable {
     @UuidGenerator
     private String uniqueId;
 
+    @Column(unique = true)
     private String formulirId;
 
     @Column(unique = true)

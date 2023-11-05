@@ -79,6 +79,14 @@ public class StudentController {
         ));
     }
 
+    @GetMapping(path = "/get-payments")
+    public ResponseEntity<?> findAllStudentPayments(
+            @RequestParam("batchId") Integer batchId,
+            @RequestParam("studentId") Integer studentId
+    ){
+        return this.http.response(HttpStatus.OK.value(), new Date(), this.studentService.getAllStudentPayments(batchId,studentId));
+    }
+
     @PutMapping(path = "/update-bio")
     public ResponseEntity<?> updateCV(
             @RequestParam(value = "profile_picture") MultipartFile profile_picture,

@@ -39,8 +39,7 @@ public class RegistrationBatch implements Serializable {
 
     private Boolean isOpen = true;
 
-//    @Transient
-    private Long countStudent; //read only, not stored to column table
+    private Long countStudent;
 
     public RegistrationBatch(Integer id, String name, Integer index, Integer max_quota, Date start_date, Date end_date, Banks bank_name, String bank_user, Double price, String bank_account, Long countStudent) {
         this.id = id;

@@ -27,6 +27,9 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.Year;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
@@ -80,9 +83,17 @@ public class StudentServiceImpl implements StudentService{
             staging = this.stagingRepository.findByName("Pilih Gelombang PPDB")
                     .orElseThrow(() -> new DataNotFoundException("Data yang diinput invalid"));;
         }
-        
+
         Student student = this.studentRepository.findById(user.getStudent().getId())
                 .orElseThrow(() -> new DataNotFoundException("Data not found"));
+
+//        Integer quota = registrationBatch.getMax_quota();
+//        Integer batchCode = registrationBatch.getIndex();
+//        Year year = Year.now();
+//
+//        String uniqueCode = String.format("%s-%s-%s",year,batchCode,quota);
+//
+//        student.setFormulirId(uniqueCode);
 
         student.setRegistrationDate(new Date());
         student.setBatch_id(batchDto.getBatch_id());
@@ -404,5 +415,13 @@ public class StudentServiceImpl implements StudentService{
         List<Student> datas = this.studentRepository.findAllStudentByGrade(grade);
         if( !Objects.equals(grade, "SMK") && !Objects.equals(grade, "SMP") ) throw new DataNotFoundException("Grade is invalid");
         return datas;
+    }
+
+    @Override
+    public List<StudentPayments> getAllStudentPayments(Integer batchId, Integer studentId) {
+        this.registrationBatchRepo.findById(batchId).orElseThrow(() -> new DataNotFoundException("Registration batch id not found."));
+        this.studentRepository.findById(studentId).orElseThrow(() -> new DataNotFoundException("Student id not found."));
+
+        return this.studentRepository.findAllStudentPayments(batchId,studentId);
     }
 }
