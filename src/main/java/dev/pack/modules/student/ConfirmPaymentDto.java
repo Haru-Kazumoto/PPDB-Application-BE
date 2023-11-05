@@ -16,9 +16,7 @@ public class ConfirmPaymentDto {
     @NotNull
     private Integer payment_id;
 
-
     @NotNull
     private Integer student_id;
-
 
 }

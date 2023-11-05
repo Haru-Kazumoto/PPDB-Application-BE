@@ -16,6 +16,7 @@ import java.time.Duration;
 @RequiredArgsConstructor
 @EnableWebMvc
 public class WebMvcConfig implements WebMvcConfigurer {
+
     private final FilesStorageService filesStorageService;
 
     @Override
