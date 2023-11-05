@@ -87,13 +87,13 @@ public class StudentServiceImpl implements StudentService{
         Student student = this.studentRepository.findById(user.getStudent().getId())
                 .orElseThrow(() -> new DataNotFoundException("Data not found"));
 
-//        Integer quota = registrationBatch.getMax_quota();
-//        Integer batchCode = registrationBatch.getIndex();
-//        Year year = Year.now();
-//
-//        String uniqueCode = String.format("%s-%s-%s",year,batchCode,quota);
-//
-//        student.setFormulirId(uniqueCode);
+        Integer quota = registrationBatch.getMax_quota();
+        Integer batchCode = registrationBatch.getIndex();
+        Year year = Year.now();
+
+        String uniqueCode = String.format("%s-%s-%s",year,batchCode,quota);
+
+        student.setFormulirId(uniqueCode);
 
         student.setRegistrationDate(new Date());
         student.setBatch_id(batchDto.getBatch_id());
