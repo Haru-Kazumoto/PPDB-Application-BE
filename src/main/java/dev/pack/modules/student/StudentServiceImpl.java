@@ -3,6 +3,7 @@ package dev.pack.modules.student;
 import dev.pack.constraint.ErrorMessage;
 import dev.pack.exception.DataNotFoundException;
 import dev.pack.exception.DuplicateDataException;
+import dev.pack.filestorage.FilesStorageService;
 import dev.pack.modules.auth.AuthenticationService;
 import dev.pack.modules.enums.FormPurchaseType;
 import dev.pack.modules.enums.PaymentMethod;
@@ -19,17 +20,14 @@ import dev.pack.modules.student_logs.StudentLogsRepository;
 import dev.pack.modules.student_payments.StudentPaymentRepository;
 import dev.pack.modules.student_payments.StudentPayments;
 import dev.pack.modules.user.User;
-import dev.pack.filestorage.FilesStorageService;
 import dev.pack.utils.Filenameutils;
+import dev.pack.utils.StudentUtils;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.Year;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
@@ -46,6 +44,7 @@ public class StudentServiceImpl implements StudentService{
     private final AuthenticationService authenticationService;
     private final StudentPaymentRepository studentPaymentRepository;
     private final FilesStorageService filesStorageService;
+    private final StudentUtils studentUtils;
 
     @Override
     @Transactional
@@ -84,17 +83,17 @@ public class StudentServiceImpl implements StudentService{
                     .orElseThrow(() -> new DataNotFoundException("Data yang diinput invalid"));;
         }
 
+        long lastInsertedCount = this.registrationBatchRepo.countStudentsForRunningNumber(batchDto.getBatch_id());
+        if(lastInsertedCount+1 > registrationBatch.getMax_quota()){
+            throw new DuplicateDataException("Kuota gelombang sudah penuh, harap pilih gelombang lain.");
+        }
+
         Student student = this.studentRepository.findById(user.getStudent().getId())
                 .orElseThrow(() -> new DataNotFoundException("Data not found"));
 
-        Integer quota = registrationBatch.getMax_quota();
-        Integer batchCode = registrationBatch.getIndex();
-        Year year = Year.now();
+        String formulirId = studentUtils.generateIdStudent(lastInsertedCount+1,registrationBatch.getBatchCode());
 
-        String uniqueCode = String.format("%s-%s-%s",year,batchCode,quota);
-
-        student.setFormulirId(uniqueCode);
-
+        student.setFormulirId(formulirId);
         student.setRegistrationDate(new Date());
         student.setBatch_id(batchDto.getBatch_id());
         student.setStatus("REGISTERED");
