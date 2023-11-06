@@ -21,6 +21,8 @@ public interface StudentService {
 
     StudentLogs uploadPayment(UploadPaymentDto dto);
 
+    List<StudentAchievement> getStudentAchievement(GetStudentAchievementDto dto);
+
     StudentLogs confirmPayment(ConfirmPaymentDto dto);
 
 //    Student getStudentById(Integer studentId, Integer batchId);

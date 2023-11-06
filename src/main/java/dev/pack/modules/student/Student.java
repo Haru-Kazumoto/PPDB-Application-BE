@@ -122,4 +122,12 @@ public class Student extends Timestamps implements Serializable {
     )
     @JsonIgnore
     private List<StudentPayments> studentPayments;
+
+    @OneToMany(
+            orphanRemoval = true,
+            fetch = FetchType.LAZY,
+            mappedBy = "student"
+    )
+    @JsonIgnore
+    private List<StudentAchievement> studentAchievements;
 }
