@@ -13,4 +13,5 @@ public interface RegistrationPathsService {
     RegistrationPaths update(Integer id, RegistrationPaths bodyUpdate);
     void delete(Integer id);
     List<GetAllRegistrationPaths> getPathWithTotalStudents();
+    List<ResponseRegistrationPathsDto> indexAllWithRecursion();
 }
