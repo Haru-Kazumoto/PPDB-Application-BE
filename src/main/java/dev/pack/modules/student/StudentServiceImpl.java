@@ -45,6 +45,7 @@ public class StudentServiceImpl implements StudentService{
     private final StudentPaymentRepository studentPaymentRepository;
     private final FilesStorageService filesStorageService;
     private final StudentUtils studentUtils;
+    private final StudentAchievementRepository studentAchievementRepository;
 
     @Override
     @Transactional
@@ -243,6 +244,12 @@ public class StudentServiceImpl implements StudentService{
                         .build()
         );
 
+    }
+
+    @Override
+    public List<StudentAchievement> getStudentAchievement(GetStudentAchievementDto dto) {
+        Student student = this.studentRepository.findById(dto.getStudentId()).orElseThrow(() -> new DataNotFoundException("Data siswa tidak ditemukan"));
+        return this.studentAchievementRepository.getStudentAchievementByStudentAndType(student,dto.getType());
     }
 
     public StudentLogs printCard(PrintCardDto printCardDto) {
