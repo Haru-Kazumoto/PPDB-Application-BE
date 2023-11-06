@@ -5,6 +5,7 @@ import dev.pack.payloads.HttpResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -59,5 +60,14 @@ public class RegistrationPathsController {
     @DeleteMapping(path = "/delete")
     public void delete(@RequestParam(name = "id", defaultValue = "0")int id){
         this.registrationPathsService.delete(id);
+    }
+
+    @GetMapping(path = "/index-recursion")
+    public ResponseEntity<?> indexWithRecursion(){
+        return this.http.response(
+                HttpStatus.OK.value(),
+                new Date(),
+                this.registrationPathsService.indexAllWithRecursion()
+        );
     }
 }

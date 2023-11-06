@@ -1,15 +1,23 @@
 package dev.pack.modules.registration_paths;
 
 import dev.pack.exception.DataNotFoundException;
+import dev.pack.modules.additional_prices.AdditionalPrices;
+import dev.pack.modules.additional_prices.ResponseAdditionalPriceDto;
 import dev.pack.modules.enums.FormPurchaseType;
+import dev.pack.modules.prices.PriceDetails;
+import dev.pack.modules.prices.ResponsePriceDetailsDto;
 import dev.pack.modules.registration_batch.RegistrationBatch;
 import dev.pack.modules.registration_batch.RegistrationBatchRepository;
+import dev.pack.modules.registration_batch.ResponseRegistrationBatchDto;
+import dev.pack.modules.registration_general_information.RegistrationGeneralInformation;
+import dev.pack.modules.registration_general_information.ResponseGeneralInformationDto;
 import dev.pack.utils.Validator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static dev.pack.constraint.ErrorMessage.*;
 
@@ -57,6 +65,73 @@ public class RegistrationPathsServiceImpl implements RegistrationPathsService {
         savedRegistrationPaths.setRegistrationBatches(savedRegistrationBatches);
 
         return savedRegistrationPaths;
+    }
+
+    @Override
+    public List<ResponseRegistrationPathsDto> indexAllWithRecursion() {
+        List<RegistrationPaths> registrationPaths = registrationPathsRepository.findAll();
+
+        return registrationPaths.stream()
+                .map(this::mapToCustomResponse)
+                .collect(Collectors.toList());
+    }
+
+    private ResponseRegistrationPathsDto mapToCustomResponse(RegistrationPaths registrationPaths) {
+        return ResponseRegistrationPathsDto.builder()
+                .id(registrationPaths.getId())
+                .name(registrationPaths.getName())
+                .registrationBatches(registrationPaths.getRegistrationBatches().stream()
+                        .map(this::mapToCustomResponseRegistrationBatch)
+                        .collect(Collectors.toList()))
+                .generalInformations(registrationPaths.getRegistrationGeneralInformations().stream()
+                        .map(this::mapToCustomResponseGeneralInformation)
+                        .collect(Collectors.toList()))
+                .additionalPrices(registrationPaths.getAdditionalPrices().stream()
+                        .map(this::mapToCustomResponseAdditionalPrice)
+                        .collect(Collectors.toList()))
+                .build();
+    }
+
+    private ResponseRegistrationBatchDto mapToCustomResponseRegistrationBatch(RegistrationBatch registrationBatch) {
+        return ResponseRegistrationBatchDto.builder()
+                .id(registrationBatch.getId())
+                .name(registrationBatch.getName())
+                .index(registrationBatch.getIndex())
+                .max_quota(registrationBatch.getMax_quota())
+                .batchCode(registrationBatch.getBatchCode())
+                .start_date(registrationBatch.getStart_date())
+                .end_date(registrationBatch.getEnd_date())
+                .bank_name(registrationBatch.getBank_name())
+                .bank_user(registrationBatch.getBank_user())
+                .price(registrationBatch.getPrice())
+                .bank_account(registrationBatch.getBank_account())
+                .build();
+    }
+
+    private ResponseGeneralInformationDto mapToCustomResponseGeneralInformation(RegistrationGeneralInformation generalInformation) {
+        return ResponseGeneralInformationDto.builder()
+                .id(generalInformation.getId())
+                .name(generalInformation.getName())
+                .description(generalInformation.getDescription())
+                .build();
+    }
+
+    private ResponseAdditionalPriceDto mapToCustomResponseAdditionalPrice(AdditionalPrices additionalPrice) {
+        return ResponseAdditionalPriceDto.builder()
+                .id(additionalPrice.getId())
+                .namePrice(additionalPrice.getNamePrice())
+                .priceDetails(additionalPrice.getPriceDetails().stream()
+                        .map(this::mapToCustomResponsePriceDetails)
+                        .collect(Collectors.toList()))
+                .build();
+    }
+
+    private ResponsePriceDetailsDto mapToCustomResponsePriceDetails(PriceDetails priceDetails) {
+        return ResponsePriceDetailsDto.builder()
+                .id(priceDetails.getId())
+                .subTitle(priceDetails.getSubTitle())
+                .price(priceDetails.getPrice())
+                .build();
     }
 
     @Override
