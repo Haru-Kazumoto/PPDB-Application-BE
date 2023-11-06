@@ -2,6 +2,7 @@ package dev.pack.globalException;
 
 import dev.pack.exception.DataNotFoundException;
 import dev.pack.exception.DuplicateDataException;
+import dev.pack.exception.MaxQuotaReachedException;
 import dev.pack.payloads.ErrorResponse;
 import dev.pack.payloads.ValidationErrorResponse;
 import lombok.NonNull;
@@ -44,6 +45,16 @@ public class GlobalException extends ResponseEntityExceptionHandler {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(DuplicateDataException.class)
     public ResponseEntity<ErrorResponse> handleViolatesConstraints(DuplicateDataException ex){
+        ErrorResponse errorResponse = ErrorResponse.builder()
+                .statusResponse(HttpStatus.BAD_REQUEST.name())
+                .message(ex.getMessage())
+                .build();
+        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(MaxQuotaReachedException.class)
+    public ResponseEntity<ErrorResponse> handleViolatesConstraints(MaxQuotaReachedException ex){
         ErrorResponse errorResponse = ErrorResponse.builder()
                 .statusResponse(HttpStatus.BAD_REQUEST.name())
                 .message(ex.getMessage())

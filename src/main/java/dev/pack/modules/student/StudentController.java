@@ -4,17 +4,24 @@ import dev.pack.modules.enums.FormPurchaseType;
 import dev.pack.modules.registration_batch.ChooseBatchDto;
 import dev.pack.modules.registration_batch.GetStagingStatusDto;
 import dev.pack.payloads.HttpResponse;
+import dev.pack.utils.ExcelExporter;
 import dev.pack.utils.StringUtils;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.text.DateFormat;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -71,6 +78,36 @@ public class StudentController {
                 this.studentService.chooseMajor(chooseMajorDto)
         );
     }
+
+    @GetMapping(path = "/get-student-to-excel")
+    public void exportToExcel(HttpServletResponse response)throws IOException {
+        response.setContentType(String.valueOf(MediaType.APPLICATION_OCTET_STREAM));
+
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
+
+        String currentDateTime = dateFormat.format(new Date());
+
+        String headerKey = "Content-Disposition";
+        String headerValue = "attachment; filename=student"+currentDateTime+".xlsx";
+
+        response.setHeader(headerKey, headerValue);
+
+        List<Student> listOfStudents = studentService.getAll();
+
+        ExcelExporter export = new ExcelExporter(listOfStudents);
+
+        export.generateExcelFile(response);
+
+    }
+
+    @GetMapping(path = "/get-student")
+    public ResponseEntity<?> findStudentByIdAndBatchId(
+            @RequestParam("studentId") Integer studentId
+
+    ){
+        return this.http.response(HttpStatus.OK.value(), new Date(), this.studentService.getStudentById(studentId));
+    }
+
 
     @PutMapping(path = "/confirm-payment")
     public ResponseEntity<?> confirmPayment(@RequestBody ConfirmPaymentDto paymentDto) {

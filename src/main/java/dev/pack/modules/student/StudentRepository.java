@@ -33,4 +33,9 @@ public interface StudentRepository extends JpaRepository<Student, Integer> {
             @Param("studentId") Integer studentid
     );
 
+    @Query("SELECT s FROM Student s WHERE s.id = :studentId AND s.batch_id = :batchId ORDER BY s.id ASC")
+    Student findStudentByIdAnAndBAndBatch_id(
+            @Param("studentId") Integer studentId,
+            @Param("batchId") Integer batchId
+    );
 }

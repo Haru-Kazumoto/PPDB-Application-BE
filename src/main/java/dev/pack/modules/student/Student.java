@@ -42,6 +42,9 @@ public class Student extends Timestamps implements Serializable {
     private String formulirId;
 
     @Column(unique = true)
+    private String lastInsertedNumber;
+
+    @Column(unique = true)
     private String nisn;
 
     private String name; //2

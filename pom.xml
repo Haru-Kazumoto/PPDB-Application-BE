@@ -110,6 +110,17 @@
 			<version>0.11.5</version>
 		</dependency>
 
+		<!--	EXPORTER EXCEL DEP	-->
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi</artifactId>
+			<version>5.1.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi-ooxml</artifactId>
+			<version>5.1.0</version>
+		</dependency>
 
 		<dependency>
 			<groupId>org.springdoc</groupId>

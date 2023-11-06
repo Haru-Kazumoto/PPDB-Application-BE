@@ -3,6 +3,7 @@ package dev.pack.modules.student;
 import dev.pack.constraint.ErrorMessage;
 import dev.pack.exception.DataNotFoundException;
 import dev.pack.exception.DuplicateDataException;
+import dev.pack.exception.MaxQuotaReachedException;
 import dev.pack.filestorage.FilesStorageService;
 import dev.pack.modules.auth.AuthenticationService;
 import dev.pack.modules.enums.FormPurchaseType;
@@ -85,7 +86,7 @@ public class StudentServiceImpl implements StudentService{
 
         long lastInsertedCount = this.registrationBatchRepo.countStudentsForRunningNumber(batchDto.getBatch_id());
         if(lastInsertedCount+1 > registrationBatch.getMax_quota()){
-            throw new DuplicateDataException("Kuota gelombang sudah penuh, harap pilih gelombang lain.");
+            throw new MaxQuotaReachedException("Kuota gelombang sudah penuh, harap pilih gelombang lain.");
         }
 
         Student student = this.studentRepository.findById(user.getStudent().getId())
@@ -94,6 +95,7 @@ public class StudentServiceImpl implements StudentService{
         String formulirId = studentUtils.generateIdStudent(lastInsertedCount+1,registrationBatch.getBatchCode());
 
         student.setFormulirId(formulirId);
+        student.setLastInsertedNumber(String.valueOf(lastInsertedCount+1));
         student.setRegistrationDate(new Date());
         student.setBatch_id(batchDto.getBatch_id());
         student.setStatus("REGISTERED");
@@ -305,7 +307,14 @@ public class StudentServiceImpl implements StudentService{
 
     @Override
     public Student getStudentById(Integer studentId) {
-        return this.studentRepository.findById(studentId).orElseThrow(() -> new DataNotFoundException("Student id not found."));
+//        this.registrationBatchRepo.findById(batchId)
+//                .orElseThrow(() -> new DataNotFoundException("Id gelombang tidak ditemukan."));
+//
+//        this.studentRepository.findById(studentId).orElseThrow(() -> new DataNotFoundException("Id student tidak ditemukan"));
+//
+//        return this.studentRepository.findStudentByIdAnAndBAndBatch_id(studentId, batchId);
+
+        return this.studentRepository.findById(studentId).orElseThrow(() -> new DataNotFoundException("Id tidka ditemukan"));
     }
 
     @Override

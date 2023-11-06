@@ -23,6 +23,7 @@ public interface StudentService {
 
     StudentLogs confirmPayment(ConfirmPaymentDto dto);
 
+//    Student getStudentById(Integer studentId, Integer batchId);
     Student getStudentById(Integer studentId);
 
     StudentLogs updateBio(UpdateBioDto updateBioDto);
