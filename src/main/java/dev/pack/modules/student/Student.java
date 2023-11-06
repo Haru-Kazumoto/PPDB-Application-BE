@@ -19,6 +19,7 @@ import org.hibernate.annotations.UuidGenerator;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 @Data
 @AllArgsConstructor
@@ -35,10 +36,10 @@ public class Student extends Timestamps implements Serializable {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @UuidGenerator
-    private String uniqueId;
-
     @Column(unique = true)
+    @UuidGenerator
+    private UUID uniqueId = UUID.randomUUID();
+
     private String formulirId;
 
     @Column(unique = true)

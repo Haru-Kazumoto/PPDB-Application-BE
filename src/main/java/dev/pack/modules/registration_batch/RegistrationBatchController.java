@@ -9,6 +9,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.repository.query.Param;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -45,6 +46,24 @@ public class RegistrationBatchController {
     @GetMapping(path = "/getByType")
     public ResponseEntity<?> getByType(@RequestParam(name = "type")FormPurchaseType type) {
         return this.http.response(OK.value(),new Date(),this.registrationBatchService.getAllBatchByType(type));
+    }
+
+    @GetMapping(path = "/get-detail-student-pembelian")
+    public ResponseEntity<?> getDetailStudentPembelian(@RequestParam("studentId") Integer studentId){
+        return this.http.response(
+                HttpStatus.OK.value(),
+                new Date(),
+                this.studentService.getDetailStudentPembelian(studentId)
+        );
+    }
+
+    @GetMapping(path = "/get-detail-student-pengembalian")
+    public ResponseEntity<?> getDetailStudentPengembalian(@RequestParam("studentId")Integer studentId){
+        return this.http.response(
+                HttpStatus.OK.value(),
+                new Date(),
+                this.studentService.getDetailStudentPengembalian(studentId)
+        );
     }
 
     @PatchMapping(path = "/update")

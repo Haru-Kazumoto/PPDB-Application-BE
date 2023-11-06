@@ -70,6 +70,24 @@ public class StudentServiceImpl implements StudentService{
     }
 
     @Override
+    public ResponseStudentDto getDetailStudentPembelian(Integer studentId) {
+        Student dataStudent = this.studentRepository.findById(studentId).orElseThrow(() -> new DataNotFoundException("Id siswa tidak ditemukan."));
+
+        return ResponseStudentDto.builder()
+                .id(dataStudent.getId())
+                .phone(dataStudent.getPhone())
+                .name(dataStudent.getName())
+                .address(dataStudent.getAddress())
+                .school_origin(dataStudent.getSchool_origin())
+                .build();
+    }
+
+    @Override
+    public Student getDetailStudentPengembalian(Integer studentId) {
+        return this.studentRepository.findById(studentId).orElseThrow(() -> new DataNotFoundException("Id siswa tidak ditemukan."));
+    }
+
+    @Override
     @Transactional
     public RegistrationBatch chooseRegistrationBatch(ChooseBatchDto batchDto) {
         RegistrationBatch registrationBatch = this.registrationBatchRepo.findById(batchDto.getBatch_id())

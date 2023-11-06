@@ -23,6 +23,10 @@ public interface StudentService {
 
     List<StudentAchievement> getStudentAchievement(GetStudentAchievementDto dto);
 
+    ResponseStudentDto getDetailStudentPembelian(Integer studentId);
+
+    Student getDetailStudentPengembalian(Integer studentId);
+
     StudentLogs confirmPayment(ConfirmPaymentDto dto);
 
 //    Student getStudentById(Integer studentId, Integer batchId);
