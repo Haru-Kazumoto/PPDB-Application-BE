@@ -57,6 +57,7 @@ public class FilesStorageServiceImpl implements FilesStorageService {
                 throw new RuntimeException("Could not read the file!");
             }
         } catch (MalformedURLException e) {
+            System.out.println(e.getMessage());
             throw new RuntimeException("Error: " + e.getMessage());
         }
     }

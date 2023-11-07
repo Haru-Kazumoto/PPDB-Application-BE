@@ -17,6 +17,7 @@ import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.LogoutHandler;
+import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
 import static dev.pack.modules.enums.Role.*;
 import static org.springframework.http.HttpMethod.*;
@@ -83,6 +84,7 @@ public class SecurityConfiguration {
         );
         http.authenticationProvider(authenticationProvider);
         http.addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+        http.addFilterAfter(new SpaWebFilter(), BasicAuthenticationFilter.class);
 
         return http.build();
   }

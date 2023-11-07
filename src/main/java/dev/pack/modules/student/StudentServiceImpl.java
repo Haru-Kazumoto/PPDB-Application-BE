@@ -283,14 +283,22 @@ public class StudentServiceImpl implements StudentService{
         if(studentLogs != null) {
             return studentLogs;
         }
+        String remark = "Cetak Kartu Peserta Proses Pembelian";
+        String status = "PRINT_CARD_PURCHASED";
+
+        if(printCardDto.getType() == FormPurchaseType.PENGEMBALIAN) {
+            remark = "Cetak Kartu Peserta Proses Pengembalian";
+            status = "PRINT_CARD_RETURNING";
+        }
 
 
         return this.studentLogsRepository.save(
                 StudentLogs.builder()
                         .registrationBatch(RegistrationBatch.builder().id(user.getStudent().getBatch_id()).build())
                         .path_id(user.getStudent().getPath_id())
-                        .remark("Cetak Kartu Peserta Proses Pembelian")
+                        .remark(remark)
                         .staging(staging)
+                        .status(status)
                         .type(printCardDto.getType())
                         .student(user.getStudent())
                         .build()
