@@ -121,7 +121,7 @@ public class StudentServiceImpl implements StudentService{
         student.setBatch_id(batchDto.getBatch_id());
         student.setStatus("REGISTERED");
         student.setPath_id(registrationBatch.getRegistrationPaths().getId());
-//eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJUZXN0aW5nIDIiLCJpZCI6MjEsInVzZXJuYW1lIjoiVGVzdGluZyAyIiwiaWF0IjoxNjk5MzY4NjY5LCJleHAiOjE2OTk0NTUwNjl9.jn5kUICoIIKJlZqHdEx2_jDA6JZuqjd6QQr39MHzavE
+
         this.studentRepository.save(student);
 
         this.studentLogsRepository.save(

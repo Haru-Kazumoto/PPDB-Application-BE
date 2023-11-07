@@ -77,6 +77,7 @@ public class RegistrationBatchServiceImpl implements RegistrationBatchService{
         data.setIndex(bodyUpdate.getIndex());
         data.setName(bodyUpdate.getName());
         data.setMax_quota(bodyUpdate.getMax_quota());
+        data.setBatchCode(bodyUpdate.getBatchCode());
         data.setStart_date(bodyUpdate.getStart_date());
         data.setEnd_date(bodyUpdate.getEnd_date());
         data.setBank_name(bodyUpdate.getBank_name());
