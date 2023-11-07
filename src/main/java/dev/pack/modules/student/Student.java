@@ -42,7 +42,6 @@ public class Student extends Timestamps implements Serializable {
 
     private String formulirId;
 
-    @Column(unique = true)
     private String lastInsertedNumber;
 
     @Column(unique = true)
@@ -69,7 +68,6 @@ public class Student extends Timestamps implements Serializable {
     private String postal_code;
     private String school_origin; //4
 
-    @Column(nullable = true)
     private String profile_picture;
 
     private String status;

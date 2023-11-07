@@ -5,13 +5,23 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
-@Builder
 public class CountStudents {
 
-    private Long totalStudents;
-    private Long studentAccepted;
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Builder
+    public static class DetailBatch {
+        private Long totalStudents;
+        private Long studentAccepted;
+    }
 
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Builder
+    public static class InfoBatch {
+        private Integer id;
+        private Long totalStudents;
+    }
 }

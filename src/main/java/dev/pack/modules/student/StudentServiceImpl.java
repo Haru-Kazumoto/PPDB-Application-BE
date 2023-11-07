@@ -111,15 +111,17 @@ public class StudentServiceImpl implements StudentService{
         Student student = this.studentRepository.findById(user.getStudent().getId())
                 .orElseThrow(() -> new DataNotFoundException("Data not found"));
 
-        String formulirId = studentUtils.generateIdStudent(lastInsertedCount+1,registrationBatch.getBatchCode());
+        long runningNumber = lastInsertedCount+1;
+
+        String formulirId = studentUtils.generateIdStudent(runningNumber,registrationBatch.getBatchCode());
 
         student.setFormulirId(formulirId);
-        student.setLastInsertedNumber(String.valueOf(lastInsertedCount+1));
+        student.setLastInsertedNumber(String.valueOf(runningNumber));
         student.setRegistrationDate(new Date());
         student.setBatch_id(batchDto.getBatch_id());
         student.setStatus("REGISTERED");
         student.setPath_id(registrationBatch.getRegistrationPaths().getId());
-
+//eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJUZXN0aW5nIDIiLCJpZCI6MjEsInVzZXJuYW1lIjoiVGVzdGluZyAyIiwiaWF0IjoxNjk5MzY4NjY5LCJleHAiOjE2OTk0NTUwNjl9.jn5kUICoIIKJlZqHdEx2_jDA6JZuqjd6QQr39MHzavE
         this.studentRepository.save(student);
 
         this.studentLogsRepository.save(

@@ -29,6 +29,7 @@ public class RegistrationBatch implements Serializable {
     private Integer index;
     private Integer max_quota;
 
+    @Column(unique = true)
     private String batchCode;
 
     private Date start_date;

@@ -32,5 +32,7 @@ public interface RegistrationBatchService {
 
     List<Student> getStudentByBatchId(Integer batchId);
 
-    CountStudents countStudent(Integer batchId);
+    CountStudents.DetailBatch countStudent(Integer batchId);
+
+    List<CountStudents.InfoBatch> countAllStudents();
 }

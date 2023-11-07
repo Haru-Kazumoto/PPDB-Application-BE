@@ -18,9 +18,12 @@ spring:
         dialect: org.hibernate.dialect.PostgreSQLDialect # Use PostgreSQL dialect
         format_sql: true
     database: postgresql # Set the database type to PostgreSQL
-
+  servlet:
+    multipart:
+      max-file-size: 5MB
 application:
   version: 1
+
   security:
     jwt:
       secret-key: 404E635266556A586E3272357538782F413F4428472B4B6250645367566b5970

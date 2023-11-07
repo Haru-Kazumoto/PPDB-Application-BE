@@ -21,6 +21,9 @@ public interface StudentRepository extends JpaRepository<Student, Integer> {
     @Query("SELECT COUNT(s) FROM Student s WHERE s.batch_id = :batchId")
     long countStudentsByBatchId(@Param("batchId") Integer batchId);
 
+    @Query("SELECT COUNT(s) FROM Student s ORDER BY s.id ASC")
+    long countAllStudents();
+
     @Query("SELECT COUNT(s) FROM Student s WHERE s.batch_id = :batchId AND s.status = 'PEMBAYARAN_TERKONFIRMASI'")
     long countConfirmedPaymentStudentsByBatchId(@Param("batchId") Integer batchId);
 

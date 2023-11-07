@@ -138,16 +138,21 @@ public class RegistrationBatchServiceImpl implements RegistrationBatchService{
     }
 
     @Override
-    public CountStudents countStudent(Integer batchId) {
+    public CountStudents.DetailBatch countStudent(Integer batchId) {
         RegistrationBatch data = this.registrationBatchRepository.findById(batchId)
                 .orElseThrow(() -> new DataNotFoundException(BATCH_ID_NOT_FOUND));
 
         long total = this.studentRepository.countStudentsByBatchId(data.getId());
         long accepted = this.studentRepository.countConfirmedPaymentStudentsByBatchId(data.getId());
 
-        return CountStudents.builder()
+        return CountStudents.DetailBatch.builder()
                 .totalStudents(total)
                 .studentAccepted(accepted)
                 .build();
+    }
+
+    @Override
+    public List<CountStudents.InfoBatch> countAllStudents() {
+        return null;
     }
 }

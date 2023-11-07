@@ -12,6 +12,6 @@ public class StudentUtils {
     public String generateIdStudent(long lastInsertedCount, String batchCode){
         Year year = Year.now();
 
-        return String.format("%s-%s-%s",year,batchCode,lastInsertedCount+1);
+        return String.format("%s-%s-%s",year,batchCode,lastInsertedCount);
     }
 }
