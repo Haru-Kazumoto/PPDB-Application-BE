@@ -36,9 +36,9 @@ public class Student extends Timestamps implements Serializable {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(unique = true)
-    @UuidGenerator
-    private UUID uniqueId = UUID.randomUUID();
+//    @Column(unique = true)
+//    @UuidGenerator
+//    private UUID uniqueId = UUID.randomUUID();
 
     private String formulirId;
 
