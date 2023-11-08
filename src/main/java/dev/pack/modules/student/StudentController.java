@@ -3,6 +3,8 @@ package dev.pack.modules.student;
 import dev.pack.modules.enums.FormPurchaseType;
 import dev.pack.modules.registration_batch.ChooseBatchDto;
 import dev.pack.modules.registration_batch.GetStagingStatusDto;
+import dev.pack.modules.registration_batch.RegistrationBatch;
+import dev.pack.modules.registration_batch.RegistrationBatchRepository;
 import dev.pack.payloads.HttpResponse;
 import dev.pack.utils.ExcelExporter;
 import dev.pack.utils.StringUtils;
@@ -20,6 +22,8 @@ import java.io.IOException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.Year;
 import java.util.Date;
 import java.util.List;
 
@@ -29,6 +33,7 @@ import java.util.List;
 public class StudentController {
 
     private final StudentService studentService;
+    private final RegistrationBatchRepository registrationBatchRepository;
     private final ModelMapper modelMapper;
     private final HttpResponse http;
 
@@ -80,24 +85,17 @@ public class StudentController {
     }
 
     @GetMapping(path = "/get-student-to-excel")
-    public void exportToExcel(HttpServletResponse response)throws IOException {
-        response.setContentType(String.valueOf(MediaType.APPLICATION_OCTET_STREAM));
+    public void exportToExcel(HttpServletResponse response, @RequestParam("batchId") Integer batchId)throws IOException {
+        var registrationBatch = this.registrationBatchRepository.findById(batchId).orElseThrow();
 
-        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
+        response.setContentType("application/octet-stream");
 
-        String currentDateTime = dateFormat.format(new Date());
+        LocalDateTime time = LocalDateTime.now();
 
         String headerKey = "Content-Disposition";
-        String headerValue = "attachment; filename=student"+currentDateTime+".xlsx";
+        String headerValue = String.format("attachment;filename=student_%s_%s_data.xls",registrationBatch.getBatchCode(),time);
 
         response.setHeader(headerKey, headerValue);
-
-        List<Student> listOfStudents = studentService.getAll();
-
-        ExcelExporter export = new ExcelExporter(listOfStudents);
-
-        export.generateExcelFile(response);
-
     }
 
     @GetMapping(path = "/get-student")

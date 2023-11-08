@@ -21,17 +21,20 @@ import dev.pack.modules.student_logs.StudentLogsRepository;
 import dev.pack.modules.student_payments.StudentPaymentRepository;
 import dev.pack.modules.student_payments.StudentPayments;
 import dev.pack.modules.user.User;
+import dev.pack.utils.ExportService;
 import dev.pack.utils.Filenameutils;
 import dev.pack.utils.StudentUtils;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Objects;
+import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.Year;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -47,6 +50,7 @@ public class StudentServiceImpl implements StudentService{
     private final FilesStorageService filesStorageService;
     private final StudentUtils studentUtils;
     private final StudentAchievementRepository studentAchievementRepository;
+    private final ExportService exportService;
 
     @Override
     @Transactional
@@ -80,6 +84,53 @@ public class StudentServiceImpl implements StudentService{
                 .address(dataStudent.getAddress())
                 .school_origin(dataStudent.getSchool_origin())
                 .build();
+    }
+
+    @Override
+    public void exportExcelDataStudent(HttpServletResponse response, Integer batchId) throws IOException {
+        this.registrationBatchRepo.findById(batchId)
+                .orElseThrow(() -> new DataNotFoundException("Id gelombang tidak ditemukan"));
+
+        List<Student> students = this.registrationBatchRepo.findAllStudentByBatchId(batchId);
+
+        List<String> headers = Arrays.asList(
+                "Id",
+                "Formulir-id",
+                "Pendaftar ke",
+                "Nama siswa",
+                "Nomor telepon",
+                "Alamat",
+                "Jenjang",
+                "Jenis kelamin",
+                "Agama",
+                "Asal sekolah",
+                "Jurusan",
+                "Tanggal mendaftar"
+        );
+
+        List<List<Object>> data = new ArrayList<>();
+        Year year = Year.now();
+
+        for(Student student : students){
+            List<Object> rowData = new ArrayList<>();
+
+            rowData.add(student.getId());
+            rowData.add(student.getFormulirId());
+            rowData.add(student.getLastInsertedNumber());
+            rowData.add(student.getName());
+            rowData.add(student.getPhone());
+            rowData.add(student.getAddress());
+            rowData.add(student.getGrade());
+            rowData.add(student.getGender());
+            rowData.add(student.getReligion());
+            rowData.add(student.getSchool_origin());
+            rowData.add(student.getMajor());
+            rowData.add(student.getRegistrationDate());
+
+            data.add(rowData);
+        }
+
+        exportService.generateExcelCustomHeader(response,String.format("Data siswa %s",year), headers, data);
     }
 
     @Override

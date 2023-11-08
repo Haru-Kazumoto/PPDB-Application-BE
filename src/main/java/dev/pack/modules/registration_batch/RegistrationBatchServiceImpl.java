@@ -108,8 +108,6 @@ public class RegistrationBatchServiceImpl implements RegistrationBatchService{
         return resultData;
     }
 
-    //TODO : GET ALL GELOMBANG BY TIPE JALUR
-
     public void updateCountStudent(Integer regisPathsId){
         this.registrationBatchRepository.updateCountStudent(regisPathsId);
     }
