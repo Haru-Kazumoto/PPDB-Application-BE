@@ -21,6 +21,11 @@ spring:
   servlet:
     multipart:
       max-file-size: 5MB
+  task:
+    scheduling:
+      pool:
+        size: 1
+      thread-name-prefix: token-cleanup-
 application:
   version: 1
 

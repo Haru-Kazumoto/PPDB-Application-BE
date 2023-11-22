@@ -41,4 +41,11 @@ public interface StudentRepository extends JpaRepository<Student, Integer> {
             @Param("studentId") Integer studentId,
             @Param("batchId") Integer batchId
     );
+
+//    @Query("SELECT s FROM Student s " +
+//            "JOIN StudentLogs sl ON s.id = sl.student.id " +
+//            "JOIN RegistrationPaths rp ON rp.id = sl.path_id " +
+//            "WHERE sl.id = (SELECT MAX(sl2.id) FROM StudentLogs sl2 WHERE sl2.student.id = s.id) " +
+//            "AND rp. = :batchId")
+//    List<Student> findAllStudentHasRegistered(@Param("batchId") Integer batchId);
 }

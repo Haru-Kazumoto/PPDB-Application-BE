@@ -3,29 +3,22 @@ package dev.pack.modules.student;
 import dev.pack.modules.enums.FormPurchaseType;
 import dev.pack.modules.registration_batch.ChooseBatchDto;
 import dev.pack.modules.registration_batch.GetStagingStatusDto;
-import dev.pack.modules.registration_batch.RegistrationBatch;
 import dev.pack.modules.registration_batch.RegistrationBatchRepository;
 import dev.pack.payloads.HttpResponse;
-import dev.pack.utils.ExcelExporter;
 import dev.pack.utils.StringUtils;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.text.DateFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
-import java.time.Year;
 import java.util.Date;
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -90,12 +83,12 @@ public class StudentController {
 
         response.setContentType("application/octet-stream");
 
-        LocalDateTime time = LocalDateTime.now();
-
         String headerKey = "Content-Disposition";
-        String headerValue = String.format("attachment;filename=student_%s_%s_data.xls",registrationBatch.getBatchCode(),time);
+        String headerValue = String.format("attachment;filename=student_%s_data.xls",registrationBatch.getBatchCode());
 
         response.setHeader(headerKey, headerValue);
+
+        this.studentService.exportExcelDataStudent(response,batchId);
     }
 
     @GetMapping(path = "/get-student")
