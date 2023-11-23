@@ -1,4 +1,4 @@
-package dev.pack.utils;
+package dev.pack.utils.excel;
 
 import dev.pack.modules.student.Student;
 import dev.pack.modules.student.StudentRepository;
@@ -10,7 +10,6 @@ import org.apache.poi.hssf.util.HSSFColor;
 import org.apache.poi.ss.usermodel.FillPatternType;
 import org.apache.poi.ss.usermodel.HorizontalAlignment;
 import org.apache.poi.ss.usermodel.VerticalAlignment;
-import org.apache.poi.ss.util.CellRangeAddress;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -18,7 +17,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class ExportServiceImpl implements ExportService{
+public class ExcelServiceImpl implements ExcelService {
 
     private final StudentRepository studentRepository;
 

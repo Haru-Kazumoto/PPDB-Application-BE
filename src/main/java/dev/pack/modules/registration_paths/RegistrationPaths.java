@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import dev.pack.modules.additional_prices.AdditionalPrices;
 import dev.pack.modules.registration_batch.RegistrationBatch;
 import dev.pack.modules.enums.FormPurchaseType;
+import dev.pack.modules.exam_information.ExamInformation;
 import dev.pack.modules.registration_general_information.RegistrationGeneralInformation;
 import dev.pack.modules.student.Student;
 import dev.pack.modules.student_logs.StudentLogs;
@@ -90,6 +91,7 @@ public class RegistrationPaths implements Serializable {
     )
     @JsonIgnore
     private List<AdditionalPrices> additionalPrices;
+
 
     //one to many ke 3 model student, student_logs, student_payments
     @OneToMany(

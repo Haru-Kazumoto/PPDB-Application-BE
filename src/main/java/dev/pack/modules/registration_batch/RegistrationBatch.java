@@ -1,6 +1,7 @@
 package dev.pack.modules.registration_batch;
 
 import com.fasterxml.jackson.annotation.*;
+import dev.pack.modules.exam_information.ExamInformation;
 import dev.pack.modules.registration_paths.RegistrationPaths;
 import dev.pack.modules.enums.Banks;
 import dev.pack.modules.student.Student;
@@ -79,6 +80,13 @@ public class RegistrationBatch implements Serializable {
     @JsonIgnore
     private List<Student> students;
 
+    @OneToMany(
+            cascade = CascadeType.ALL,
+            orphanRemoval = true,
+            mappedBy = "registrationBatch"
+    )
+    @JsonIgnore
+    private List<ExamInformation> examInformations;
 
     @OneToMany(
             fetch = FetchType.LAZY,

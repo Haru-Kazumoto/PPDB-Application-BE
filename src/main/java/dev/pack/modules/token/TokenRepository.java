@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,4 +19,7 @@ public interface TokenRepository extends JpaRepository<Token, Integer> {
     List<Token> findAllValidTokenByUser(Integer id);
 
     Optional<Token> findByToken(String token);
+
+    @Query("SELECT t FROM Token t WHERE (t.expired = true OR t.revoked = true) AND t.updatedAt <= :date")
+    List<Token> findAllByExpiredOrRevokedBeforeDate(@Param("date") LocalDateTime date);
 }

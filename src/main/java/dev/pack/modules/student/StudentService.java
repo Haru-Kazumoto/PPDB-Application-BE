@@ -47,4 +47,6 @@ public interface StudentService {
     List<StudentPayments> getAllStudentPayments(Integer batchId, Integer studentId);
 
     void exportExcelDataStudent(HttpServletResponse response, Integer batchId) throws IOException;
+
+
 }
