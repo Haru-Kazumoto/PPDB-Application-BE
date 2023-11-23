@@ -32,11 +32,11 @@ public class ExamInformationController {
     }
 
     @GetMapping("/index")
-    private ResponseEntity<?> indexAllExamInformationByPathId(@RequestParam(name = "pathId")Integer pathId){
+    private ResponseEntity<?> indexAllExamInformationByPathId(@RequestParam(name = "batchId")Integer batchId){
         return this.http.response(
                 HttpStatus.OK.value(),
                 new Date(),
-                this.examInformationService.index(pathId)
+                this.examInformationService.index(batchId)
         );
     }
 
