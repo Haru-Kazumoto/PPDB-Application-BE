@@ -33,8 +33,8 @@ public class ExamInformationDto {
         @NotNull(message = "End date canoot be null field")
         private Date endDate;
 
-        @NotNull(message = "Path id cannot be null field")
-        private Integer pathId;
+        @NotNull(message = "Batch id cannot be null field")
+        private Integer batchId;
     }
 
     @Data

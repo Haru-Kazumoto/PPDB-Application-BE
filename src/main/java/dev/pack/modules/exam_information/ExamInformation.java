@@ -1,6 +1,7 @@
 package dev.pack.modules.exam_information;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import dev.pack.modules.registration_batch.RegistrationBatch;
 import dev.pack.modules.registration_paths.RegistrationPaths;
 import dev.pack.utils.Timestamps;
 import jakarta.persistence.*;
@@ -27,11 +28,10 @@ public class ExamInformation extends Timestamps {
     private Date startDate;
     private Date endDate;
     private Boolean isOpen;
-    private Integer pathId;
-
+    private Integer batchId;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnore
-    private RegistrationPaths registrationPaths;
+    private RegistrationBatch registrationBatch;
 
 }

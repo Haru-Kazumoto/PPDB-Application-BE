@@ -92,13 +92,6 @@ public class RegistrationPaths implements Serializable {
     @JsonIgnore
     private List<AdditionalPrices> additionalPrices;
 
-    @OneToMany(
-        cascade = CascadeType.ALL,
-        orphanRemoval = true,
-        mappedBy = "registrationPaths"
-    )
-    @JsonIgnore
-    private List<ExamInformation> examInformations;
 
     //one to many ke 3 model student, student_logs, student_payments
     @OneToMany(

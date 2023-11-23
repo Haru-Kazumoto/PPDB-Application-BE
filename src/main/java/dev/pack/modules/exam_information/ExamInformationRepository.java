@@ -11,7 +11,6 @@ import java.util.Optional;
 @Repository
 public interface ExamInformationRepository extends JpaRepository<ExamInformation, Integer> {
 
-    List<ExamInformation> findAllByPathId(Integer pathId);
-    Optional<ExamInformation> findByPathId(Integer pathId);
+    List<ExamInformation> findAllByBatchId(Integer batchId);
 
 }

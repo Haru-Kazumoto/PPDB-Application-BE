@@ -3,8 +3,8 @@ package dev.pack.modules.exam_information;
 import dev.pack.exception.DataNotFoundException;
 import dev.pack.modules.lookup.Lookup;
 import dev.pack.modules.lookup.LookupRepository;
-import dev.pack.modules.registration_paths.RegistrationPaths;
-import dev.pack.modules.registration_paths.RegistrationPathsRepository;
+import dev.pack.modules.registration_batch.RegistrationBatch;
+import dev.pack.modules.registration_batch.RegistrationBatchRepository;
 import dev.pack.utils.Validator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -17,13 +17,13 @@ import java.util.List;
 public class ExamInformationServiceImpl implements ExamInformationService {
 
     private final ExamInformationRepository examInformationRepository;
-    private final RegistrationPathsRepository registrationPathsRepository;
+    private final RegistrationBatchRepository registrationBatchRepository;
     private final LookupRepository lookupRepository;
     private final Validator validator;
 
     @Override
     public ExamInformation create(ExamInformation bodyCreate) {
-        RegistrationPaths registrationPaths = this.registrationPathsRepository.findById(bodyCreate.getPathId())
+        RegistrationBatch registrationBatch = this.registrationBatchRepository.findById(bodyCreate.getBatchId())
                 .orElseThrow(() -> new DataNotFoundException("Registration path id not found."));
 
         this.majorValidate(bodyCreate.getFor_major());
@@ -42,19 +42,19 @@ public class ExamInformationServiceImpl implements ExamInformationService {
                         .title(bodyCreate.getTitle())
                         .for_major(bodyCreate.getFor_major())
                         .link(bodyCreate.getLink())
-                        .pathId(bodyCreate.getPathId())
+                        .batchId(bodyCreate.getBatchId())
                         .startDate(bodyCreate.getStartDate())
                         .endDate(bodyCreate.getEndDate())
                         .isOpen(bodyCreate.getIsOpen())
-                        .registrationPaths(registrationPaths)
+                        .registrationBatch(registrationBatch)
                         .build()
         );
     }
 
     @Override
-    public List<ExamInformation> index(Integer pathId) {
-//        this.examInformationRepository.findByPathId(pathId).orElseThrow(() -> new DataNotFoundException("Path id not found."));
-        return this.examInformationRepository.findAllByPathId(pathId);
+    public List<ExamInformation> index(Integer batchId) {
+//        this.examInformationRepository.findByPathId(batchId).orElseThrow(() -> new DataNotFoundException("Path id not found."));
+        return this.examInformationRepository.findAllByBatchId(batchId);
     }
 
     @Override
