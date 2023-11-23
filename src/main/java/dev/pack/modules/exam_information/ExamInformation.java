@@ -22,12 +22,11 @@ public class ExamInformation extends Timestamps {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
     private String title;
-    private String for_major;
     private String link;
     private Date startDate;
     private Date endDate;
-    private Boolean isOpen;
     private Integer batchId;
 
     @ManyToOne(fetch = FetchType.LAZY)

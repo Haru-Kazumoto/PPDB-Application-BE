@@ -15,7 +15,7 @@ import java.util.Date;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping(path = "/api/public/")
+@RequestMapping(path = "/api/public")
 public class GuestPublicApi {
 
     private final RegistrationPathsService registrationPathsService;

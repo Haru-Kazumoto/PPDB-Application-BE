@@ -166,7 +166,6 @@ public class AuthenticationService {
   }
 
   public User decodeJwt(){
-
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
     var userData =  (org.springframework.security.core.userdetails.User)authentication.getPrincipal();
