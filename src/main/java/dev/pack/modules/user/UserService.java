@@ -7,8 +7,16 @@ import org.springframework.data.domain.Pageable;
 public interface UserService {
 
     User createAdmin(User bodyAdminCreate);
+
     Iterable<User> getAllUser(Pageable pageable);
+
     Iterable<User> getAllUserByRole(Role role,Pageable pageable);
+
     User getUserByUsername(String username);
+
     User updateUser(@NonNull Integer id, User bodyUpdate);
+
+    UserDto.Profile profile();
+
+    void updateProfile(UserDto.UpdateProfile body);
 }

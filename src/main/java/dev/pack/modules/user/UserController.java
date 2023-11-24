@@ -74,4 +74,18 @@ public class UserController {
 
         return ResponseEntity.status(HttpStatus.CREATED).body(this.http.response(HttpStatus.CREATED.value(), new Date(), result));
     }
+
+    @GetMapping("/profile")
+    public ResponseEntity<?> getProfileData(){
+        return http.response(
+                OK.value(),
+                new Date(),
+                this.userService.profile()
+        );
+    }
+
+    @PutMapping("/update-profile")
+    public void updatePasswordProfile(@RequestBody UserDto.UpdateProfile body){
+        this.userService.updateProfile(body);
+    }
 }

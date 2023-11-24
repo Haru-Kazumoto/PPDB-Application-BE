@@ -2,6 +2,7 @@ package dev.pack.modules.user;
 
 import dev.pack.modules.enums.Role;
 import dev.pack.modules.student.StudentDto;
+import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -36,6 +37,26 @@ public class UserDto {
 
         @NotNull()
         private StudentDto.OnRegister student;
+    }
+
+    @Data
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class Profile{
+        private String username;
+        private String fullname;
+        private String name;
+        private String address;
+        private String school_origin;
+    }
+
+    @Data
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class UpdateProfile{
+        private String password;
     }
 
 }
