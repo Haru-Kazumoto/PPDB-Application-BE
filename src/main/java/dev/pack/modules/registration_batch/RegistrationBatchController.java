@@ -30,7 +30,7 @@ public class RegistrationBatchController {
     private final ModelMapper modelMapper;
 
     @PostMapping(path = "/post")
-    public ResponseEntity<?> store(@RequestBody @Valid RegistrationBatchDto dto){
+    public ResponseEntity<?> store(@RequestBody @Valid RegistrationBatchDto.Create dto){
         RegistrationBatch entity = this.modelMapper.map(dto, RegistrationBatch.class);
         return this.http.response(CREATED.value(), new Date(), this.registrationBatchService.store(entity));
     }
@@ -66,7 +66,7 @@ public class RegistrationBatchController {
     @PatchMapping(path = "/update")
     public ResponseEntity<?> update(
             @RequestParam(name = "id", defaultValue = "0") int id,
-            @RequestBody @Valid RegistrationBatchDto dto
+            @RequestBody @Valid RegistrationBatchDto.Update dto
     ){
         RegistrationBatch entity = this.modelMapper.map(dto, RegistrationBatch.class);
         return this.http.response(OK.value(), new Date(), this.registrationBatchService.update(id, entity));
