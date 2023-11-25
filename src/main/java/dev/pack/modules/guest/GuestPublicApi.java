@@ -22,7 +22,7 @@ public class GuestPublicApi {
     private final AlurPpdbService alurPpdbService;
     private final HttpResponse http;
 
-    @GetMapping(path = "/index-recursion")
+    @GetMapping(path = "/index-registration-path")
     public ResponseEntity<?> indexWithRecursion(){
         return this.http.response(
                 HttpStatus.OK.value(),
@@ -31,7 +31,7 @@ public class GuestPublicApi {
         );
     }
 
-    @GetMapping(path ="/index")
+    @GetMapping(path ="/index-alur-ppdb")
     public ResponseEntity<?> index(){
         return ResponseEntity.status(HttpStatus.OK).body(
                 new PayloadsResponse(
