@@ -28,7 +28,7 @@ public class RegistrationBatchServiceImpl implements RegistrationBatchService{
     private final Validator validate;
 
     @Override
-    public RegistrationBatch store(RegistrationBatch bodyCreate, Integer regisId) {
+    public RegistrationBatch store(RegistrationBatch bodyCreate) {
         this.validate.dateValidate(
                 bodyCreate.getStart_date(),
                 bodyCreate.getEnd_date()
@@ -38,7 +38,7 @@ public class RegistrationBatchServiceImpl implements RegistrationBatchService{
             throw new IllegalArgumentException("Max quota only have 500 set");
         }
 
-        RegistrationPaths registrationPaths = registrationPathsRepository.findById(regisId)
+        RegistrationPaths registrationPaths = registrationPathsRepository.findById(bodyCreate.getPath_id())
                 .orElseThrow(() -> new DataNotFoundException(REGISTRATION_PATHS_ID_NOT_FOUND));
 
         bodyCreate.setRegistrationPaths(registrationPaths);
@@ -57,7 +57,7 @@ public class RegistrationBatchServiceImpl implements RegistrationBatchService{
                 .orElseThrow(() -> new DataNotFoundException(REGISTRATION_PATHS_ID_NOT_FOUND));
 
 //        return this.registrationBatchRepository.findTotalPendaftarPerBatchModel(regisPathsId);
-        return null;
+        return this.registrationBatchRepository.findAllByPathId(regisPathsId);
     }
 
     @Override

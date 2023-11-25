@@ -10,7 +10,8 @@ import java.util.Map;
 
 public interface RegistrationBatchService {
 
-    RegistrationBatch store(RegistrationBatch bodyCreate, Integer regisId);
+//    RegistrationBatch store(RegistrationBatch bodyCreate, Integer regisId);
+    RegistrationBatch store(RegistrationBatch bodyCreate);
 
     List<RegistrationBatch> index(Integer regisPathsId);
 

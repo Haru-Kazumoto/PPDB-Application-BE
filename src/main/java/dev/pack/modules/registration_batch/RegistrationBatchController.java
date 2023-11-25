@@ -30,12 +30,9 @@ public class RegistrationBatchController {
     private final ModelMapper modelMapper;
 
     @PostMapping(path = "/post")
-    public ResponseEntity<?> store(
-            @RequestBody @Valid RegistrationBatchDto dto,
-            @RequestParam(name = "regisId", defaultValue = "0") int regisId
-    ){
+    public ResponseEntity<?> store(@RequestBody @Valid RegistrationBatchDto dto){
         RegistrationBatch entity = this.modelMapper.map(dto, RegistrationBatch.class);
-        return this.http.response(CREATED.value(), new Date(), this.registrationBatchService.store(entity, regisId));
+        return this.http.response(CREATED.value(), new Date(), this.registrationBatchService.store(entity));
     }
 
     @GetMapping(path = "/index")

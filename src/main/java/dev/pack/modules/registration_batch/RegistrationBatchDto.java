@@ -51,6 +51,9 @@ public class RegistrationBatchDto {
     private Double price;
 
     @NotNull()
+    private Integer path_id;
+
+    @NotNull()
     private String bank_account; //nomor rekening
 
 }

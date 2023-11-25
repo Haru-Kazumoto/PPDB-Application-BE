@@ -41,6 +41,8 @@ public class RegistrationBatch implements Serializable {
     private Double price;
     private String bank_account;
 
+    private Integer path_id;
+
     private Boolean isOpen = true;
 
     private Integer countStudent=0;
@@ -66,7 +68,6 @@ public class RegistrationBatch implements Serializable {
                     "handler"
             })
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "path_id")
     @JsonIgnore
     private RegistrationPaths registrationPaths;
 

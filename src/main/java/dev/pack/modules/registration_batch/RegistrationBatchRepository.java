@@ -37,6 +37,9 @@ public interface RegistrationBatchRepository extends JpaRepository<RegistrationB
     @Query("SELECT COUNT(s) FROM Student s WHERE s.batch_id = :batchId")
     long countStudentsForRunningNumber(@Param("batchId") Integer batchId);
 
+    @Query("SELECT p FROM RegistrationBatch p WHERE p.path_id = :pathId")
+    List<RegistrationBatch> findAllByPathId(@Param("pathId") Integer pathId);
+
 //    @Query(value = """
 //            SELECT new dev.pack.modules.registration_batch.RegistrationBatch(
 //            rb.id,\s
