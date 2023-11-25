@@ -37,23 +37,14 @@ public class DashboardStatisticService {
     private List<PurchasePathStatistic> buildPurchasePathStatistics(){
         List<PurchasePathStatistic> purchasePathStatistics = new ArrayList<>();
 
-        List<RegistrationPaths> countStudentByRegistrationPaths = this.studentRepository.countStudentsByRegistrationPathAndType(FormPurchaseType.PEMBELIAN);
+//        List<RegistrationPaths> countStudentByRegistrationPaths = this.studentRepository.countStudentsByRegistrationPathAndType(FormPurchaseType.PEMBELIAN);
         List<RegistrationPaths> registrationPaths = this.registrationPathsRepository.findAll();
 
-//        for(RegistrationPaths path : registrationPaths){
-//            PurchasePathStatistic.PurchasePathStatisticBuilder purchasePathStatisticBuilder = PurchasePathStatistic.builder()
-//                    .id(path.getId())
-//                    .name(path.getName())
-//                    .countStudent(null);
-//
-//            purchasePathStatistics.add(purchasePathStatisticBuilder.build());
-//        }
-
-        for(RegistrationPaths path : countStudentByRegistrationPaths){
+        for(RegistrationPaths path : registrationPaths){
             PurchasePathStatistic.PurchasePathStatisticBuilder purchasePathStatisticBuilder = PurchasePathStatistic.builder()
                     .id(path.getId())
                     .name(path.getName())
-                    .countStudent(Math.toIntExact(path.getCountStudent()));
+                    .countStudent(path.getCountStudent());
 
             purchasePathStatistics.add(purchasePathStatisticBuilder.build());
         }

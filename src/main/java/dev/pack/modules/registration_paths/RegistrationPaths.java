@@ -51,9 +51,9 @@ public class RegistrationPaths implements Serializable {
 
     private Double price;
 
-    private Long countStudent;
+    private Integer countStudent;
 
-    public RegistrationPaths(Integer id, String name, FormPurchaseType type, Date start_date, Date end_date, Double price, Long countStudent) {
+    public RegistrationPaths(Integer id, String name, FormPurchaseType type, Date start_date, Date end_date, Double price, Integer countStudent) {
         this.id = id;
         this.name = name;
         this.type = type;

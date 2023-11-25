@@ -176,7 +176,10 @@ public class StudentServiceImpl implements StudentService{
         student.setStatus("REGISTERED");
         student.setPath_id(registrationBatch.getRegistrationPaths().getId());
 
-        registrationBatch.setCountStudent(registrationBatch.getCountStudent()+1);
+        Integer runningCount = registrationBatch.getCountStudent() + 1;
+
+        registrationBatch.setCountStudent(runningCount);
+        registrationBatch.getRegistrationPaths().setCountStudent(runningCount);
 
         this.studentRepository.save(student);
 

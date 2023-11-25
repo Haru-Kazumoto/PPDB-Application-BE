@@ -19,21 +19,21 @@ public interface RegistrationPathsRepository extends JpaRepository<RegistrationP
 
 //    List<RegistrationPaths> findAllBy
 
-    @Query(value = """
-        SELECT new dev.pack.modules.registration_paths.RegistrationPaths(
-            rp.id,
-            rp.name,
-            rp.type,
-            rp.start_date,
-            rp.end_date,
-            rp.price,
-            COUNT(rb.id)
-        )
-        FROM RegistrationPaths rp
-        LEFT JOIN RegistrationBatch rb ON rp.id = rb.registrationPaths.id
-        GROUP BY rp.id, rp.name, rp.type, rp.start_date, rp.end_date, rp.price
-    """)
-    List<RegistrationPaths> calculateTotalStudentInPaths();
+//    @Query(value = """
+//        SELECT new dev.pack.modules.registration_paths.RegistrationPaths(
+//            rp.id,
+//            rp.name,
+//            rp.type,
+//            rp.start_date,
+//            rp.end_date,
+//            rp.price,
+//            COUNT(rb.id)
+//        )
+//        FROM RegistrationPaths rp
+//        LEFT JOIN RegistrationBatch rb ON rp.id = rb.registrationPaths.id
+//        GROUP BY rp.id, rp.name, rp.type, rp.start_date, rp.end_date, rp.price
+//    """)
+//    List<RegistrationPaths> calculateTotalStudentInPaths();
 
     @Query(value = """
         select 
