@@ -176,6 +176,8 @@ public class StudentServiceImpl implements StudentService{
         student.setStatus("REGISTERED");
         student.setPath_id(registrationBatch.getRegistrationPaths().getId());
 
+        registrationBatch.setCountStudent(registrationBatch.getCountStudent()+1);
+
         this.studentRepository.save(student);
 
         this.studentLogsRepository.save(

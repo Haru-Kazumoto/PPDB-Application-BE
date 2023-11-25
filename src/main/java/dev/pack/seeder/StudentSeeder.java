@@ -16,7 +16,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
-//@Component
+@Component
 @RequiredArgsConstructor
 public class StudentSeeder implements ApplicationRunner {
 
@@ -39,7 +39,7 @@ public class StudentSeeder implements ApplicationRunner {
     private void seedStudents() {
         Faker faker = new Faker();
 
-        for (int i = 0; i < 1000; i++) {
+        for (int i = 0; i < 150; i++) {
             String name = faker.name().fullName();
             String phonenumber = faker.phoneNumber()
                     .phoneNumber()
@@ -57,6 +57,7 @@ public class StudentSeeder implements ApplicationRunner {
                             .studentData(StudentDto.OnRegister.builder()
                                     .address(address)
                                     .school_origin("YATINDO")
+                                    .grade("SMK")
                                     .name(name)
                                     .build())
                             .build()

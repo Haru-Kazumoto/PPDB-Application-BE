@@ -43,9 +43,9 @@ public class RegistrationBatch implements Serializable {
 
     private Boolean isOpen = true;
 
-    private Long countStudent;
+    private Integer countStudent=0;
 
-    public RegistrationBatch(Integer id, String name, Integer index, Integer max_quota, String batchCode, Date start_date, Date end_date, Banks bank_name, String bank_user, Double price, String bank_account, Long countStudent) {
+    public RegistrationBatch(Integer id, String name, Integer index, Integer max_quota, String batchCode, Date start_date, Date end_date, Banks bank_name, String bank_user, Double price, String bank_account, Integer countStudent) {
         this.id = id;
         this.name = name;
         this.index = index;

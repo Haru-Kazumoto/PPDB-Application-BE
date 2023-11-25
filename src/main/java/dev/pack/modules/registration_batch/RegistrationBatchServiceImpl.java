@@ -56,7 +56,8 @@ public class RegistrationBatchServiceImpl implements RegistrationBatchService{
         this.registrationPathsRepository.findById(regisPathsId)
                 .orElseThrow(() -> new DataNotFoundException(REGISTRATION_PATHS_ID_NOT_FOUND));
 
-        return this.registrationBatchRepository.findTotalPendaftarPerBatchModel(regisPathsId);
+//        return this.registrationBatchRepository.findTotalPendaftarPerBatchModel(regisPathsId);
+        return null;
     }
 
     @Override
@@ -103,9 +104,9 @@ public class RegistrationBatchServiceImpl implements RegistrationBatchService{
 
     @Override
     public List<RegistrationBatch> countStudents(Integer regisPathsId) {
-        List<RegistrationBatch> resultData = this.registrationBatchRepository.findTotalPendaftarPerBatchModel(regisPathsId);
-        updateCountStudent(regisPathsId);
-        return resultData;
+//        List<RegistrationBatch> resultData = this.registrationBatchRepository.findTotalPendaftarPerBatchModel(regisPathsId);
+//        updateCountStudent(regisPathsId);
+        return null;
     }
 
     public void updateCountStudent(Integer regisPathsId){
@@ -122,8 +123,10 @@ public class RegistrationBatchServiceImpl implements RegistrationBatchService{
 
     @Override
     public RegistrationBatch getById(Integer id) {
-        return this.registrationBatchRepository.getRegistrationBatchById(id)
-                .orElseThrow(() -> new DataNotFoundException(BATCH_ID_NOT_FOUND));
+//        return this.registrationBatchRepository.getRegistrationBatchById(id)
+//                .orElseThrow(() -> new DataNotFoundException(BATCH_ID_NOT_FOUND));
+
+        return null;
     }
 
     @Override

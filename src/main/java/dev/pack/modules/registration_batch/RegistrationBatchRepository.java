@@ -37,66 +37,66 @@ public interface RegistrationBatchRepository extends JpaRepository<RegistrationB
     @Query("SELECT COUNT(s) FROM Student s WHERE s.batch_id = :batchId")
     long countStudentsForRunningNumber(@Param("batchId") Integer batchId);
 
-    @Query(value = """
-            SELECT new dev.pack.modules.registration_batch.RegistrationBatch(
-            rb.id,\s
-            rb.name,
-            rb.index,
-            rb.max_quota,
-            rb.batchCode,
-            rb.start_date,
-            rb.end_date,
-            rb.bank_name,
-            rb.bank_user,
-            rb.price,
-            rb.bank_account,\s
-            COUNT(s)
-            )\s
-            FROM RegistrationBatch rb\s
-            LEFT JOIN rb.students s\s
-            WHERE rb.registrationPaths.id = :regisPathId
-            GROUP BY rb.id,rb.name,
-            rb.index,
-            rb.max_quota,
-            rb.batchCode,
-            rb.start_date,
-            rb.end_date,
-            rb.bank_name,
-            rb.bank_user,
-            rb.price,
-            rb.bank_account
-    """)
-    List<RegistrationBatch> findTotalPendaftarPerBatchModel(@Param("regisPathId") Integer regisPathId);
-    @Query(value = """
-            SELECT new dev.pack.modules.registration_batch.RegistrationBatch(
-            rb.id,\s
-            rb.name,
-            rb.index,
-            rb.max_quota,
-            rb.batchCode,
-            rb.start_date,
-            rb.end_date,
-            rb.bank_name,
-            rb.bank_user,
-            rb.price,
-            rb.bank_account,\s
-            COUNT(s)
-            )\s
-            FROM RegistrationBatch rb\s
-            LEFT JOIN rb.students s\s
-            WHERE rb.id = :registBatchId
-            GROUP BY rb.id,rb.name,
-            rb.index,
-            rb.max_quota,
-            rb.batchCode,
-            rb.start_date,
-            rb.end_date,
-            rb.bank_name,
-            rb.bank_user,
-            rb.price,
-            rb.bank_account
-    """)
-    Optional<RegistrationBatch> getRegistrationBatchById(@Param("registBatchId") Integer registBatchId);
+//    @Query(value = """
+//            SELECT new dev.pack.modules.registration_batch.RegistrationBatch(
+//            rb.id,\s
+//            rb.name,
+//            rb.index,
+//            rb.max_quota,
+//            rb.batchCode,
+//            rb.start_date,
+//            rb.end_date,
+//            rb.bank_name,
+//            rb.bank_user,
+//            rb.price,
+//            rb.bank_account,\s
+//            COUNT(s)
+//            )\s
+//            FROM RegistrationBatch rb\s
+//            LEFT JOIN rb.students s\s
+//            WHERE rb.registrationPaths.id = :regisPathId
+//            GROUP BY rb.id,rb.name,
+//            rb.index,
+//            rb.max_quota,
+//            rb.batchCode,
+//            rb.start_date,
+//            rb.end_date,
+//            rb.bank_name,
+//            rb.bank_user,
+//            rb.price,
+//            rb.bank_account
+//    """)
+//    List<RegistrationBatch> findTotalPendaftarPerBatchModel(@Param("regisPathId") Integer regisPathId);
+//    @Query(value = """
+//            SELECT new dev.pack.modules.registration_batch.RegistrationBatch(
+//            rb.id,\s
+//            rb.name,
+//            rb.index,
+//            rb.max_quota,
+//            rb.batchCode,
+//            rb.start_date,
+//            rb.end_date,
+//            rb.bank_name,
+//            rb.bank_user,
+//            rb.price,
+//            rb.bank_account,\s
+//            COUNT(s)
+//            )\s
+//            FROM RegistrationBatch rb\s
+//            LEFT JOIN rb.students s\s
+//            WHERE rb.id = :registBatchId
+//            GROUP BY rb.id,rb.name,
+//            rb.index,
+//            rb.max_quota,
+//            rb.batchCode,
+//            rb.start_date,
+//            rb.end_date,
+//            rb.bank_name,
+//            rb.bank_user,
+//            rb.price,
+//            rb.bank_account
+//    """)
+//    Optional<RegistrationBatch> getRegistrationBatchById(@Param("registBatchId") Integer registBatchId);
 
 
     @Transactional

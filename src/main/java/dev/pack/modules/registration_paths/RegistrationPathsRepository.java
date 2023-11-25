@@ -17,6 +17,8 @@ public interface RegistrationPathsRepository extends JpaRepository<RegistrationP
     @Query("SELECT n FROM RegistrationPaths n WHERE n.name = :name")
     RegistrationPaths findByName(@Param("name") String name);
 
+//    List<RegistrationPaths> findAllBy
+
     @Query(value = """
         SELECT new dev.pack.modules.registration_paths.RegistrationPaths(
             rp.id,
