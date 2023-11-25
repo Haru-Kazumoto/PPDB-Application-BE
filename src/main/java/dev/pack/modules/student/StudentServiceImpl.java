@@ -14,6 +14,8 @@ import dev.pack.modules.registration_batch.ChooseBatchDto;
 import dev.pack.modules.registration_batch.GetStagingStatusDto;
 import dev.pack.modules.registration_batch.RegistrationBatch;
 import dev.pack.modules.registration_batch.RegistrationBatchRepository;
+import dev.pack.modules.registration_paths.RegistrationPaths;
+import dev.pack.modules.registration_paths.RegistrationPathsRepository;
 import dev.pack.modules.staging.Staging;
 import dev.pack.modules.staging.StagingRepository;
 import dev.pack.modules.student_logs.StudentLogs;
@@ -42,6 +44,7 @@ public class StudentServiceImpl implements StudentService{
     private final StudentRepository studentRepository;
     private final LookupRepository lookupRepository;
     private final RegistrationBatchRepository registrationBatchRepo;
+    private final RegistrationPathsRepository registrationPathsRepository;
     private final StudentLogsRepository studentLogsRepository;
     private final StagingRepository stagingRepository;
     private final AuthenticationService authenticationService;
@@ -147,6 +150,9 @@ public class StudentServiceImpl implements StudentService{
         RegistrationBatch registrationBatch = this.registrationBatchRepo.findById(batchDto.getBatch_id())
                 .orElseThrow(() -> new DataNotFoundException("Gelombang tidak ditemukan"));
 
+        RegistrationPaths registrationPaths = this.registrationPathsRepository.findById(registrationBatch.getPath_id())
+                .orElseThrow();
+
         User user = this.authenticationService.decodeJwt();
 
         Staging staging = this.stagingRepository.findByName("Pilih Jalur PPDB")
@@ -179,7 +185,7 @@ public class StudentServiceImpl implements StudentService{
         Integer runningCount = registrationBatch.getCountStudent() + 1;
 
         registrationBatch.setCountStudent(runningCount);
-        registrationBatch.getRegistrationPaths().setCountStudent(runningCount);
+        registrationPaths.setCountStudent(runningCount);
 
         this.studentRepository.save(student);
 

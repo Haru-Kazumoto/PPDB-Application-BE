@@ -52,12 +52,8 @@ public class RegistrationBatchServiceImpl implements RegistrationBatchService{
     }
 
     @Override
-    public List<RegistrationBatch> index(Integer regisPathsId) {
-        this.registrationPathsRepository.findById(regisPathsId)
-                .orElseThrow(() -> new DataNotFoundException(REGISTRATION_PATHS_ID_NOT_FOUND));
-
-//        return this.registrationBatchRepository.findTotalPendaftarPerBatchModel(regisPathsId);
-        return this.registrationBatchRepository.findAllByPathId(regisPathsId);
+    public List<GetAllRegistrationBatch> index(Integer regisPathsId) {
+        return this.registrationBatchRepository.findAllRegistrationBatch();
     }
 
     @Override

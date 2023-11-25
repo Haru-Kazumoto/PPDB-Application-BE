@@ -36,7 +36,7 @@ public interface RegistrationPathsRepository extends JpaRepository<RegistrationP
 //    List<RegistrationPaths> calculateTotalStudentInPaths();
 
     @Query(value = """
-        select 
+        select\s
             s.id,
             s.name,
             s.type,

@@ -32,6 +32,10 @@ public interface RegistrationBatchRepository extends JpaRepository<RegistrationB
     """)
     List<RegistrationBatch> getAllByType(FormPurchaseType type);
 
+    @Transactional
+    @Modifying
+    @Query("UPDATE RegistrationBatch rb SET rb.countStudent = (SELECT COUNT(s) FROM Student s WHERE s.batch_id = :batchId) WHERE rb.id = :batchId")
+    void countStudentFromBatch(@Param("batchId") Integer batchId);
 
     @Lock(LockModeType.OPTIMISTIC_FORCE_INCREMENT)
     @Query("SELECT COUNT(s) FROM Student s WHERE s.batch_id = :batchId")
@@ -126,4 +130,30 @@ public interface RegistrationBatchRepository extends JpaRepository<RegistrationB
         SELECT s FROM Student s WHERE s.batch_id = :batchId
     """)
     List<Student> findAllStudentByBatchId(Integer batchId);
+
+    @Query(value = """
+        SELECT\s
+            rb.id,rb.name,\s
+            rb.start_date,\s
+            rb.end_date,
+            rb.max_quota,
+            rb.batch_code,
+            rb.bank_name,
+            rb.bank_user,
+            rb.price,
+            rb.bank_account,
+            rb.path_id,\s
+            count(sl.student_id) as countStudent
+        from registration_batch rb
+        left join student_logs sl on sl.batch_id = rb.id
+        group by rb.id,rb.name,rb.start_date,rb.end_date,rb.max_quota,
+            rb.batch_code,
+            rb.bank_name,
+            rb.bank_user,
+            rb.price,
+            rb.bank_account,
+            rb.path_id
+    """,
+            nativeQuery = true)
+    List<GetAllRegistrationBatch> findAllRegistrationBatch();
 }
