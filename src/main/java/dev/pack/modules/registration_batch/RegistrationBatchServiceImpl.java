@@ -123,10 +123,10 @@ public class RegistrationBatchServiceImpl implements RegistrationBatchService{
 
     @Override
     public RegistrationBatch getById(Integer id) {
-//        return this.registrationBatchRepository.getRegistrationBatchById(id)
-//                .orElseThrow(() -> new DataNotFoundException(BATCH_ID_NOT_FOUND));
-
-        return null;
+        return this.registrationBatchRepository.getRegistrationBatchById(id)
+                .orElseThrow(() -> new DataNotFoundException(BATCH_ID_NOT_FOUND));
+//
+//        return null;
     }
 
     @Override

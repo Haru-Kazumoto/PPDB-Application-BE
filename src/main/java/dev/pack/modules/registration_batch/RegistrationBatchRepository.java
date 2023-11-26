@@ -106,6 +106,9 @@ public interface RegistrationBatchRepository extends JpaRepository<RegistrationB
 //    """)
 //    Optional<RegistrationBatch> getRegistrationBatchById(@Param("registBatchId") Integer registBatchId);
 
+    @Query("SELECT b FROM RegistrationBatch b WHERE b.id = :regisBatchId")
+    Optional<RegistrationBatch> getRegistrationBatchById(@Param("regisBatchId") Integer regisBatchId);
+
 
     @Transactional
     @Modifying
