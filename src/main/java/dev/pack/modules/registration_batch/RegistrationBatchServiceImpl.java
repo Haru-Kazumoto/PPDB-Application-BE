@@ -8,7 +8,10 @@ import dev.pack.modules.student.CountStudents;
 import dev.pack.modules.student.Student;
 import dev.pack.modules.student.StudentRepository;
 import dev.pack.utils.Validator;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -28,6 +31,7 @@ public class RegistrationBatchServiceImpl implements RegistrationBatchService{
     private final Validator validate;
 
     @Override
+    @Transactional
     public RegistrationBatch store(RegistrationBatch bodyCreate) {
         this.validate.dateValidate(
                 bodyCreate.getStart_date(),
@@ -131,8 +135,8 @@ public class RegistrationBatchServiceImpl implements RegistrationBatchService{
     }
 
     @Override
-    public List<Student> getStudentByBatchId(Integer batchId) {
-        return this.registrationBatchRepository.findAllStudentByBatchId(batchId);
+    public Page<GetAllStudentsByBatch> getStudentByBatchId(Integer batchId, Pageable pageable) {
+        return this.registrationBatchRepository.findAllStudentByBatchId(batchId, pageable);
     }
 
     @Override

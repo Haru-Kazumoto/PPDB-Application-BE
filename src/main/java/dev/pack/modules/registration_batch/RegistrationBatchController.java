@@ -8,6 +8,8 @@ import dev.pack.payloads.HttpResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -112,11 +114,18 @@ public class RegistrationBatchController {
     }
 
     @GetMapping(path = "/get-students")
-    public ResponseEntity<?> getStudentsById(@RequestParam("batchId") Integer batchId){
+    public ResponseEntity<?> getStudentsById(
+            @RequestParam("batchId") Integer batchId,
+            @RequestParam("page") Integer page,
+            @RequestParam("size") Integer size
+    ){
         return this.http.response(
                 OK.value(),
                 new Date(),
-                this.registrationBatchService.getStudentByBatchId(batchId)
+                this.registrationBatchService.getStudentByBatchId(
+                        batchId,
+                        PageRequest.of(page, size)
+                )
         );
     }
 

@@ -29,20 +29,17 @@ public class RegistrationBatch implements Serializable {
     private String name;
     private Integer index;
     private Integer max_quota;
-
-    @Column(unique = true)
     private String batchCode;
-
     private Date start_date;
     private Date end_date;
 
+    @Enumerated(value = EnumType.STRING)
     private Banks bank_name;
+
     private String bank_user;
     private Double price;
     private String bank_account;
-
     private Integer path_id;
-
     private Boolean isOpen = true;
 
     private Integer countStudent=0;

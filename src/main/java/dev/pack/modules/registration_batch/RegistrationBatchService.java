@@ -4,6 +4,8 @@ import dev.pack.modules.enums.FormPurchaseType;
 import dev.pack.modules.student.CountStudents;
 import dev.pack.modules.student.Student;
 import jakarta.servlet.Registration;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 import java.util.Map;
@@ -31,7 +33,7 @@ public interface RegistrationBatchService {
 
     List<RegistrationBatch> getRegisBatchByType(FormPurchaseType type);
 
-    List<Student> getStudentByBatchId(Integer batchId);
+    Page<GetAllStudentsByBatch> getStudentByBatchId(Integer batchId, Pageable pageable);
 
     CountStudents.DetailBatch countStudent(Integer batchId);
 

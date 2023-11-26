@@ -78,7 +78,7 @@ public class Student extends Timestamps implements Serializable {
 
     private String birth_card;
     private String family_card;
-//EMANG UPDATE APAH
+
     private String dad_name;
     private String dad_phone;
     private String dad_job;

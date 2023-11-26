@@ -4,6 +4,7 @@ import dev.pack.modules.enums.FormPurchaseType;
 import dev.pack.modules.student.Student;
 import jakarta.persistence.LockModeType;
 import jakarta.transaction.Transactional;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Lock;
@@ -126,10 +127,24 @@ public interface RegistrationBatchRepository extends JpaRepository<RegistrationB
     """)
     List<RegistrationBatch> findRegistrationBatchByPathType(@Param("type") FormPurchaseType type);
 
-    @Query("""
-        SELECT s FROM Student s WHERE s.batch_id = :batchId
-    """)
-    List<Student> findAllStudentByBatchId(Integer batchId);
+    @Query(value = """
+        select s.id,s.name,s.phone,s.registration_date,sl.status from students s
+        left join student_logs sl on sl.student_id = s.id
+        where sl.batch_id = :batchId and\s
+        sl.id = (select max(id) from student_logs where student_id = s.id and batch_id = sl.batch_id)
+        group by s.id,s.name,s.phone,s.registration_date,sl.status
+        ORDER BY s.id \n-- #pageable
+    
+    """, countQuery = """
+        select count(*)\s
+        from students s
+        left join student_logs sl on sl.student_id = s.id
+        where sl.batch_id = :batchId and\s
+        sl.id = (select max(id) from student_logs where student_id = s.id and batch_id = sl.batch_id)
+        group by s.id,s.name,s.phone,s.registration_date,sl.status
+    """,
+            nativeQuery = true)
+    Page<GetAllStudentsByBatch> findAllStudentByBatchId(Integer batchId,Pageable pageable);
 
     @Query(value = """
         SELECT\s
@@ -143,10 +158,15 @@ public interface RegistrationBatchRepository extends JpaRepository<RegistrationB
             rb.price,
             rb.bank_account,
             rb.path_id,\s
-            count(sl.student_id) as countStudent
+            count(distinct sl.student_id) as countStudent
         from registration_batch rb
         left join student_logs sl on sl.batch_id = rb.id
-        group by rb.id,rb.name,rb.start_date,rb.end_date,rb.max_quota,
+        group by\s
+            rb.id,
+            rb.name,
+            rb.start_date,
+            rb.end_date,
+            rb.max_quota,
             rb.batch_code,
             rb.bank_name,
             rb.bank_user,

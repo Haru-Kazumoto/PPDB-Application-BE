@@ -30,6 +30,7 @@ public class StudentLogs extends Timestamps {
 
     private Integer path_id;
 
+    @Enumerated(EnumType.STRING)
     private FormPurchaseType type;
 
     private String majors;

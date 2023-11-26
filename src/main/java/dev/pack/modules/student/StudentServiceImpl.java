@@ -94,7 +94,8 @@ public class StudentServiceImpl implements StudentService{
             this.registrationBatchRepo.findById(batchId)
                     .orElseThrow(() -> new DataNotFoundException("Id gelombang tidak ditemukan"));
 
-            List<Student> students = this.registrationBatchRepo.findAllStudentByBatchId(batchId);
+//            List<Student> students = this.registrationBatchRepo.findAllStudentByBatchId(batchId);
+            List<Student> students = null;
 
             List<String> headers = Arrays.asList(
                     "Id",
@@ -298,7 +299,6 @@ public class StudentServiceImpl implements StudentService{
 
         Student student = user.getStudent();
         student.setStatus("WAITING_PAYMENT");
-
 
         this.studentRepository.save(student);
 
