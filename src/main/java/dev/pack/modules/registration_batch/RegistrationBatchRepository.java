@@ -45,67 +45,6 @@ public interface RegistrationBatchRepository extends JpaRepository<RegistrationB
     @Query("SELECT p FROM RegistrationBatch p WHERE p.path_id = :pathId")
     List<RegistrationBatch> findAllByPathId(@Param("pathId") Integer pathId);
 
-//    @Query(value = """
-//            SELECT new dev.pack.modules.registration_batch.RegistrationBatch(
-//            rb.id,\s
-//            rb.name,
-//            rb.index,
-//            rb.max_quota,
-//            rb.batchCode,
-//            rb.start_date,
-//            rb.end_date,
-//            rb.bank_name,
-//            rb.bank_user,
-//            rb.price,
-//            rb.bank_account,\s
-//            COUNT(s)
-//            )\s
-//            FROM RegistrationBatch rb\s
-//            LEFT JOIN rb.students s\s
-//            WHERE rb.registrationPaths.id = :regisPathId
-//            GROUP BY rb.id,rb.name,
-//            rb.index,
-//            rb.max_quota,
-//            rb.batchCode,
-//            rb.start_date,
-//            rb.end_date,
-//            rb.bank_name,
-//            rb.bank_user,
-//            rb.price,
-//            rb.bank_account
-//    """)
-//    List<RegistrationBatch> findTotalPendaftarPerBatchModel(@Param("regisPathId") Integer regisPathId);
-//    @Query(value = """
-//            SELECT new dev.pack.modules.registration_batch.RegistrationBatch(
-//            rb.id,\s
-//            rb.name,
-//            rb.index,
-//            rb.max_quota,
-//            rb.batchCode,
-//            rb.start_date,
-//            rb.end_date,
-//            rb.bank_name,
-//            rb.bank_user,
-//            rb.price,
-//            rb.bank_account,\s
-//            COUNT(s)
-//            )\s
-//            FROM RegistrationBatch rb\s
-//            LEFT JOIN rb.students s\s
-//            WHERE rb.id = :registBatchId
-//            GROUP BY rb.id,rb.name,
-//            rb.index,
-//            rb.max_quota,
-//            rb.batchCode,
-//            rb.start_date,
-//            rb.end_date,
-//            rb.bank_name,
-//            rb.bank_user,
-//            rb.price,
-//            rb.bank_account
-//    """)
-//    Optional<RegistrationBatch> getRegistrationBatchById(@Param("registBatchId") Integer registBatchId);
-
     @Query("SELECT b FROM RegistrationBatch b WHERE b.id = :regisBatchId")
     Optional<RegistrationBatch> getRegistrationBatchById(@Param("regisBatchId") Integer regisBatchId);
 
@@ -125,27 +64,31 @@ public interface RegistrationBatchRepository extends JpaRepository<RegistrationB
     @Query("SELECT rb FROM RegistrationBatch rb WHERE rb.isOpen = :condition")
     List<RegistrationBatch> findRegistrationBatchByIsOpen(@Param("condition") Boolean condition);
 
-    @Query("""
-        SELECT rb FROM RegistrationBatch rb WHERE rb.registrationPaths.type = :type
-    """)
+    @Query("SELECT rb FROM RegistrationBatch rb WHERE rb.registrationPaths.type = :type")
     List<RegistrationBatch> findRegistrationBatchByPathType(@Param("type") FormPurchaseType type);
 
-    @Query(value = """
-        select s.id,s.name,s.phone,s.registration_date,sl.status from students s
-        left join student_logs sl on sl.student_id = s.id
-        where sl.batch_id = :batchId and\s
-        sl.id = (select max(id) from student_logs where student_id = s.id and batch_id = sl.batch_id)
-        group by s.id,s.name,s.phone,s.registration_date,sl.status
-        ORDER BY s.id \n-- #pageable
-    
-    """, countQuery = """
-        select count(*)\s
-        from students s
-        left join student_logs sl on sl.student_id = s.id
-        where sl.batch_id = :batchId and\s
-        sl.id = (select max(id) from student_logs where student_id = s.id and batch_id = sl.batch_id)
-        group by s.id,s.name,s.phone,s.registration_date,sl.status
-    """,
+    @Query(
+            value = """
+                select s.id,s.name,s.phone,s.registration_date,sl.status from students s
+                left join student_logs sl on sl.student_id = s.id
+                where sl.batch_id = :batchId and\s
+                sl.id = (
+                    select max(id) from student_logs where student_id = s.id and batch_id = sl.batch_id
+                )
+                group by s.id,s.name,s.phone,s.registration_date,sl.status
+                ORDER BY s.id \n-- #pageable
+            
+            """,
+            countQuery = """
+                select count(*)\s
+                from students s
+                left join student_logs sl on sl.student_id = s.id
+                where sl.batch_id = :batchId and\s
+                sl.id = (
+                    select max(id) from student_logs where student_id = s.id and batch_id = sl.batch_id
+                )
+                group by s.id,s.name,s.phone,s.registration_date,sl.status
+            """,
             nativeQuery = true)
     Page<GetAllStudentsByBatch> findAllStudentByBatchId(Integer batchId,Pageable pageable);
 
@@ -164,6 +107,7 @@ public interface RegistrationBatchRepository extends JpaRepository<RegistrationB
             count(distinct sl.student_id) as countStudent
         from registration_batch rb
         left join student_logs sl on sl.batch_id = rb.id
+        where rb.id = :batchId
         group by\s
             rb.id,
             rb.name,
@@ -178,5 +122,5 @@ public interface RegistrationBatchRepository extends JpaRepository<RegistrationB
             rb.path_id
     """,
             nativeQuery = true)
-    List<GetAllRegistrationBatch> findAllRegistrationBatch();
+    List<GetAllRegistrationBatch> findAllRegistrationBatch(Integer batchId);
 }

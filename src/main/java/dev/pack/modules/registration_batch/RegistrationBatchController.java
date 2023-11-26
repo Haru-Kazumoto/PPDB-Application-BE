@@ -116,8 +116,8 @@ public class RegistrationBatchController {
     @GetMapping(path = "/get-students")
     public ResponseEntity<?> getStudentsById(
             @RequestParam("batchId") Integer batchId,
-            @RequestParam("page") Integer page,
-            @RequestParam("size") Integer size
+            @RequestParam(name = "page", defaultValue = "1") Integer page,
+            @RequestParam(name = "size", defaultValue = "1") Integer size
     ){
         return this.http.response(
                 OK.value(),

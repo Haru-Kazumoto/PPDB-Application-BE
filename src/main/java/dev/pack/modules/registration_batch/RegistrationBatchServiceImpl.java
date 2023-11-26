@@ -57,7 +57,7 @@ public class RegistrationBatchServiceImpl implements RegistrationBatchService{
 
     @Override
     public List<GetAllRegistrationBatch> index(Integer regisPathsId) {
-        return this.registrationBatchRepository.findAllRegistrationBatch();
+        return this.registrationBatchRepository.findAllRegistrationBatch(regisPathsId);
     }
 
     @Override
@@ -125,8 +125,6 @@ public class RegistrationBatchServiceImpl implements RegistrationBatchService{
     public RegistrationBatch getById(Integer id) {
         return this.registrationBatchRepository.getRegistrationBatchById(id)
                 .orElseThrow(() -> new DataNotFoundException(BATCH_ID_NOT_FOUND));
-//
-//        return null;
     }
 
     @Override
