@@ -339,7 +339,7 @@ public class StudentServiceImpl implements StudentService{
     public StudentLogs printCard(PrintCardDto printCardDto) {
         User user = this.authenticationService.decodeJwt();
 
-        Staging staging = this.stagingRepository.findByNameAndStagingType("Cetak Kartu Peserta",printCardDto.getType())
+        Staging staging = this.stagingRepository.findByNameAndStagingType("Cetak Formulir",printCardDto.getType())
                 .orElseThrow(() -> new DataNotFoundException("Staging tidak ditemukan"));
 
         StudentLogs studentLogs = this.studentLogsRepository.findByStudentAndStagingByType(user.getStudent(),staging,printCardDto.getType())
@@ -348,11 +348,11 @@ public class StudentServiceImpl implements StudentService{
         if(studentLogs != null) {
             return studentLogs;
         }
-        String remark = "Cetak Kartu Peserta Proses Pembelian";
+        String remark = "Cetak Formulir Proses Pembelian";
         String status = "PRINT_CARD_PURCHASED";
 
         if(printCardDto.getType() == FormPurchaseType.PENGEMBALIAN) {
-            remark = "Cetak Kartu Peserta Proses Pengembalian";
+            remark = "Cetak Formulir Proses Pengembalian";
             status = "PRINT_CARD_RETURNING";
         }
 

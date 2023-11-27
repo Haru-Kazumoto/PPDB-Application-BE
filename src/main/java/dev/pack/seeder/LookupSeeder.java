@@ -62,8 +62,8 @@ public class LookupSeeder implements ApplicationRunner {
         lookups.add(List.of("Mengisi Biodata","FILLING_BIO","STATUS"));
         lookups.add(List.of("Berkas Terkonfirmasi","FILE_CONFIRMED","STATUS"));
         lookups.add(List.of("Pembayaran Terkonfirmasi","PAYMENT_CONFIRMED","STATUS"));
-        lookups.add(List.of("Cetak Kartu Peserta","PRINT_CARD_PURCHASED","STATUS"));
-        lookups.add(List.of("Cetak Kartu Peserta","PRINT_CARD_RETURNING","STATUS"));
+        lookups.add(List.of("Cetak Formulir","PRINT_CARD_PURCHASED","STATUS"));
+        lookups.add(List.of("Cetak Formulir","PRINT_CARD_RETURNING","STATUS"));
         lookups.add(List.of("Lulus Seleksi","SELECTION_PASSED","STATUS"));
         lookups.add(List.of("Tidak Lulus Seleksi","SELECTION_NOT_PASSED","STATUS"));
 

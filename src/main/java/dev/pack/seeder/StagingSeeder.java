@@ -41,13 +41,13 @@ public class StagingSeeder implements ApplicationRunner {
         stagings.add(List.of("Pilih Gelombang PPDB",1, FormPurchaseType.PEMBELIAN));
         stagings.add(List.of("Pembelian Formulir Pendaftaran",2, FormPurchaseType.PEMBELIAN));
         stagings.add(List.of("Pilih Jurusan",3, FormPurchaseType.PEMBELIAN));
-        stagings.add(List.of("Cetak Kartu Peserta",4, FormPurchaseType.PEMBELIAN));
+        stagings.add(List.of("Cetak Formulir",4, FormPurchaseType.PEMBELIAN));
 
         stagings.add(List.of("Pilih Jalur PPDB",1, FormPurchaseType.PENGEMBALIAN));
         stagings.add(List.of("Transaksi Pengembalian",2, FormPurchaseType.PENGEMBALIAN));
         stagings.add(List.of("Isi Biodata",3, FormPurchaseType.PENGEMBALIAN));
         stagings.add(List.of("Pilih Jurusan",4,FormPurchaseType.PENGEMBALIAN));
-        stagings.add(List.of("Cetak Kartu Peserta",5, FormPurchaseType.PENGEMBALIAN));
+        stagings.add(List.of("Cetak Formulir",5, FormPurchaseType.PENGEMBALIAN));
 
 
         var index = 0;
