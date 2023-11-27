@@ -23,9 +23,9 @@ import dev.pack.modules.student_logs.StudentLogsRepository;
 import dev.pack.modules.student_payments.StudentPaymentRepository;
 import dev.pack.modules.student_payments.StudentPayments;
 import dev.pack.modules.user.User;
-import dev.pack.utils.excel.ExcelService;
 import dev.pack.utils.Filenameutils;
 import dev.pack.utils.StudentUtils;
+import dev.pack.utils.excel.ExcelService;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -94,8 +94,7 @@ public class StudentServiceImpl implements StudentService{
             this.registrationBatchRepo.findById(batchId)
                     .orElseThrow(() -> new DataNotFoundException("Id gelombang tidak ditemukan"));
 
-//            List<Student> students = this.registrationBatchRepo.findAllStudentByBatchId(batchId);
-            List<Student> students = null;
+            List<Student> students = this.registrationBatchRepo.findAllStudentByBatchId(batchId);
 
             List<String> headers = Arrays.asList(
                     "Id",
@@ -105,8 +104,6 @@ public class StudentServiceImpl implements StudentService{
                     "Nomor telepon",
                     "Alamat",
                     "Jenjang",
-                    "Jenis kelamin",
-                    "Agama",
                     "Asal sekolah",
                     "Jurusan",
                     "Tanggal mendaftar"

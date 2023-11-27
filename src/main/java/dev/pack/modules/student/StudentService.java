@@ -1,5 +1,6 @@
 package dev.pack.modules.student;
 
+import dev.pack.modules.enums.FormPurchaseType;
 import dev.pack.modules.registration_batch.ChooseBatchDto;
 import dev.pack.modules.registration_batch.GetStagingStatusDto;
 import dev.pack.modules.registration_batch.RegistrationBatch;
