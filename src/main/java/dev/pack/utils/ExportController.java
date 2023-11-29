@@ -1,9 +1,6 @@
 package dev.pack.utils;
 
-import com.lowagie.text.DocumentException;
-import dev.pack.modules.registration_batch.RegistrationBatch;
 import dev.pack.modules.registration_batch.RegistrationBatchRepository;
-import dev.pack.modules.student.Student;
 import dev.pack.modules.student.StudentRepository;
 import dev.pack.modules.student.StudentService;
 import dev.pack.utils.excel.ExcelService;
@@ -11,15 +8,13 @@ import dev.pack.utils.pdf.PdfService;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor

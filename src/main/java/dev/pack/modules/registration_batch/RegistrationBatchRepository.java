@@ -77,7 +77,6 @@ public interface RegistrationBatchRepository extends JpaRepository<RegistrationB
                 )
                 group by s.id,s.name,s.phone,s.registration_date,sl.status
                 ORDER BY s.id \n-- #pageable
-            
             """,
             countQuery = """
                 select count(*)\s
@@ -92,8 +91,13 @@ public interface RegistrationBatchRepository extends JpaRepository<RegistrationB
             nativeQuery = true)
     Page<GetAllStudentsByBatch> findAllStudentByBatchId(Integer batchId,Pageable pageable);
 
-    @Query("SELECT s FROM Student s WHERE s.batch_id = :batchId")
+    @Query("SELECT s FROM Student s " +
+            "LEFT JOIN s.studentLogs sl " +
+            "WHERE sl.student.batch_id = :batchId AND " +
+            "sl.id = (SELECT MAX(sl2.id) FROM StudentLogs sl2 " +
+            "WHERE sl2.student = s AND sl2.student.batch_id = sl.student.batch_id)")
     List<Student> findAllStudentByBatchId(@Param("batchId") Integer batchId);
+
 
     @Query(value = """
         SELECT\s
