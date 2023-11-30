@@ -104,6 +104,8 @@ public class StudentServiceImpl implements StudentService{
                     "Nomor telepon",
                     "Alamat",
                     "Jenjang",
+                    "Jenis kelamin",
+                    "Agama",
                     "Asal sekolah",
                     "Jurusan",
                     "Tanggal mendaftar"
