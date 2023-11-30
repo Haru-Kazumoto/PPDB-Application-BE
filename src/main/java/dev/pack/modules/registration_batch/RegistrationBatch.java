@@ -1,6 +1,7 @@
 package dev.pack.modules.registration_batch;
 
 import com.fasterxml.jackson.annotation.*;
+import dev.pack.modules.enums.Grade;
 import dev.pack.modules.exam_information.ExamInformation;
 import dev.pack.modules.registration_paths.RegistrationPaths;
 import dev.pack.modules.enums.Banks;
@@ -41,6 +42,8 @@ public class RegistrationBatch implements Serializable {
     private String bank_account;
     private Integer path_id;
     private Boolean isOpen = true;
+
+    private Grade grade;
 
     private Integer countStudent=0;
 

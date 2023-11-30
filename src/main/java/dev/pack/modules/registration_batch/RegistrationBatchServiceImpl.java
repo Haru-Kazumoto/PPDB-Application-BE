@@ -46,6 +46,7 @@ public class RegistrationBatchServiceImpl implements RegistrationBatchService{
                 .orElseThrow(() -> new DataNotFoundException(REGISTRATION_PATHS_ID_NOT_FOUND));
 
         bodyCreate.setRegistrationPaths(registrationPaths);
+        bodyCreate.setGrade(registrationPaths.getGrade());
 
         return this.registrationBatchRepository.save(bodyCreate);
     }

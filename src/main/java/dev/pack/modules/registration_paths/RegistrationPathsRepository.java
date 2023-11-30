@@ -1,6 +1,7 @@
 package dev.pack.modules.registration_paths;
 
 import dev.pack.modules.enums.FormPurchaseType;
+import dev.pack.modules.enums.Grade;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -16,6 +17,9 @@ public interface RegistrationPathsRepository extends JpaRepository<RegistrationP
 
     @Query("SELECT n FROM RegistrationPaths n WHERE n.name = :name")
     RegistrationPaths findByName(@Param("name") String name);
+
+    @Query("SELECT g FROM RegistrationPaths g WHERE g.grade = :grade")
+    List<RegistrationPaths> findAllByGrade(Grade grade);
 
 //    List<RegistrationPaths> findAllBy
 

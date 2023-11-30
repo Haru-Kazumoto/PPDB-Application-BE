@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import dev.pack.modules.additional_prices.AdditionalPrices;
+import dev.pack.modules.enums.Grade;
 import dev.pack.modules.registration_batch.RegistrationBatch;
 import dev.pack.modules.enums.FormPurchaseType;
 import dev.pack.modules.exam_information.ExamInformation;
@@ -50,6 +51,9 @@ public class RegistrationPaths implements Serializable {
     private Date end_date;
 
     private Double price;
+
+    @Enumerated(EnumType.STRING)
+    private Grade grade;
 
     private Integer countStudent;
 
