@@ -69,27 +69,33 @@ public interface RegistrationBatchRepository extends JpaRepository<RegistrationB
 
     @Query(
             value = """
-                select s.id,s.name,s.phone,s.registration_date,sl.status from students s
-                left join student_logs sl on sl.student_id = s.id
-                where sl.batch_id = :batchId and\s
-                sl.id = (
-                    select max(id) from student_logs where student_id = s.id and batch_id = sl.batch_id
-                )
-                group by s.id,s.name,s.phone,s.registration_date,sl.status
-                ORDER BY s.id \n-- #pageable
-            """,
+        SELECT s.id, s.name, s.phone, s.registration_date, sl.status
+        FROM students s
+        LEFT JOIN student_logs sl ON sl.student_id = s.id
+        WHERE sl.batch_id = :batchId AND
+        sl.id = (
+            SELECT MAX(id)
+            FROM student_logs
+            WHERE student_id = s.id AND batch_id = sl.batch_id
+        )
+        GROUP BY s.id, s.name, s.phone, s.registration_date, sl.status
+        ORDER BY s.id \n-- #pageable
+    """,
             countQuery = """
-                select count(*)\s
-                from students s
-                left join student_logs sl on sl.student_id = s.id
-                where sl.batch_id = :batchId and\s
-                sl.id = (
-                    select max(id) from student_logs where student_id = s.id and batch_id = sl.batch_id
-                )
-                group by s.id,s.name,s.phone,s.registration_date,sl.status
-            """,
+        SELECT COUNT(*)
+        FROM students s
+        LEFT JOIN student_logs sl ON sl.student_id = s.id
+        WHERE sl.batch_id = :batchId AND
+        sl.id = (
+            SELECT MAX(id)
+            FROM student_logs
+            WHERE student_id = s.id AND batch_id = sl.batch_id
+        )
+        GROUP BY s.id, s.name, s.phone, s.registration_date, sl.status
+    """,
             nativeQuery = true)
-    Page<GetAllStudentsByBatch> findAllStudentByBatchId(Integer batchId,Pageable pageable);
+    Page<GetAllStudentsByBatch> findAllStudentByBatchId(@Param("batchId") Integer batchId, Pageable pageable);
+
 
     @Query("SELECT s FROM Student s " +
             "LEFT JOIN s.studentLogs sl " +

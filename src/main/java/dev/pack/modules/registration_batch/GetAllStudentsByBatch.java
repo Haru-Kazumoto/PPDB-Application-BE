@@ -6,7 +6,7 @@ public interface GetAllStudentsByBatch {
     Integer getId();
     String getName();
     String getPhone();
-    Date getRegistration_date();
+    Date getRegistration_Date();
     String getStatus();
 }
 
