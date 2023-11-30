@@ -40,6 +40,15 @@ public class ExamInformationController {
         );
     }
 
+    @GetMapping("index-all")
+    private ResponseEntity<?> indexAll(){
+        return this.http.response(
+                HttpStatus.OK.value(),
+                new Date(),
+                this.examInformationService.indexAll()
+        );
+    }
+
     @PatchMapping("/update")
     private ResponseEntity<?> updateDataWithId(@RequestBody @Valid ExamInformationDto.Update dto, @RequestParam("id") Integer id){
         ExamInformation updatedEntity = this.modelMapper.map(dto, ExamInformation.class);

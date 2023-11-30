@@ -45,6 +45,11 @@ public class ExamInformationServiceImpl implements ExamInformationService {
     }
 
     @Override
+    public List<ExamInformation> indexAll() {
+        return this.examInformationRepository.findAll();
+    }
+
+    @Override
     public ExamInformation update(ExamInformation bodyUpdate, Integer id) {
         ExamInformation data = this.examInformationRepository.findById(id)
                 .orElseThrow(() -> new DataNotFoundException("ID not found."));
