@@ -19,10 +19,6 @@ public class ExamInformationDto {
         @NotEmpty(message = "Title cannot be empty field")
         private String title;
 
-        @NotNull(message = "For major cannot be null field")
-        @NotEmpty(message = "For major cannot be empty field")
-        private String for_major;
-
         @NotNull(message = "Link cannot be null field")
         @NotEmpty(message = "Link cannot be empty field")
         private String link;

@@ -12,7 +12,7 @@ import java.util.Date;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping(path = "/api/v${application.version}/admin/exam-information")
+@RequestMapping(path = "/api/v${application.version}/user/exam-information")
 public class ExamInformationController {
 
     private final ExamInformationService examInformationService;
@@ -32,11 +32,11 @@ public class ExamInformationController {
     }
 
     @GetMapping("/index")
-    private ResponseEntity<?> indexAllExamInformationByPathId(){
+    private ResponseEntity<?> indexAllExamInformationByPathId(@RequestParam("batchId") Integer batchId){
         return this.http.response(
                 HttpStatus.OK.value(),
                 new Date(),
-                this.examInformationService.index()
+                this.examInformationService.index(batchId)
         );
     }
 

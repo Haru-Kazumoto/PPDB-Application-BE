@@ -40,9 +40,8 @@ public class ExamInformationServiceImpl implements ExamInformationService {
     }
 
     @Override
-    public List<ExamInformation> index() {
-        User student = this.authenticationService.decodeJwt();
-        return this.examInformationRepository.findAllByBatchId(student.getStudent().getBatch_id());
+    public List<ExamInformation> index(Integer batchId) {
+        return this.examInformationRepository.findAllByBatchId(batchId);
     }
 
     @Override
