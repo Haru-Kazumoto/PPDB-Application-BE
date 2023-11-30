@@ -40,7 +40,7 @@ public class ExamInformationController {
         );
     }
 
-    @GetMapping("index-all")
+    @GetMapping("/index-all")
     private ResponseEntity<?> indexAll(){
         return this.http.response(
                 HttpStatus.OK.value(),

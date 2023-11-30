@@ -4,6 +4,7 @@ import dev.pack.exception.DataNotFoundException;
 import dev.pack.modules.additional_prices.AdditionalPrices;
 import dev.pack.modules.additional_prices.ResponseAdditionalPriceDto;
 import dev.pack.modules.enums.FormPurchaseType;
+import dev.pack.modules.enums.Grade;
 import dev.pack.modules.prices.PriceDetails;
 import dev.pack.modules.prices.ResponsePriceDetailsDto;
 import dev.pack.modules.registration_batch.RegistrationBatch;
@@ -145,8 +146,8 @@ public class RegistrationPathsServiceImpl implements RegistrationPathsService {
     }
 
     @Override
-    public List<RegistrationPaths> index() {
-        return this.registrationPathsRepository.findAll();
+    public List<RegistrationPaths> index(Grade grade) {
+        return this.registrationPathsRepository.findAllByGrade(grade);
     }
 
     @Override
