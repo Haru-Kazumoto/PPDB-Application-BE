@@ -1,15 +1,14 @@
 package dev.pack.modules.exam_information;
 
 import dev.pack.exception.DataNotFoundException;
-import dev.pack.modules.lookup.Lookup;
-import dev.pack.modules.lookup.LookupRepository;
+import dev.pack.modules.auth.AuthenticationService;
 import dev.pack.modules.registration_batch.RegistrationBatch;
 import dev.pack.modules.registration_batch.RegistrationBatchRepository;
+import dev.pack.modules.user.User;
 import dev.pack.utils.Validator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
 import java.util.List;
 
 @Service
@@ -18,6 +17,7 @@ public class ExamInformationServiceImpl implements ExamInformationService {
 
     private final ExamInformationRepository examInformationRepository;
     private final RegistrationBatchRepository registrationBatchRepository;
+    private final AuthenticationService authenticationService;
     private final Validator validator;
 
     @Override
@@ -40,8 +40,9 @@ public class ExamInformationServiceImpl implements ExamInformationService {
     }
 
     @Override
-    public List<ExamInformation> index(Integer batchId) {
-        return this.examInformationRepository.findAllByBatchId(batchId);
+    public List<ExamInformation> index() {
+        User student = this.authenticationService.decodeJwt();
+        return this.examInformationRepository.findAllByBatchId(student.getStudent().getBatch_id());
     }
 
     @Override
@@ -64,5 +65,14 @@ public class ExamInformationServiceImpl implements ExamInformationService {
         ExamInformation data = this.examInformationRepository.findById(id).orElseThrow(() -> new DataNotFoundException("Id not found."));
 
         this.examInformationRepository.delete(data);
+    }
+
+    @Override
+    public List<ExamInformation> findAllExamByBatchId(Integer batchId) {
+        User student = this.authenticationService.decodeJwt();
+
+
+
+        return null;
     }
 }

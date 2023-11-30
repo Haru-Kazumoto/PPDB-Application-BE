@@ -96,7 +96,6 @@ public interface RegistrationBatchRepository extends JpaRepository<RegistrationB
             nativeQuery = true)
     Page<GetAllStudentsByBatch> findAllStudentByBatchId(@Param("batchId") Integer batchId, Pageable pageable);
 
-
     @Query("SELECT s FROM Student s " +
             "LEFT JOIN s.studentLogs sl " +
             "WHERE sl.student.batch_id = :batchId AND " +
