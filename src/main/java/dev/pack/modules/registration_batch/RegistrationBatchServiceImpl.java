@@ -2,6 +2,7 @@ package dev.pack.modules.registration_batch;
 
 import dev.pack.exception.DataNotFoundException;
 import dev.pack.modules.enums.FormPurchaseType;
+import dev.pack.modules.enums.Grade;
 import dev.pack.modules.registration_paths.RegistrationPaths;
 import dev.pack.modules.registration_paths.RegistrationPathsRepository;
 import dev.pack.modules.student.CountStudents;
@@ -64,6 +65,11 @@ public class RegistrationBatchServiceImpl implements RegistrationBatchService{
     @Override
     public List<RegistrationBatch> getAllBatchByType(FormPurchaseType type) {
         return this.registrationBatchRepository.getAllByType(type);
+    }
+
+    @Override
+    public List<RegistrationBatch> getAllBatchByGrade(Grade grade) {
+        return this.registrationBatchRepository.getAllBatchByGrade(grade);
     }
 
     @Override

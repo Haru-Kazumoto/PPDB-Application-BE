@@ -1,6 +1,7 @@
 package dev.pack.modules.staging;
 
 import dev.pack.modules.enums.FormPurchaseType;
+import dev.pack.modules.enums.Grade;
 import dev.pack.modules.staging.Staging;
 import dev.pack.modules.student.Student;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -22,9 +23,9 @@ public interface StagingRepository extends JpaRepository<Staging, Integer> {
     Optional<Staging> findByName(String name);
 
     @Query("""
-        select s from Staging s where s.name like CONCAT('%', CONCAT(:name, '%')) and s.type = :type
+        select s from Staging s where s.name like CONCAT('%', CONCAT(:name, '%')) and s.type = :type and s.grade = :grade
 """)
-    Optional<Staging> findByNameAndStagingType(String name, FormPurchaseType type);
+    Optional<Staging> findByNameAndStagingType(String name, FormPurchaseType type, Grade grade);
 
     @Query(value = """
         select

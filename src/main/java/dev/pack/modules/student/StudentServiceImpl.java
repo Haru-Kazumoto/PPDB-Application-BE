@@ -7,6 +7,7 @@ import dev.pack.exception.MaxQuotaReachedException;
 import dev.pack.filestorage.FilesStorageService;
 import dev.pack.modules.auth.AuthenticationService;
 import dev.pack.modules.enums.FormPurchaseType;
+import dev.pack.modules.enums.Grade;
 import dev.pack.modules.enums.PaymentMethod;
 import dev.pack.modules.lookup.Lookup;
 import dev.pack.modules.lookup.LookupRepository;
@@ -274,8 +275,6 @@ public class StudentServiceImpl implements StudentService{
         return newFileName;
     }
 
-
-
     @Override
     @Transactional
     public StudentLogs uploadPayment(UploadPaymentDto uploadPaymentDto) {
@@ -320,6 +319,8 @@ public class StudentServiceImpl implements StudentService{
                         .build()
         );
 
+        //TODO : CREATE STAGING FOR SMP
+
         return this.studentLogsRepository.save(
                 StudentLogs.builder()
                         .registrationBatch(RegistrationBatch.builder().id(user.getStudent().getBatch_id()).build())
@@ -343,7 +344,7 @@ public class StudentServiceImpl implements StudentService{
     public StudentLogs printCard(PrintCardDto printCardDto) {
         User user = this.authenticationService.decodeJwt();
 
-        Staging staging = this.stagingRepository.findByNameAndStagingType("Cetak Formulir",printCardDto.getType())
+        Staging staging = this.stagingRepository.findByNameAndStagingType("Cetak Formulir",printCardDto.getType(), printCardDto.getGrade())
                 .orElseThrow(() -> new DataNotFoundException("Staging tidak ditemukan"));
 
         StudentLogs studentLogs = this.studentLogsRepository.findByStudentAndStagingByType(user.getStudent(),staging,printCardDto.getType())
@@ -394,7 +395,7 @@ public class StudentServiceImpl implements StudentService{
             stagingName = "Transaksi Pengembalian";
         }
 
-        Staging staging = this.stagingRepository.findByNameAndStagingType(stagingName,studentPayments.getType()).orElseThrow(() -> new DataNotFoundException("Staging tidak ditemukan"));
+        Staging staging = this.stagingRepository.findByNameAndStagingType(stagingName,studentPayments.getType(), student.getGrade()).orElseThrow(() -> new DataNotFoundException("Staging tidak ditemukan"));
 
         studentPayments.setStatus("PAYMENT_CONFIRMED");
         this.studentPaymentRepository.save(studentPayments);
@@ -483,14 +484,13 @@ public class StudentServiceImpl implements StudentService{
                         .student(student)
                         .build()
         );
-
     }
 
     @Override
     public StudentLogs chooseMajor(ChooseMajorDto majorDto) {
         User user = this.authenticationService.decodeJwt();
         Staging staging = this.stagingRepository
-                .findByNameAndStagingType("Pilih Jurusan",majorDto.getType())
+                .findByNameAndStagingType("Pilih Jurusan",majorDto.getType(), Grade.SMK)
                 .orElseThrow(() -> new DataNotFoundException("Data yang diinput invalid"));
 
         String status = "CHOOSING_FIRST_MAJORS";

@@ -1,6 +1,7 @@
 package dev.pack.modules.registration_batch;
 
 import dev.pack.modules.enums.FormPurchaseType;
+import dev.pack.modules.enums.Grade;
 import dev.pack.modules.student.StudentRepository;
 import dev.pack.modules.student.StudentService;
 import dev.pack.modules.user.UserService;
@@ -62,6 +63,15 @@ public class RegistrationBatchController {
                 HttpStatus.OK.value(),
                 new Date(),
                 this.studentService.getDetailStudentPengembalian(studentId)
+        );
+    }
+
+    @GetMapping(path = "/get-batch-by-grade")
+    public ResponseEntity<?> getAllBatchByGrade(@RequestParam("grade")Grade grade){
+        return this.http.response(
+                HttpStatus.OK.value(),
+                new Date(),
+                this.registrationBatchService.getAllBatchByGrade(grade)
         );
     }
 

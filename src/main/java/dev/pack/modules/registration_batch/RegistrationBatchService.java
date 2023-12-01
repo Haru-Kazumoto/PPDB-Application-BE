@@ -1,6 +1,7 @@
 package dev.pack.modules.registration_batch;
 
 import dev.pack.modules.enums.FormPurchaseType;
+import dev.pack.modules.enums.Grade;
 import dev.pack.modules.student.CountStudents;
 import dev.pack.modules.student.Student;
 import jakarta.servlet.Registration;
@@ -38,4 +39,6 @@ public interface RegistrationBatchService {
     CountStudents.DetailBatch countStudent(Integer batchId);
 
     List<CountStudents.InfoBatch> countAllStudents();
+
+    List<RegistrationBatch> getAllBatchByGrade(Grade grade);
 }

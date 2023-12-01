@@ -45,7 +45,7 @@ public class ExcelServiceImpl implements ExcelService {
             dataRow.createCell(0).setCellValue(student.getId());
             dataRow.createCell(1).setCellValue(student.getPhone());
             dataRow.createCell(2).setCellValue(student.getName());
-            dataRow.createCell(3).setCellValue(student.getGrade());
+            dataRow.createCell(3).setCellValue(student.getGrade().ordinal());
             dataRow.createCell(4).setCellValue(student.getGender());
             dataRow.createCell(5).setCellValue(student.getNisn());
 

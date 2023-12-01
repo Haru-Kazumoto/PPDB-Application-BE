@@ -3,6 +3,7 @@ package dev.pack.seeder;
 import com.github.javafaker.Faker;
 import dev.pack.modules.auth.AuthenticationService;
 import dev.pack.modules.auth.RegisterRequest;
+import dev.pack.modules.enums.Grade;
 import dev.pack.modules.enums.Role;
 import dev.pack.modules.student.StudentDto;
 import lombok.RequiredArgsConstructor;
@@ -57,7 +58,7 @@ public class StudentSeeder implements ApplicationRunner {
                             .studentData(StudentDto.OnRegister.builder()
                                     .address(address)
                                     .school_origin("YATINDO")
-                                    .grade("SMK")
+                                    .grade(Grade.SMK)
                                     .name(name)
                                     .build())
                             .build()

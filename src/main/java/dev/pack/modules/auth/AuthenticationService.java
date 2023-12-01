@@ -82,9 +82,9 @@ public class AuthenticationService {
 
     user = this.userRepository.save(user); // Simpan User terlebih dahulu
 
-    String grade = request.getStudentData().getGrade();
+    Grade grade = request.getStudentData().getGrade();
 
-    if(!grade.equals("SMP") && !grade.equals("SMK")){
+    if(!grade.equals(Grade.SMP) && !grade.equals(Grade.SMK)){
       throw new DataNotFoundException("Grade not valid");
     }
 

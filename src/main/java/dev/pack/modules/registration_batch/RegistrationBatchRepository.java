@@ -1,6 +1,7 @@
 package dev.pack.modules.registration_batch;
 
 import dev.pack.modules.enums.FormPurchaseType;
+import dev.pack.modules.enums.Grade;
 import dev.pack.modules.student.Student;
 import jakarta.persistence.LockModeType;
 import jakarta.transaction.Transactional;
@@ -32,6 +33,9 @@ public interface RegistrationBatchRepository extends JpaRepository<RegistrationB
         where d.type = :type
     """)
     List<RegistrationBatch> getAllByType(FormPurchaseType type);
+
+    @Query("SELECT b FROM RegistrationBatch b WHERE b.grade = :grade")
+    List<RegistrationBatch> getAllBatchByGrade(Grade grade);
 
     @Transactional
     @Modifying
