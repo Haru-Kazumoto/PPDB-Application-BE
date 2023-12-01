@@ -39,6 +39,11 @@ public class RegistrationPathsController {
         return http.response(OK.value(), new Date(), this.registrationPathsService.index(grade));
     }
 
+    @GetMapping(path = "/get-path-by-session")
+    public ResponseEntity<?> getById(){
+        return http.response(OK.value(), new Date(), this.registrationPathsService.getPathByStudentSession());
+    }
+
     @GetMapping(path = "/get-type")
     public ResponseEntity<?> getAllByType(@RequestParam(name = "type")FormPurchaseType type){
         return http.response(OK.value(), new Date(), this.registrationPathsService.indexByTypeRegistrationPaths(type));
