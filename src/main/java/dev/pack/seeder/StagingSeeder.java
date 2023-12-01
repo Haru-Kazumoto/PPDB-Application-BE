@@ -1,6 +1,7 @@
 package dev.pack.seeder;
 
 import dev.pack.modules.enums.FormPurchaseType;
+import dev.pack.modules.enums.Grade;
 import dev.pack.modules.staging.Staging;
 import dev.pack.modules.staging.StagingRepository;
 import lombok.RequiredArgsConstructor;
@@ -38,16 +39,25 @@ public class StagingSeeder implements ApplicationRunner {
     private void seedStagings(){
         List<List<Object>> stagings = new ArrayList<>();
 
-        stagings.add(List.of("Pilih Gelombang PPDB",1, FormPurchaseType.PEMBELIAN));
-        stagings.add(List.of("Pembelian Formulir Pendaftaran",2, FormPurchaseType.PEMBELIAN));
-        stagings.add(List.of("Pilih Jurusan",3, FormPurchaseType.PEMBELIAN));
-        stagings.add(List.of("Cetak Formulir",4, FormPurchaseType.PEMBELIAN));
+        stagings.add(List.of("Pilih Gelombang PPDB",1, FormPurchaseType.PEMBELIAN, Grade.SMK));
+        stagings.add(List.of("Pembelian Formulir Pendaftaran",2, FormPurchaseType.PEMBELIAN,Grade.SMK));
+        stagings.add(List.of("Pilih Jurusan",3, FormPurchaseType.PEMBELIAN,Grade.SMK));
+        stagings.add(List.of("Cetak Formulir",4, FormPurchaseType.PEMBELIAN,Grade.SMK));
 
-        stagings.add(List.of("Pilih Jalur PPDB",1, FormPurchaseType.PENGEMBALIAN));
-        stagings.add(List.of("Transaksi Pengembalian",2, FormPurchaseType.PENGEMBALIAN));
-        stagings.add(List.of("Isi Biodata",3, FormPurchaseType.PENGEMBALIAN));
-        stagings.add(List.of("Pilih Jurusan",4,FormPurchaseType.PENGEMBALIAN));
-        stagings.add(List.of("Cetak Formulir",5, FormPurchaseType.PENGEMBALIAN));
+        stagings.add(List.of("Pilih Gelombang PPDB",1, FormPurchaseType.PEMBELIAN, Grade.SMP));
+        stagings.add(List.of("Pembelian Formulir Pendaftaran",2, FormPurchaseType.PEMBELIAN,Grade.SMP));
+        stagings.add(List.of("Cetak Formulir",3, FormPurchaseType.PEMBELIAN,Grade.SMP));
+
+        stagings.add(List.of("Pilih Jalur PPDB",1, FormPurchaseType.PENGEMBALIAN,Grade.SMK));
+        stagings.add(List.of("Transaksi Pengembalian",2, FormPurchaseType.PENGEMBALIAN,Grade.SMK));
+        stagings.add(List.of("Isi Biodata",3, FormPurchaseType.PENGEMBALIAN,Grade.SMK));
+        stagings.add(List.of("Pilih Jurusan",4,FormPurchaseType.PENGEMBALIAN,Grade.SMK));
+        stagings.add(List.of("Cetak Formulir",5, FormPurchaseType.PENGEMBALIAN,Grade.SMK));
+
+        stagings.add(List.of("Pilih Jalur PPDB",1, FormPurchaseType.PENGEMBALIAN,Grade.SMP));
+        stagings.add(List.of("Transaksi Pengembalian",2, FormPurchaseType.PENGEMBALIAN,Grade.SMP));
+        stagings.add(List.of("Isi Biodata",3, FormPurchaseType.PENGEMBALIAN,Grade.SMP));
+        stagings.add(List.of("Cetak Formulir",4, FormPurchaseType.PENGEMBALIAN,Grade.SMP));
 
 
         var index = 0;
@@ -59,6 +69,7 @@ public class StagingSeeder implements ApplicationRunner {
                             .index((Integer) staging.get(1))
                             .type((FormPurchaseType) staging.get(2))
                             .is_visible(true)
+                            .grade((Grade) staging.get(3))
                             .build()
             );
 
