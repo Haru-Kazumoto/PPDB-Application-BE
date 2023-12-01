@@ -13,9 +13,9 @@ import java.util.Optional;
 public interface StagingRepository extends JpaRepository<Staging, Integer> {
 
     @Query("""
-                    select s from Staging s where s.name like CONCAT('%', CONCAT(:name, '%'))
+                    select s from Staging s where s.name like CONCAT('%', CONCAT(:name, '%')) and s.grade = :grade
             """)
-    Optional<Staging> findByName(String name);
+    Optional<Staging> findByName(String name, Grade grade);
 
     @Query("""
                     select s from Staging s where s.name like CONCAT('%', CONCAT(:name, '%')) and s.type = :type and s.grade = :grade
