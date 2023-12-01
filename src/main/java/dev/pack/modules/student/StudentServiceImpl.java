@@ -156,11 +156,11 @@ public class StudentServiceImpl implements StudentService{
 
         User user = this.authenticationService.decodeJwt();
 
-        Staging staging = this.stagingRepository.findByName("Pilih Jalur PPDB")
+        Staging staging = this.stagingRepository.findByName("Pilih Jalur PPDB", batchDto.getGrade())
                 .orElseThrow(() -> new DataNotFoundException("Data yang diinput invalid"));
 
         if(batchDto.getType() == FormPurchaseType.PEMBELIAN){
-            staging = this.stagingRepository.findByName("Pilih Gelombang PPDB")
+            staging = this.stagingRepository.findByName("Pilih Gelombang PPDB", batchDto.getGrade())
                     .orElseThrow(() -> new DataNotFoundException("Data yang diinput invalid"));;
         }
 
@@ -223,10 +223,10 @@ public class StudentServiceImpl implements StudentService{
                 .orElseThrow(() -> new DataNotFoundException(ErrorMessage.BATCH_ID_NOT_FOUND));
     }
 
-    private Staging getStagingByName(String name) {
-        return stagingRepository.findByName(name)
-                .orElseThrow(() -> new DataNotFoundException(ErrorMessage.STAGING_NAME_NOT_FOUND));
-    }
+//    private Staging getStagingByName(String name) {
+//        return stagingRepository.findByName(name, )
+//                .orElseThrow(() -> new DataNotFoundException(ErrorMessage.STAGING_NAME_NOT_FOUND));
+//    }
 
     @Override
     public StudentOffsetResponse getCurrentRegistrationStatus(GetStagingStatusDto stagingStatusDto) {
@@ -281,11 +281,11 @@ public class StudentServiceImpl implements StudentService{
         User user = this.authenticationService.decodeJwt();
 
         // ganti disini kalo stagingnya berubah
-        Staging staging = this.stagingRepository.findByName("Pembelian Formulir Pendaftaran")
+        Staging staging = this.stagingRepository.findByName("Pembelian Formulir Pendaftaran", user.getStudent().getGrade())
                 .orElseThrow(() -> new DataNotFoundException("Data yang diinput invalid"));
 
         if(uploadPaymentDto.getType() == FormPurchaseType.PENGEMBALIAN){
-            staging = this.stagingRepository.findByName("Transaksi Pengembalian")
+            staging = this.stagingRepository.findByName("Transaksi Pengembalian", user.getStudent().getGrade())
                     .orElseThrow(() -> new DataNotFoundException("Data yang diinput invalid"));
         }
 
@@ -429,7 +429,7 @@ public class StudentServiceImpl implements StudentService{
     @Transactional
     public StudentLogs updateBio(UpdateBioDto updateBioDto) {
         User user = this.authenticationService.decodeJwt();
-        Staging staging = this.stagingRepository.findByName("Isi Biodata")
+        Staging staging = this.stagingRepository.findByName("Isi Biodata", user.getStudent().getGrade())
                 .orElseThrow(() -> new DataNotFoundException("Data yang diinput invalid"));
 
         String profile_pictire = this.saveFileToDisk(updateBioDto.getProfile_picture());

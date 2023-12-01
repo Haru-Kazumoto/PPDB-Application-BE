@@ -4,7 +4,7 @@ import dev.pack.modules.enums.Grade;
 
 public interface GetAllStaging {
     Integer getId();
-    
+
     String getName();
 
     Integer getIndex();
