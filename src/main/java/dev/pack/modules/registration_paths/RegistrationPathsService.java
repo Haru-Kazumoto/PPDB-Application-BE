@@ -22,4 +22,6 @@ public interface RegistrationPathsService {
     List<GetAllRegistrationPaths> getPathWithTotalStudents();
 
     List<ResponseRegistrationPathsDto> indexAllWithRecursion();
+
+    RegistrationPaths getPathByStudentSession();
 }

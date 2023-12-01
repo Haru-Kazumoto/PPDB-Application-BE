@@ -415,12 +415,6 @@ public class StudentServiceImpl implements StudentService{
 
     @Override
     public Student getStudentById(Integer studentId) {
-//        this.registrationBatchRepo.findById(batchId)
-//                .orElseThrow(() -> new DataNotFoundException("Id gelombang tidak ditemukan."));
-//
-//        this.studentRepository.findById(studentId).orElseThrow(() -> new DataNotFoundException("Id student tidak ditemukan"));
-//
-//        return this.studentRepository.findStudentByIdAnAndBAndBatch_id(studentId, batchId);
 
         return this.studentRepository.findById(studentId).orElseThrow(() -> new DataNotFoundException("Id tidka ditemukan"));
     }
@@ -432,17 +426,18 @@ public class StudentServiceImpl implements StudentService{
         Staging staging = this.stagingRepository.findByName("Isi Biodata", user.getStudent().getGrade())
                 .orElseThrow(() -> new DataNotFoundException("Data yang diinput invalid"));
 
-        String profile_pictire = this.saveFileToDisk(updateBioDto.getProfile_picture());
+        String profile_picture = this.saveFileToDisk(updateBioDto.getProfile_picture());
         String birth_card = this.saveFileToDisk(updateBioDto.getBirth_card());
         String family_card = this.saveFileToDisk(updateBioDto.getFamily_card());
-
 
         Student student = user.getStudent();
         if(student == null){
             throw new DataNotFoundException("Akses hanya diberikan untuk Siswa pendaftar");
         }
 
-        student.setProfile_picture(profile_pictire);
+        RegistrationPaths registrationPaths = this.registrationPathsRepository.findById(student.getPath_id()).orElseThrow();
+
+        student.setProfile_picture(profile_picture);
         student.setFamily_card(family_card);
         student.setBirth_card(birth_card);
         student.setNisn(updateBioDto.getNisn());
@@ -468,8 +463,8 @@ public class StudentServiceImpl implements StudentService{
         student.setMother_phone(updateBioDto.getMother_phone());
         student.setMother_job(updateBioDto.getMother_job());
         student.setMother_address(updateBioDto.getMother_address());
+        student.setPathName(registrationPaths.getName());
         student.setStatus("FILLING_BIO");
-
 
         this.studentRepository.save(student);
 
@@ -495,12 +490,17 @@ public class StudentServiceImpl implements StudentService{
 
         String status = "CHOOSING_FIRST_MAJORS";
         Student student = user.getStudent();
-        if(majorDto.getType() == FormPurchaseType.PENGEMBALIAN){
-            status = "CHOOSING_FIX_MAJOR";
-        }
 
         student.setStatus(status);
         student.setMajor(majorDto.getMajor());
+        student.setFirst_major(majorDto.getFirst_major());
+        student.setSecond_major(majorDto.getSecond_major());
+
+        if(majorDto.getType() == FormPurchaseType.PENGEMBALIAN){
+            status = "CHOOSING_FIX_MAJOR";
+            student.setFix_major(majorDto.getFix_major());
+        }
+
         this.studentRepository.save(student);
 
 

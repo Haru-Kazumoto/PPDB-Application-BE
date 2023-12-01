@@ -71,12 +71,16 @@ public class Student extends Timestamps implements Serializable {
     private String status;
 
     private String major; //mengambil data type dari lookup
+    private String first_major;
+    private String second_major;
+    private String fix_major;
 
     private Date registrationDate;
 
     private Integer staging_id;
     private Integer path_id;
     private Integer batch_id;
+    private String pathName;
 
     private String birth_card;
     private String family_card;

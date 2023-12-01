@@ -15,6 +15,10 @@ public class ChooseMajorDto {
     @NotNull
     private String major;
 
+    private String first_major;
+    private String second_major;
+    private String fix_major;
+
     @NotNull
     private FormPurchaseType type;
 
