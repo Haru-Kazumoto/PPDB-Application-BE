@@ -43,6 +43,7 @@ public class RegistrationBatch implements Serializable {
     private Integer path_id;
     private Boolean isOpen = true;
 
+    @Enumerated(EnumType.STRING)
     private Grade grade;
 
     private Integer countStudent=0;

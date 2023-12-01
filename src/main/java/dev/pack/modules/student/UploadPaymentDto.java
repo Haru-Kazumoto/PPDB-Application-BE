@@ -19,5 +19,6 @@ public class UploadPaymentDto {
     String bank_account;
     String bank_user;
 
+
     FormPurchaseType type;
 }

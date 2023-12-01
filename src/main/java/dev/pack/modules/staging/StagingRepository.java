@@ -2,15 +2,11 @@ package dev.pack.modules.staging;
 
 import dev.pack.modules.enums.FormPurchaseType;
 import dev.pack.modules.enums.Grade;
-import dev.pack.modules.staging.Staging;
-import dev.pack.modules.student.Student;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
-import javax.swing.text.html.Option;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
 @Repository
@@ -18,13 +14,13 @@ public interface StagingRepository extends JpaRepository<Staging, Integer> {
 
 
     @Query("""
-        select s from Staging s where s.name like CONCAT('%', CONCAT(:name, '%'))
-""")
-    Optional<Staging> findByName(String name);
+        select s from Staging s where s.name like CONCAT('%', CONCAT(:name, '%')) and s.grade = :grade
+    """)
+    Optional<Staging> findByName(String name, Grade grade);
 
     @Query("""
         select s from Staging s where s.name like CONCAT('%', CONCAT(:name, '%')) and s.type = :type and s.grade = :grade
-""")
+    """)
     Optional<Staging> findByNameAndStagingType(String name, FormPurchaseType type, Grade grade);
 
     @Query(value = """
@@ -38,7 +34,8 @@ public interface StagingRepository extends JpaRepository<Staging, Integer> {
                 )  is null
             then 0
             else 1
-            end) as is_done
+            end) as is_done,
+            s.grade as grade
         from staging s
         where s.type = :type
         order by s.index asc
