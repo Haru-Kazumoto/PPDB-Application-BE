@@ -344,7 +344,7 @@ public class StudentServiceImpl implements StudentService{
     public StudentLogs printCard(PrintCardDto printCardDto) {
         User user = this.authenticationService.decodeJwt();
 
-        Staging staging = this.stagingRepository.findByNameAndStagingType("Cetak Formulir",printCardDto.getType(), printCardDto.getGrade())
+        Staging staging = this.stagingRepository.findByNameAndStagingType("Cetak Formulir",printCardDto.getType(), user.getStudent().getGrade())
                 .orElseThrow(() -> new DataNotFoundException("Staging tidak ditemukan"));
 
         StudentLogs studentLogs = this.studentLogsRepository.findByStudentAndStagingByType(user.getStudent(),staging,printCardDto.getType())
