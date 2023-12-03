@@ -85,8 +85,13 @@ public class UserController {
     }
 
     //NEW FEATURE
-    @PutMapping("/update-profile")
-    public void updatePasswordProfile(@RequestBody UserDto.UpdateProfile body, @RequestParam("id") Integer id){
-        this.userService.updateProfile(body, id);
+    @PutMapping("/update-password/student")
+    public void updatePasswordStudent(@RequestBody UserDto.UpdateProfile body, @RequestParam("studentId") Integer id){
+        this.userService.updatePasswordStudent(body, id);
+    }
+
+    @PutMapping("/update-password/admin")
+    public void updatePasswordAdmin(@RequestBody UserDto.UpdateProfile body, @RequestParam("id") Integer id){
+        this.userService.updatePasswordStudent(body, id);
     }
 }
