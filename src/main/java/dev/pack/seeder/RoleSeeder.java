@@ -58,6 +58,7 @@ public class RoleSeeder implements ApplicationRunner {
         userPath.add("/ppdb/main/home");
         userPath.add("/ppdb/main/pembelian");
         userPath.add("/ppdb/main/pengembalian");
+        userPath.add("/ppdb/main/tes-ujian");
 
         adminPath.add("/ppdb/main/dashboard");
         adminPath.add("/ppdb/main/alur");

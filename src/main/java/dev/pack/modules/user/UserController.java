@@ -80,12 +80,13 @@ public class UserController {
         return http.response(
                 OK.value(),
                 new Date(),
-                this.userService.profile()
+                this.userService.updateUser(null, null)
         );
     }
 
+    //NEW FEATURE
     @PutMapping("/update-profile")
-    public void updatePasswordProfile(@RequestBody UserDto.UpdateProfile body){
-        this.userService.updateProfile(body);
+    public void updatePasswordProfile(@RequestBody UserDto.UpdateProfile body, @RequestParam("id") Integer id){
+        this.userService.updateProfile(body, id);
     }
 }

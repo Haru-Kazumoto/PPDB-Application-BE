@@ -1,6 +1,7 @@
 package dev.pack.modules.alur_ppdb;
 
 import com.fasterxml.jackson.annotation.*;
+import dev.pack.modules.enums.Grade;
 import dev.pack.modules.user.User;
 import dev.pack.utils.Timestamps;
 import jakarta.persistence.*;
@@ -26,5 +27,8 @@ public class AlurPpdb extends Timestamps {
 
     @Column(length = 2000)
     private String content;
+
+    @Enumerated(EnumType.STRING)
+    private Grade grade;
 
 }

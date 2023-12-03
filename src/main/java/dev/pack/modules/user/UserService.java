@@ -16,7 +16,7 @@ public interface UserService {
 
     User updateUser(@NonNull Integer id, User bodyUpdate);
 
-    UserDto.Profile profile();
+    UserDto.Profile updatePasswordStudent(Integer id);
 
-    void updateProfile(UserDto.UpdateProfile body);
+    void updateProfile(UserDto.UpdateProfile body, Integer id);
 }

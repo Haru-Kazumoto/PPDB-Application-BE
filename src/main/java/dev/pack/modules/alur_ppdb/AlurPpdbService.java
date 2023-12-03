@@ -1,11 +1,13 @@
 package dev.pack.modules.alur_ppdb;
 
+import dev.pack.modules.enums.Grade;
+
 import java.util.List;
 
 public interface AlurPpdbService {
 
     AlurPpdb createFlow(AlurPpdb bodyCreate);
-    List<AlurPpdb> getAll();
+    List<AlurPpdb> getAllByGrade(Grade grade);
     AlurPpdb updateFlow(Integer id, AlurPpdb bodyUpdate);
     void hardDeleteById(Integer id);
     void softDeleteById(Integer id);

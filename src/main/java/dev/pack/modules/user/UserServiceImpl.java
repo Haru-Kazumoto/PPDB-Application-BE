@@ -68,17 +68,17 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public UserDto.Profile profile() {
-        User user = this.authenticationService.decodeJwt();
+    public UserDto.Profile updatePasswordStudent(Integer id) {
+        User user = this.userRepository.findById(id).orElseThrow(() -> new DataNotFoundException("Id siswa tidak ditemukan"));
+
         User data = this.userRepository.findById(user.getId()).orElseThrow();
 
         return this.mapToProfileResponse(data);
     }
 
     @Override
-    public void updateProfile(UserDto.UpdateProfile body) {
-        User user = this.authenticationService.decodeJwt();
-        User data = this.userRepository.findById(user.getId()).orElseThrow();
+    public void updateProfile(UserDto.UpdateProfile body, Integer id) {
+        User data = this.userRepository.findById(id).orElseThrow(() -> new DataNotFoundException("Id siswa tidak ditemukan."));
 
         data.setPassword(this.password.encode(body.getPassword()));
 

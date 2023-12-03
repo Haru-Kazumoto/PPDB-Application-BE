@@ -98,13 +98,11 @@ public class StudentServiceImpl implements StudentService{
             List<Student> students = this.registrationBatchRepo.findAllStudentByBatchId(batchId);
 
             List<String> headers = Arrays.asList(
-                    "Id",
                     "Formulir-id",
                     "Pendaftar ke",
                     "Nama siswa",
                     "Nomor telepon",
                     "Alamat",
-                    "Jenjang",
                     "Jenis kelamin",
                     "Agama",
                     "Asal sekolah",
@@ -118,13 +116,11 @@ public class StudentServiceImpl implements StudentService{
             for(Student student : students){
                 List<Object> rowData = new ArrayList<>();
 
-                rowData.add(student.getId());
                 rowData.add(student.getFormulirId());
                 rowData.add(student.getLastInsertedNumber());
                 rowData.add(student.getName());
                 rowData.add(student.getPhone());
                 rowData.add(student.getAddress());
-                rowData.add(student.getGrade());
                 rowData.add(student.getGender());
                 rowData.add(student.getReligion());
                 rowData.add(student.getSchool_origin());
@@ -223,11 +219,6 @@ public class StudentServiceImpl implements StudentService{
                 .orElseThrow(() -> new DataNotFoundException(ErrorMessage.BATCH_ID_NOT_FOUND));
     }
 
-//    private Staging getStagingByName(String name) {
-//        return stagingRepository.findByName(name, )
-//                .orElseThrow(() -> new DataNotFoundException(ErrorMessage.STAGING_NAME_NOT_FOUND));
-//    }
-
     @Override
     public StudentOffsetResponse getCurrentRegistrationStatus(GetStagingStatusDto stagingStatusDto) {
         User user = this.authenticationService.decodeJwt();
@@ -318,8 +309,6 @@ public class StudentServiceImpl implements StudentService{
                         .total(Double.valueOf(uploadPaymentDto.amount))
                         .build()
         );
-
-        //TODO : CREATE STAGING FOR SMP
 
         return this.studentLogsRepository.save(
                 StudentLogs.builder()
@@ -431,10 +420,9 @@ public class StudentServiceImpl implements StudentService{
         String family_card = this.saveFileToDisk(updateBioDto.getFamily_card());
 
         Student student = user.getStudent();
-        if(student == null){
+        if(student == null) {
             throw new DataNotFoundException("Akses hanya diberikan untuk Siswa pendaftar");
         }
-
         RegistrationPaths registrationPaths = this.registrationPathsRepository.findById(student.getPath_id()).orElseThrow();
 
         student.setProfile_picture(profile_picture);
@@ -502,7 +490,6 @@ public class StudentServiceImpl implements StudentService{
         }
 
         this.studentRepository.save(student);
-
 
         return this.studentLogsRepository.save(
                 StudentLogs.builder()

@@ -1,5 +1,6 @@
 package dev.pack.modules.alur_ppdb;
 
+import dev.pack.modules.enums.Grade;
 import dev.pack.payloads.HttpResponse;
 import dev.pack.payloads.PayloadsResponse;
 import jakarta.validation.Valid;
@@ -35,12 +36,12 @@ public class AlurPpdbController {
     }
 
     @GetMapping(path ="/index")
-    public ResponseEntity<?> index(){
+    public ResponseEntity<?> index(@RequestParam("grade")Grade grade){
         return ResponseEntity.status(HttpStatus.OK).body(
                 new PayloadsResponse(
                         HttpStatus.OK.value(),
                         new Date(),
-                        this.alurPpdbService.getAll()
+                        this.alurPpdbService.getAllByGrade(grade)
                 )
         );
     }
