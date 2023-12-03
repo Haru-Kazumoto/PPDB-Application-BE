@@ -24,7 +24,7 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     Integer countByRole(Role role);
 
     @Query("SELECT u FROM User u WHERE u.student.id = :studentId")
-    Optional<User> findUserByStudentId(Integer studentId);
+    Optional<User> findUserByStudentId(@Param("studentId") Integer studentId);
 
     @Query("SELECT u FROM User u WHERE u.deletedAt IS NULL ORDER BY u.id ASC")
     Page<User> findAllActive(Pageable pageable);
