@@ -36,12 +36,12 @@ public class AlurPpdbController {
     }
 
     @GetMapping(path ="/index")
-    public ResponseEntity<?> index(@RequestParam("grade")Grade grade){
+    public ResponseEntity<?> index(){
         return ResponseEntity.status(HttpStatus.OK).body(
                 new PayloadsResponse(
                         HttpStatus.OK.value(),
                         new Date(),
-                        this.alurPpdbService.getAllByGrade(grade)
+                        this.alurPpdbService.getAll()
                 )
         );
     }

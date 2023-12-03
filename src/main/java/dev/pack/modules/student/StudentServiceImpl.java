@@ -148,7 +148,7 @@ public class StudentServiceImpl implements StudentService{
                 .orElseThrow(() -> new DataNotFoundException("Gelombang tidak ditemukan"));
 
         RegistrationPaths registrationPaths = this.registrationPathsRepository.findById(registrationBatch.getPath_id())
-                .orElseThrow();
+                .orElseThrow(() -> new DataNotFoundException("Jalur tidak ditemukan."));
 
         User user = this.authenticationService.decodeJwt();
 
@@ -178,6 +178,7 @@ public class StudentServiceImpl implements StudentService{
         student.setBatch_id(batchDto.getBatch_id());
         student.setStatus("REGISTERED");
         student.setPath_id(registrationBatch.getRegistrationPaths().getId());
+        student.setPathName(registrationBatch.getName());
 
         Integer runningCount = registrationBatch.getCountStudent() + 1;
 
@@ -422,7 +423,8 @@ public class StudentServiceImpl implements StudentService{
         if(student == null) {
             throw new DataNotFoundException("Akses hanya diberikan untuk Siswa pendaftar");
         }
-        RegistrationPaths registrationPaths = this.registrationPathsRepository.findById(student.getPath_id()).orElseThrow();
+
+        RegistrationBatch registrationBatch = this.registrationBatchRepo.findById(student.getBatch_id()).orElseThrow();
 
         student.setProfile_picture(profile_picture);
         student.setFamily_card(family_card);
@@ -450,7 +452,7 @@ public class StudentServiceImpl implements StudentService{
         student.setMother_phone(updateBioDto.getMother_phone());
         student.setMother_job(updateBioDto.getMother_job());
         student.setMother_address(updateBioDto.getMother_address());
-        student.setPathName(registrationPaths.getName());
+        student.setPathName(registrationBatch.getName());
         student.setStatus("FILLING_BIO");
 
         this.studentRepository.save(student);
@@ -481,8 +483,17 @@ public class StudentServiceImpl implements StudentService{
         student.setStatus(status);
         student.setMajor(majorDto.getMajor());
 
+        String[] majors = majorDto.getMajor().split(",");
+        if(majors.length > 0){
+            student.setFirst_major(majors[0].trim());
+        }
+        if(majors.length > 1){
+            student.setSecond_major(majors[1].trim());
+        }
+
         if(majorDto.getType() == FormPurchaseType.PENGEMBALIAN){
             status = "CHOOSING_FIX_MAJOR";
+            student.setFix_major(majorDto.getMajor());
         }
 
         this.studentRepository.save(student);
