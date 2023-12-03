@@ -91,7 +91,7 @@ public class UserController {
     }
 
     @PutMapping("/update-password/admin")
-    public void updatePasswordAdmin(@RequestBody UserDto.UpdateProfile body, @RequestParam("id") Integer id){
-        this.userService.updatePasswordStudent(body, id);
+    public void updatePasswordAdmin(@RequestBody UserDto.UpdateProfile body){
+        this.userService.updatePasswordAdmin(body);
     }
 }
