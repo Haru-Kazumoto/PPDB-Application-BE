@@ -27,8 +27,8 @@ public class AlurPpdbServiceImpl implements AlurPpdbService {
     }
 
     @Override
-    public List<AlurPpdb> getAllByGrade(Grade grade) {
-        return this.alurPpdbRepository.findAllByGrade(grade);
+    public List<AlurPpdb> getAll() {
+        return this.alurPpdbRepository.findAll();
     }
 
     @Override

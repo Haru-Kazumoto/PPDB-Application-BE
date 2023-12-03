@@ -247,7 +247,6 @@ public class StudentServiceImpl implements StudentService{
             registrationBatch = currentState.getRegistrationBatch();
         }
 
-
         return StudentOffsetResponse.builder()
                 .studentLogs(studentLogs)
                 .currentState(currentState)
@@ -481,12 +480,9 @@ public class StudentServiceImpl implements StudentService{
 
         student.setStatus(status);
         student.setMajor(majorDto.getMajor());
-        student.setFirst_major(majorDto.getFirst_major());
-        student.setSecond_major(majorDto.getSecond_major());
 
         if(majorDto.getType() == FormPurchaseType.PENGEMBALIAN){
             status = "CHOOSING_FIX_MAJOR";
-            student.setFix_major(majorDto.getFix_major());
         }
 
         this.studentRepository.save(student);

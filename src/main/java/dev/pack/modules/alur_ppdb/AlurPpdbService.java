@@ -7,7 +7,7 @@ import java.util.List;
 public interface AlurPpdbService {
 
     AlurPpdb createFlow(AlurPpdb bodyCreate);
-    List<AlurPpdb> getAllByGrade(Grade grade);
+    List<AlurPpdb> getAll();
     AlurPpdb updateFlow(Integer id, AlurPpdb bodyUpdate);
     void hardDeleteById(Integer id);
     void softDeleteById(Integer id);
