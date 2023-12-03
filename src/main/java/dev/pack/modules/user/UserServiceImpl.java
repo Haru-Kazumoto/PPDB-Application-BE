@@ -88,10 +88,8 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public void updatePasswordAdmin(UserDto.UpdateProfile body, Integer id) {
-        var user = this.userRepository.findById(id).orElseThrow(
-                () -> new DataNotFoundException("Id akun siswa tidak ditemukan")
-        );
+    public void updatePasswordAdmin(UserDto.UpdateProfile body) {
+        User user = this.authenticationService.decodeJwt();
 
         user.setPassword(this.password.encode(body.getPassword()));
 
