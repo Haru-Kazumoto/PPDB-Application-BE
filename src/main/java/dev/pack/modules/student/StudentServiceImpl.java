@@ -170,7 +170,9 @@ public class StudentServiceImpl implements StudentService{
 
         long runningNumber = lastInsertedCount+1;
 
-        String formulirId = studentUtils.generateIdStudent(runningNumber,registrationBatch.getBatchCode());
+        String formattedRunningNumber = String.format("%02d", runningNumber);
+
+        String formulirId = studentUtils.generateIdStudent(formattedRunningNumber,registrationBatch.getBatchCode());
 
         student.setFormulirId(formulirId);
         student.setLastInsertedNumber(String.valueOf(runningNumber));
