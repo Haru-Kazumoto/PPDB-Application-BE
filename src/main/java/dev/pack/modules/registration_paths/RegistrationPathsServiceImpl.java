@@ -84,6 +84,7 @@ public class RegistrationPathsServiceImpl implements RegistrationPathsService {
         return ResponseRegistrationPathsDto.builder()
                 .id(registrationPaths.getId())
                 .name(registrationPaths.getName())
+                .grade(registrationPaths.getGrade())
                 .registrationBatches(registrationPaths.getRegistrationBatches().stream()
                         .map(this::mapToCustomResponseRegistrationBatch)
                         .collect(Collectors.toList()))
