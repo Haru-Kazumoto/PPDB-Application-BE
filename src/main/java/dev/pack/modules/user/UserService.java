@@ -20,5 +20,5 @@ public interface UserService {
 
     void updatePasswordStudent(UserDto.UpdateProfile body, Integer id);
 
-    void updatePasswordAdmin(UserDto.UpdateProfile body);
+    void updatePasswordAdmin(UserDto.UpdateProfile body, Integer id);
 }
