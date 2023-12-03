@@ -37,7 +37,7 @@ public class GlobalException extends ResponseEntityExceptionHandler {
     public ResponseEntity<ErrorResponse> handleBadCredentialError(BadCredentialsException ex){
         ErrorResponse errorResponse = ErrorResponse.builder()
                 .statusResponse(HttpStatus.UNAUTHORIZED.name())
-                .message("Username or password invalid")
+                .message("Username atau password salah")
                 .build();
         return new ResponseEntity<>(errorResponse, HttpStatus.UNAUTHORIZED);
     }
