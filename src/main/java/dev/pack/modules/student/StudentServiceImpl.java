@@ -155,11 +155,13 @@ public class StudentServiceImpl implements StudentService{
         Staging staging = this.stagingRepository.findByName("Pilih Jalur PPDB", batchDto.getGrade())
                 .orElseThrow(() -> new DataNotFoundException("Data yang diinput invalid"));
 
+        RegistrationBatch registrationBatchBySession = this.registrationBatchRepo.findById(user.getStudent().getBatch_id()).orElseThrow();
+
         if(batchDto.getType() == FormPurchaseType.PEMBELIAN){
             staging = this.stagingRepository.findByName("Pilih Gelombang PPDB", batchDto.getGrade())
                     .orElseThrow(() -> new DataNotFoundException("Data yang diinput invalid"));
 
-            user.getStudent().setPathName(registrationBatch.getName());
+            user.getStudent().setPathName(registrationBatchBySession.getName());
         }
 
         long lastInsertedCount = this.registrationBatchRepo.countStudentsForRunningNumber(batchDto.getBatch_id());
@@ -182,6 +184,7 @@ public class StudentServiceImpl implements StudentService{
         student.setBatch_id(batchDto.getBatch_id());
         student.setStatus("REGISTERED");
         student.setPath_id(registrationBatch.getRegistrationPaths().getId());
+        student.setPathName(registrationBatchBySession.getName());
 
         Integer runningCount = registrationBatch.getCountStudent() + 1;
 
