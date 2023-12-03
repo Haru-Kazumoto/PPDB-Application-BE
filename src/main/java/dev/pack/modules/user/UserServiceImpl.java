@@ -78,11 +78,11 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public void updateProfile(UserDto.UpdateProfile body, Integer id) {
-        User data = this.userRepository.findById(id).orElseThrow(() -> new DataNotFoundException("Id siswa tidak ditemukan."));
+        var user = this.userRepository.findUserByStudentId(id).orElseThrow();
 
-        data.setPassword(this.password.encode(body.getPassword()));
+        user.setPassword(this.password.encode(body.getPassword()));
 
-        this.userRepository.save(data);
+        this.userRepository.save(user);
     }
 
     private UserDto.UpdateProfile mapToUpdatePasswordProfile(User data){
