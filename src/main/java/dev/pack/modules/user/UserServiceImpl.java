@@ -2,7 +2,7 @@ package dev.pack.modules.user;
 
 import dev.pack.exception.DataNotFoundException;
 import dev.pack.exception.DuplicateDataException;
-import dev.pack.exception.ErrorSoftDelete;
+import dev.pack.modules.auth.AuthenticationService;
 import dev.pack.modules.enums.Role;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +18,7 @@ public class UserServiceImpl implements UserService{
 
     private final UserRepository userRepository;
     private final PasswordEncoder password;
+    private final AuthenticationService authenticationService;
 
     @Override
     public User createAdmin(User bodyAdminCreate) {
@@ -65,6 +66,64 @@ public class UserServiceImpl implements UserService{
 
         return this.userRepository.save(user);
     }
+
+    @Override
+    public UserDto.Profile updatePasswordStudent(Integer id) {
+        User user = this.userRepository.findById(id).orElseThrow(() -> new DataNotFoundException("Id siswa tidak ditemukan"));
+
+        User data = this.userRepository.findById(user.getId()).orElseThrow();
+
+        return this.mapToProfileResponse(data);
+    }
+
+    @Override
+    public void updatePasswordStudent(UserDto.UpdateProfile body, Integer id) {
+        var user = this.userRepository.findUserByStudentId(id).orElseThrow(
+                () -> new DataNotFoundException("Id akun siswa tidak ditemukan")
+        );
+
+        user.setPassword(this.password.encode(body.getPassword()));
+
+        this.userRepository.save(user);
+    }
+
+    @Override
+    public void updatePasswordAdmin(UserDto.UpdateProfile body, Integer id) {
+        var user = this.userRepository.findById(id).orElseThrow(
+                () -> new DataNotFoundException("Id akun admin tidak ditemukan")
+        );
+
+        user.setPassword(this.password.encode(body.getPassword()));
+
+        this.userRepository.save(user);
+    }
+
+    private UserDto.UpdateProfile mapToUpdatePasswordProfile(User data){
+        UserDto.UpdateProfile.UpdateProfileBuilder profileBuilder = UserDto.UpdateProfile.builder()
+                .password(data.getPassword());
+
+        return profileBuilder.build();
+    }
+
+    private UserDto.Profile mapToProfileResponse(User data){
+        UserDto.Profile.ProfileBuilder profileBuilder = UserDto.Profile.builder()
+                .fullname(data.getFullname())
+                .username(data.getUsername());
+
+        if(data.getStudent() != null){
+            profileBuilder.name(data.getStudent().getName());
+            profileBuilder.address(data.getStudent().getAddress());
+            profileBuilder.school_origin(data.getStudent().getSchool_origin());
+        } else {
+            profileBuilder.address(null);
+            profileBuilder.school_origin(null);
+            profileBuilder.name(null);
+        }
+
+        return profileBuilder.build();
+    }
+
+
 
     private void checkDuplicateUsername(String username){
         this.userRepository

@@ -1,6 +1,7 @@
 package dev.pack.modules.staging;
 
 import dev.pack.modules.enums.FormPurchaseType;
+import dev.pack.modules.enums.Grade;
 import dev.pack.modules.student_logs.StudentLogs;
 import dev.pack.utils.Timestamps;
 import jakarta.persistence.*;
@@ -30,6 +31,9 @@ public class Staging extends Timestamps {
     private Boolean is_visible = Boolean.TRUE;
 
     private FormPurchaseType type;
+
+    @Enumerated(EnumType.STRING)
+    private Grade grade;
 
     @OneToMany(
             cascade = CascadeType.ALL,

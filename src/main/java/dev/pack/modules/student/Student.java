@@ -3,6 +3,7 @@ package dev.pack.modules.student;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import dev.pack.modules.enums.Grade;
 import dev.pack.modules.registration_batch.RegistrationBatch;
 import dev.pack.modules.registration_paths.RegistrationPaths;
 import dev.pack.modules.student_logs.StudentLogs;
@@ -36,10 +37,6 @@ public class Student extends Timestamps implements Serializable {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-//    @Column(unique = true)
-//    @UuidGenerator
-//    private UUID uniqueId = UUID.randomUUID();
-
     private String formulirId;
 
     private String lastInsertedNumber;
@@ -49,7 +46,8 @@ public class Student extends Timestamps implements Serializable {
 
     private String name; //2
 
-    private String grade;
+    @Enumerated(EnumType.STRING)
+    private Grade grade;
 
     @Column(unique = true)
     private String phone; //1
@@ -73,12 +71,16 @@ public class Student extends Timestamps implements Serializable {
     private String status;
 
     private String major; //mengambil data type dari lookup
+    private String first_major;
+    private String second_major;
+    private String fix_major;
 
     private Date registrationDate;
 
     private Integer staging_id;
     private Integer path_id;
     private Integer batch_id;
+    private String pathName;
 
     private String birth_card;
     private String family_card;

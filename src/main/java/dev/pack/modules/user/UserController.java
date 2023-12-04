@@ -74,4 +74,24 @@ public class UserController {
 
         return ResponseEntity.status(HttpStatus.CREATED).body(this.http.response(HttpStatus.CREATED.value(), new Date(), result));
     }
+
+    @GetMapping("/profile")
+    public ResponseEntity<?> getProfileData(){
+        return http.response(
+                OK.value(),
+                new Date(),
+                this.userService.updateUser(null, null)
+        );
+    }
+
+    //NEW FEATURE
+    @PutMapping("/update-password/student")
+    public void updatePasswordStudent(@RequestBody UserDto.UpdateProfile body, @RequestParam("studentId") Integer id){
+        this.userService.updatePasswordStudent(body, id);
+    }
+
+    @PutMapping("/update-password/admin")
+    public void updatePasswordAdmin(@RequestBody UserDto.UpdateProfile body, @RequestParam("id") Integer id){
+        this.userService.updatePasswordAdmin(body, id);
+    }
 }

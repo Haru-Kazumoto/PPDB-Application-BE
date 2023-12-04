@@ -1,6 +1,7 @@
 package dev.pack.modules.student;
 
 import dev.pack.modules.enums.FormPurchaseType;
+import dev.pack.modules.enums.Grade;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -18,5 +19,8 @@ public class PrintCardDto {
 
     @NotNull
     Integer stagingId;
+
+    @NotNull
+    Grade grade;
 }
 

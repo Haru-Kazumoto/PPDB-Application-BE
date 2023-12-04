@@ -2,6 +2,7 @@ package dev.pack.modules.student_payments;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import dev.pack.modules.enums.FormPurchaseType;
+import dev.pack.modules.enums.Grade;
 import dev.pack.modules.enums.PaymentMethod;
 import dev.pack.modules.lookup.Lookup;
 import dev.pack.modules.student.Student;
@@ -29,6 +30,9 @@ public class StudentPayments extends Timestamps {
     private Integer batch_id;
     private String image;
     private FormPurchaseType type;
+
+//    @Enumerated(EnumType.STRING)
+//    private Grade grade;
 
     private String bank_name;
     private String bank_account;

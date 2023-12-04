@@ -1,5 +1,6 @@
 package dev.pack.modules.alur_ppdb;
 
+import dev.pack.modules.enums.Grade;
 import dev.pack.payloads.HttpResponse;
 import dev.pack.payloads.PayloadsResponse;
 import jakarta.validation.Valid;

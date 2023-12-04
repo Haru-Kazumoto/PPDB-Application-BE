@@ -3,7 +3,9 @@ package dev.pack.modules.registration_paths;
 import dev.pack.exception.DataNotFoundException;
 import dev.pack.modules.additional_prices.AdditionalPrices;
 import dev.pack.modules.additional_prices.ResponseAdditionalPriceDto;
+import dev.pack.modules.auth.AuthenticationService;
 import dev.pack.modules.enums.FormPurchaseType;
+import dev.pack.modules.enums.Grade;
 import dev.pack.modules.prices.PriceDetails;
 import dev.pack.modules.prices.ResponsePriceDetailsDto;
 import dev.pack.modules.registration_batch.RegistrationBatch;
@@ -11,6 +13,7 @@ import dev.pack.modules.registration_batch.RegistrationBatchRepository;
 import dev.pack.modules.registration_batch.ResponseRegistrationBatchDto;
 import dev.pack.modules.registration_general_information.RegistrationGeneralInformation;
 import dev.pack.modules.registration_general_information.ResponseGeneralInformationDto;
+import dev.pack.modules.user.User;
 import dev.pack.utils.Validator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -27,6 +30,7 @@ public class RegistrationPathsServiceImpl implements RegistrationPathsService {
 
     private final RegistrationPathsRepository registrationPathsRepository;
     private final RegistrationBatchRepository registrationBatchRepository;
+    private final AuthenticationService authenticationService;
     private final Validator validate;
 
     @Override
@@ -80,6 +84,7 @@ public class RegistrationPathsServiceImpl implements RegistrationPathsService {
         return ResponseRegistrationPathsDto.builder()
                 .id(registrationPaths.getId())
                 .name(registrationPaths.getName())
+                .grade(registrationPaths.getGrade())
                 .registrationBatches(registrationPaths.getRegistrationBatches().stream()
                         .map(this::mapToCustomResponseRegistrationBatch)
                         .collect(Collectors.toList()))
@@ -145,8 +150,14 @@ public class RegistrationPathsServiceImpl implements RegistrationPathsService {
     }
 
     @Override
-    public List<RegistrationPaths> index() {
-        return this.registrationPathsRepository.findAll();
+    public RegistrationPaths getPathByStudentSession() {
+        User user = this.authenticationService.decodeJwt();
+        return this.registrationPathsRepository.findById(user.getStudent().getPath_id()).orElseThrow();
+    }
+
+    @Override
+    public List<RegistrationPaths> index(Grade grade) {
+        return this.registrationPathsRepository.findAllByGrade(grade);
     }
 
     @Override

@@ -1,6 +1,7 @@
 package dev.pack.modules.registration_paths;
 
 import dev.pack.modules.enums.FormPurchaseType;
+import dev.pack.modules.enums.Grade;
 import dev.pack.modules.registration_batch.RegistrationBatch;
 import dev.pack.modules.registration_batch.RegistrationBatchDto;
 import jakarta.annotation.Nullable;
@@ -35,10 +36,7 @@ public class RegistrationPathDto {
 
         private Double price;
 
-        //uncomment this if necessary
-//        @Nullable()
-//        @Null()
-//        private List<RegistrationBatchDto> registrationBatches;
+        private Grade grade;
     }
 
     @Data

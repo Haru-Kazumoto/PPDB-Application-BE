@@ -13,7 +13,7 @@ import java.util.Date;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping(path = "/api/v${application.version}/lookup")
+@RequestMapping(path = "/api/v${application.version}/admin/lookup")
 public class LookupController {
     private final HttpResponse http;
     private final LookupService lookupService;
@@ -24,6 +24,15 @@ public class LookupController {
                 HttpStatus.OK.value(),
                 new Date(),
                 this.lookupService.findByType(value)
+        );
+    }
+
+    @GetMapping(path = "/index-major")
+    public ResponseEntity<?> indexMajor(){
+        return this.http.response(
+                HttpStatus.OK.value(),
+                new Date(),
+                this.lookupService.findAllMajor()
         );
     }
 

@@ -1,6 +1,8 @@
 package dev.pack.modules.registration_batch;
 
 import com.fasterxml.jackson.annotation.*;
+import dev.pack.modules.enums.Grade;
+import dev.pack.modules.exam_information.ExamInformation;
 import dev.pack.modules.registration_paths.RegistrationPaths;
 import dev.pack.modules.enums.Banks;
 import dev.pack.modules.student.Student;
@@ -28,23 +30,25 @@ public class RegistrationBatch implements Serializable {
     private String name;
     private Integer index;
     private Integer max_quota;
-
-    @Column(unique = true)
     private String batchCode;
-
     private Date start_date;
     private Date end_date;
 
+    @Enumerated(value = EnumType.STRING)
     private Banks bank_name;
+
     private String bank_user;
     private Double price;
     private String bank_account;
-
+    private Integer path_id;
     private Boolean isOpen = true;
 
-    private Long countStudent;
+    @Enumerated(EnumType.STRING)
+    private Grade grade;
 
-    public RegistrationBatch(Integer id, String name, Integer index, Integer max_quota, String batchCode, Date start_date, Date end_date, Banks bank_name, String bank_user, Double price, String bank_account, Long countStudent) {
+    private Integer countStudent=0;
+
+    public RegistrationBatch(Integer id, String name, Integer index, Integer max_quota, String batchCode, Date start_date, Date end_date, Banks bank_name, String bank_user, Double price, String bank_account, Integer countStudent) {
         this.id = id;
         this.name = name;
         this.index = index;
@@ -65,7 +69,6 @@ public class RegistrationBatch implements Serializable {
                     "handler"
             })
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "path_id")
     @JsonIgnore
     private RegistrationPaths registrationPaths;
 
@@ -79,6 +82,13 @@ public class RegistrationBatch implements Serializable {
     @JsonIgnore
     private List<Student> students;
 
+    @OneToMany(
+            cascade = CascadeType.ALL,
+            orphanRemoval = true,
+            mappedBy = "registrationBatch"
+    )
+    @JsonIgnore
+    private List<ExamInformation> examInformations;
 
     @OneToMany(
             fetch = FetchType.LAZY,

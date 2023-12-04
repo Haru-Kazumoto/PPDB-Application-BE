@@ -14,4 +14,9 @@ public class LookupServiceImpl implements LookupService{
     public List<Lookup> findByType(String type) {
         return this.lookupRepository.getLookupByType(type);
     }
+
+    @Override
+    public List<Lookup> findAllMajor() {
+        return this.lookupRepository.findAllMajor();
+    }
 }

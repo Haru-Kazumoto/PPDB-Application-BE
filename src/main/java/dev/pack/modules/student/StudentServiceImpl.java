@@ -7,6 +7,7 @@ import dev.pack.exception.MaxQuotaReachedException;
 import dev.pack.filestorage.FilesStorageService;
 import dev.pack.modules.auth.AuthenticationService;
 import dev.pack.modules.enums.FormPurchaseType;
+import dev.pack.modules.enums.Grade;
 import dev.pack.modules.enums.PaymentMethod;
 import dev.pack.modules.lookup.Lookup;
 import dev.pack.modules.lookup.LookupRepository;
@@ -14,6 +15,8 @@ import dev.pack.modules.registration_batch.ChooseBatchDto;
 import dev.pack.modules.registration_batch.GetStagingStatusDto;
 import dev.pack.modules.registration_batch.RegistrationBatch;
 import dev.pack.modules.registration_batch.RegistrationBatchRepository;
+import dev.pack.modules.registration_paths.RegistrationPaths;
+import dev.pack.modules.registration_paths.RegistrationPathsRepository;
 import dev.pack.modules.staging.Staging;
 import dev.pack.modules.staging.StagingRepository;
 import dev.pack.modules.student_logs.StudentLogs;
@@ -21,9 +24,9 @@ import dev.pack.modules.student_logs.StudentLogsRepository;
 import dev.pack.modules.student_payments.StudentPaymentRepository;
 import dev.pack.modules.student_payments.StudentPayments;
 import dev.pack.modules.user.User;
-import dev.pack.utils.ExportService;
 import dev.pack.utils.Filenameutils;
 import dev.pack.utils.StudentUtils;
+import dev.pack.utils.excel.ExcelService;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -32,7 +35,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.time.LocalDateTime;
 import java.time.Year;
 import java.util.*;
 
@@ -43,6 +45,7 @@ public class StudentServiceImpl implements StudentService{
     private final StudentRepository studentRepository;
     private final LookupRepository lookupRepository;
     private final RegistrationBatchRepository registrationBatchRepo;
+    private final RegistrationPathsRepository registrationPathsRepository;
     private final StudentLogsRepository studentLogsRepository;
     private final StagingRepository stagingRepository;
     private final AuthenticationService authenticationService;
@@ -50,7 +53,7 @@ public class StudentServiceImpl implements StudentService{
     private final FilesStorageService filesStorageService;
     private final StudentUtils studentUtils;
     private final StudentAchievementRepository studentAchievementRepository;
-    private final ExportService exportService;
+    private final ExcelService excelService;
 
     @Override
     @Transactional
@@ -88,49 +91,49 @@ public class StudentServiceImpl implements StudentService{
 
     @Override
     public void exportExcelDataStudent(HttpServletResponse response, Integer batchId) throws IOException {
-        this.registrationBatchRepo.findById(batchId)
-                .orElseThrow(() -> new DataNotFoundException("Id gelombang tidak ditemukan"));
+        try{
+            this.registrationBatchRepo.findById(batchId)
+                    .orElseThrow(() -> new DataNotFoundException("Id gelombang tidak ditemukan"));
 
-        List<Student> students = this.registrationBatchRepo.findAllStudentByBatchId(batchId);
+            List<Student> students = this.registrationBatchRepo.findAllStudentByBatchId(batchId);
 
-        List<String> headers = Arrays.asList(
-                "Id",
-                "Formulir-id",
-                "Pendaftar ke",
-                "Nama siswa",
-                "Nomor telepon",
-                "Alamat",
-                "Jenjang",
-                "Jenis kelamin",
-                "Agama",
-                "Asal sekolah",
-                "Jurusan",
-                "Tanggal mendaftar"
-        );
+            List<String> headers = Arrays.asList(
+                    "Formulir-id",
+                    "Pendaftar ke",
+                    "Nama siswa",
+                    "Nomor telepon",
+                    "Alamat",
+                    "Jenis kelamin",
+                    "Agama",
+                    "Asal sekolah",
+                    "Jurusan",
+                    "Tanggal mendaftar"
+            );
 
-        List<List<Object>> data = new ArrayList<>();
-        Year year = Year.now();
+            List<List<Object>> data = new ArrayList<>();
+            Year year = Year.now();
 
-        for(Student student : students){
-            List<Object> rowData = new ArrayList<>();
+            for(Student student : students){
+                List<Object> rowData = new ArrayList<>();
 
-            rowData.add(student.getId());
-            rowData.add(student.getFormulirId());
-            rowData.add(student.getLastInsertedNumber());
-            rowData.add(student.getName());
-            rowData.add(student.getPhone());
-            rowData.add(student.getAddress());
-            rowData.add(student.getGrade());
-            rowData.add(student.getGender());
-            rowData.add(student.getReligion());
-            rowData.add(student.getSchool_origin());
-            rowData.add(student.getMajor());
-            rowData.add(student.getRegistrationDate());
+                rowData.add(student.getFormulirId());
+                rowData.add(student.getLastInsertedNumber());
+                rowData.add(student.getName());
+                rowData.add(student.getPhone());
+                rowData.add(student.getAddress());
+                rowData.add(student.getGender());
+                rowData.add(student.getReligion());
+                rowData.add(student.getSchool_origin());
+                rowData.add(student.getMajor());
+                rowData.add(student.getRegistrationDate());
 
-            data.add(rowData);
+                data.add(rowData);
+            }
+
+            excelService.generateExcelCustomHeader(response,String.format("Data siswa %s",year), headers, data);
+        } catch (Exception err){
+            throw new IOException(err);
         }
-
-        exportService.generateExcelCustomHeader(response,String.format("Data siswa %s",year), headers, data);
     }
 
     @Override
@@ -144,14 +147,21 @@ public class StudentServiceImpl implements StudentService{
         RegistrationBatch registrationBatch = this.registrationBatchRepo.findById(batchDto.getBatch_id())
                 .orElseThrow(() -> new DataNotFoundException("Gelombang tidak ditemukan"));
 
+        RegistrationPaths registrationPaths = this.registrationPathsRepository.findById(registrationBatch.getPath_id())
+                .orElseThrow(() -> new DataNotFoundException("Jalur tidak ditemukan."));
+
         User user = this.authenticationService.decodeJwt();
 
-        Staging staging = this.stagingRepository.findByName("Pilih Jalur PPDB")
+        Staging staging = this.stagingRepository.findByName("Pilih Jalur PPDB", batchDto.getGrade())
                 .orElseThrow(() -> new DataNotFoundException("Data yang diinput invalid"));
 
+//        RegistrationBatch registrationBatchBySession = this.registrationBatchRepo.findById(user.getStudent().getBatch_id()).orElseThrow();
+
         if(batchDto.getType() == FormPurchaseType.PEMBELIAN){
-            staging = this.stagingRepository.findByName("Pilih Gelombang PPDB")
-                    .orElseThrow(() -> new DataNotFoundException("Data yang diinput invalid"));;
+            staging = this.stagingRepository.findByName("Pilih Gelombang PPDB", batchDto.getGrade())
+                    .orElseThrow(() -> new DataNotFoundException("Data yang diinput invalid"));
+
+            user.getStudent().setPathName(registrationBatch.getName());
         }
 
         long lastInsertedCount = this.registrationBatchRepo.countStudentsForRunningNumber(batchDto.getBatch_id());
@@ -164,7 +174,9 @@ public class StudentServiceImpl implements StudentService{
 
         long runningNumber = lastInsertedCount+1;
 
-        String formulirId = studentUtils.generateIdStudent(runningNumber,registrationBatch.getBatchCode());
+        String formattedRunningNumber = String.format("%02d", runningNumber);
+
+        String formulirId = studentUtils.generateIdStudent(formattedRunningNumber,registrationBatch.getBatchCode());
 
         student.setFormulirId(formulirId);
         student.setLastInsertedNumber(String.valueOf(runningNumber));
@@ -172,6 +184,11 @@ public class StudentServiceImpl implements StudentService{
         student.setBatch_id(batchDto.getBatch_id());
         student.setStatus("REGISTERED");
         student.setPath_id(registrationBatch.getRegistrationPaths().getId());
+//        student.setPathName(registrationBatchBySession.getName());
+        Integer runningCount = registrationBatch.getCountStudent() + 1;
+
+        registrationBatch.setCountStudent(runningCount);
+        registrationPaths.setCountStudent(runningCount);
 
         this.studentRepository.save(student);
 
@@ -208,11 +225,6 @@ public class StudentServiceImpl implements StudentService{
                 .orElseThrow(() -> new DataNotFoundException(ErrorMessage.BATCH_ID_NOT_FOUND));
     }
 
-    private Staging getStagingByName(String name) {
-        return stagingRepository.findByName(name)
-                .orElseThrow(() -> new DataNotFoundException(ErrorMessage.STAGING_NAME_NOT_FOUND));
-    }
-
     @Override
     public StudentOffsetResponse getCurrentRegistrationStatus(GetStagingStatusDto stagingStatusDto) {
         User user = this.authenticationService.decodeJwt();
@@ -241,7 +253,6 @@ public class StudentServiceImpl implements StudentService{
             registrationBatch = currentState.getRegistrationBatch();
         }
 
-
         return StudentOffsetResponse.builder()
                 .studentLogs(studentLogs)
                 .currentState(currentState)
@@ -266,11 +277,11 @@ public class StudentServiceImpl implements StudentService{
         User user = this.authenticationService.decodeJwt();
 
         // ganti disini kalo stagingnya berubah
-        Staging staging = this.stagingRepository.findByName("Pembelian Formulir Pendaftaran")
+        Staging staging = this.stagingRepository.findByName("Pembelian Formulir Pendaftaran", user.getStudent().getGrade())
                 .orElseThrow(() -> new DataNotFoundException("Data yang diinput invalid"));
 
         if(uploadPaymentDto.getType() == FormPurchaseType.PENGEMBALIAN){
-            staging = this.stagingRepository.findByName("Transaksi Pengembalian")
+            staging = this.stagingRepository.findByName("Transaksi Pengembalian", user.getStudent().getGrade())
                     .orElseThrow(() -> new DataNotFoundException("Data yang diinput invalid"));
         }
 
@@ -284,7 +295,6 @@ public class StudentServiceImpl implements StudentService{
 
         Student student = user.getStudent();
         student.setStatus("WAITING_PAYMENT");
-
 
         this.studentRepository.save(student);
 
@@ -327,25 +337,31 @@ public class StudentServiceImpl implements StudentService{
 
     public StudentLogs printCard(PrintCardDto printCardDto) {
         User user = this.authenticationService.decodeJwt();
-        Staging staging = this.stagingRepository.findByNameAndStagingType("Cetak Kartu Peserta",printCardDto.getType()).orElseThrow(() -> new DataNotFoundException("Staging tidak ditemukan"));
 
-        StudentLogs studentLogs = this.studentLogsRepository.findByStudentAndStagingByType(user.getStudent(),staging,printCardDto.getType()).orElse(null);
+        Staging staging = this.stagingRepository.findByNameAndStagingType("Cetak Formulir",printCardDto.getType(), user.getStudent().getGrade())
+                .orElseThrow(() -> new DataNotFoundException("Staging tidak ditemukan"));
+
+        StudentLogs studentLogs = this.studentLogsRepository.findByStudentAndStagingByType(user.getStudent(),staging,printCardDto.getType())
+                .orElse(null);
 
         if(studentLogs != null) {
             return studentLogs;
         }
-        String remark = "Cetak Kartu Peserta Proses Pembelian";
+        String remark = "Cetak Formulir Proses Pembelian";
         String status = "PRINT_CARD_PURCHASED";
 
         if(printCardDto.getType() == FormPurchaseType.PENGEMBALIAN) {
-            remark = "Cetak Kartu Peserta Proses Pengembalian";
+            remark = "Cetak Formulir Proses Pengembalian";
             status = "PRINT_CARD_RETURNING";
         }
 
 
         return this.studentLogsRepository.save(
                 StudentLogs.builder()
-                        .registrationBatch(RegistrationBatch.builder().id(user.getStudent().getBatch_id()).build())
+                        .registrationBatch(
+                                RegistrationBatch.builder()
+                                        .id(user.getStudent().getBatch_id())
+                                        .build())
                         .path_id(user.getStudent().getPath_id())
                         .remark(remark)
                         .staging(staging)
@@ -373,7 +389,7 @@ public class StudentServiceImpl implements StudentService{
             stagingName = "Transaksi Pengembalian";
         }
 
-        Staging staging = this.stagingRepository.findByNameAndStagingType(stagingName,studentPayments.getType()).orElseThrow(() -> new DataNotFoundException("Staging tidak ditemukan"));
+        Staging staging = this.stagingRepository.findByNameAndStagingType(stagingName,studentPayments.getType(), student.getGrade()).orElseThrow(() -> new DataNotFoundException("Staging tidak ditemukan"));
 
         studentPayments.setStatus("PAYMENT_CONFIRMED");
         this.studentPaymentRepository.save(studentPayments);
@@ -393,12 +409,6 @@ public class StudentServiceImpl implements StudentService{
 
     @Override
     public Student getStudentById(Integer studentId) {
-//        this.registrationBatchRepo.findById(batchId)
-//                .orElseThrow(() -> new DataNotFoundException("Id gelombang tidak ditemukan."));
-//
-//        this.studentRepository.findById(studentId).orElseThrow(() -> new DataNotFoundException("Id student tidak ditemukan"));
-//
-//        return this.studentRepository.findStudentByIdAnAndBAndBatch_id(studentId, batchId);
 
         return this.studentRepository.findById(studentId).orElseThrow(() -> new DataNotFoundException("Id tidka ditemukan"));
     }
@@ -407,20 +417,21 @@ public class StudentServiceImpl implements StudentService{
     @Transactional
     public StudentLogs updateBio(UpdateBioDto updateBioDto) {
         User user = this.authenticationService.decodeJwt();
-        Staging staging = this.stagingRepository.findByName("Isi Biodata")
+        Staging staging = this.stagingRepository.findByName("Isi Biodata", user.getStudent().getGrade())
                 .orElseThrow(() -> new DataNotFoundException("Data yang diinput invalid"));
 
-        String profile_pictire = this.saveFileToDisk(updateBioDto.getProfile_picture());
+        String profile_picture = this.saveFileToDisk(updateBioDto.getProfile_picture());
         String birth_card = this.saveFileToDisk(updateBioDto.getBirth_card());
         String family_card = this.saveFileToDisk(updateBioDto.getFamily_card());
 
-
         Student student = user.getStudent();
-        if(student == null){
+        if(student == null) {
             throw new DataNotFoundException("Akses hanya diberikan untuk Siswa pendaftar");
         }
 
-        student.setProfile_picture(profile_pictire);
+        RegistrationBatch registrationBatch = this.registrationBatchRepo.findById(student.getBatch_id()).orElseThrow();
+
+        student.setProfile_picture(profile_picture);
         student.setFamily_card(family_card);
         student.setBirth_card(birth_card);
         student.setNisn(updateBioDto.getNisn());
@@ -446,8 +457,8 @@ public class StudentServiceImpl implements StudentService{
         student.setMother_phone(updateBioDto.getMother_phone());
         student.setMother_job(updateBioDto.getMother_job());
         student.setMother_address(updateBioDto.getMother_address());
+        student.setPathName(registrationBatch.getName());
         student.setStatus("FILLING_BIO");
-
 
         this.studentRepository.save(student);
 
@@ -462,26 +473,35 @@ public class StudentServiceImpl implements StudentService{
                         .student(student)
                         .build()
         );
-
     }
 
     @Override
     public StudentLogs chooseMajor(ChooseMajorDto majorDto) {
         User user = this.authenticationService.decodeJwt();
         Staging staging = this.stagingRepository
-                .findByNameAndStagingType("Pilih Jurusan",majorDto.getType())
+                .findByNameAndStagingType("Pilih Jurusan",majorDto.getType(), Grade.SMK)
                 .orElseThrow(() -> new DataNotFoundException("Data yang diinput invalid"));
 
         String status = "CHOOSING_FIRST_MAJORS";
         Student student = user.getStudent();
-        if(majorDto.getType() == FormPurchaseType.PENGEMBALIAN){
-            status = "CHOOSING_FIX_MAJOR";
-        }
 
         student.setStatus(status);
         student.setMajor(majorDto.getMajor());
-        this.studentRepository.save(student);
 
+        String[] majors = majorDto.getMajor().split(",");
+        if(majors.length > 0){
+            student.setFirst_major(majors[0].trim());
+        }
+        if(majors.length > 1){
+            student.setSecond_major(majors[1].trim());
+        }
+
+        if(majorDto.getType() == FormPurchaseType.PENGEMBALIAN){
+            status = "CHOOSING_FIX_MAJOR";
+            student.setFix_major(majorDto.getMajor());
+        }
+
+        this.studentRepository.save(student);
 
         return this.studentLogsRepository.save(
                 StudentLogs.builder()

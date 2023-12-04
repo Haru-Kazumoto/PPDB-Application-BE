@@ -1,5 +1,6 @@
 package dev.pack.modules.alur_ppdb;
 
+import dev.pack.modules.enums.Grade;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -19,6 +20,9 @@ public class AlurPpdbDto {
         @NotEmpty
         @NotNull
         private String content;
+
+        @NotNull
+        private Grade grade;
     }
 
     @Data

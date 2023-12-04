@@ -25,7 +25,7 @@ public class StudentDto {
         private String name;
         @NotNull()
         @NotEmpty()
-        private String grade;
+        private Grade grade;
         @NotEmpty()
         @NotNull()
         private String address;

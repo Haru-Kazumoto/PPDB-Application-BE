@@ -7,7 +7,7 @@ public class ErrorMessage {
     public static final String USERNAME_NOT_FOUND = "Username not found";
     public static final String USER_ID_NOT_FOUND = "User with id %s is not found";
     public static final String USERNAME_EXISTS = "Username already exists";
-    public static final String NUMBER_ALREADY_EXISTS = "Number already exists";
+    public static final String NUMBER_ALREADY_EXISTS = "Nomor telah digunakan";
     public static final String ROLE_NOT_FOUND = "Role name is not found";
 
     //STUDENT

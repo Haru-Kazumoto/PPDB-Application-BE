@@ -1,6 +1,7 @@
 package dev.pack.modules.registration_paths;
 
 import dev.pack.modules.enums.FormPurchaseType;
+import dev.pack.modules.enums.Grade;
 import dev.pack.payloads.HttpResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -34,8 +35,13 @@ public class RegistrationPathsController {
     }
 
     @GetMapping(path = "/index")
-    public ResponseEntity<?> index(){
-        return http.response(OK.value(), new Date(), this.registrationPathsService.index());
+    public ResponseEntity<?> index(@RequestParam("grade") Grade grade){
+        return http.response(OK.value(), new Date(), this.registrationPathsService.index(grade));
+    }
+
+    @GetMapping(path = "/get-path-by-session")
+    public ResponseEntity<?> getById(){
+        return http.response(OK.value(), new Date(), this.registrationPathsService.getPathByStudentSession());
     }
 
     @GetMapping(path = "/get-type")

@@ -3,6 +3,7 @@ package dev.pack.seeder;
 import com.github.javafaker.Faker;
 import dev.pack.modules.auth.AuthenticationService;
 import dev.pack.modules.auth.RegisterRequest;
+import dev.pack.modules.enums.Grade;
 import dev.pack.modules.enums.Role;
 import dev.pack.modules.student.StudentDto;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +17,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
-//@Component
+@Component
 @RequiredArgsConstructor
 public class StudentSeeder implements ApplicationRunner {
 
@@ -39,7 +40,7 @@ public class StudentSeeder implements ApplicationRunner {
     private void seedStudents() {
         Faker faker = new Faker();
 
-        for (int i = 0; i < 1000; i++) {
+        for (int i = 0; i < 20; i++) {
             String name = faker.name().fullName();
             String phonenumber = faker.phoneNumber()
                     .phoneNumber()
@@ -52,11 +53,12 @@ public class StudentSeeder implements ApplicationRunner {
             this.authenticationService.registerStudent(
                     RegisterRequest.User.builder()
                             .username(phonenumber)
-                            .password("123456")
+                            .password("1234")
                             .role(Role.USER)
                             .studentData(StudentDto.OnRegister.builder()
                                     .address(address)
                                     .school_origin("YATINDO")
+                                    .grade(Grade.SMK)
                                     .name(name)
                                     .build())
                             .build()

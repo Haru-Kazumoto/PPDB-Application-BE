@@ -1,5 +1,7 @@
 package dev.pack.modules.alur_ppdb;
 
+import dev.pack.modules.enums.Grade;
+
 import java.util.List;
 
 public interface AlurPpdbService {

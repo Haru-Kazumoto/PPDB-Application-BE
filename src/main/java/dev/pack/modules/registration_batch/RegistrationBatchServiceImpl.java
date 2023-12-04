@@ -2,13 +2,17 @@ package dev.pack.modules.registration_batch;
 
 import dev.pack.exception.DataNotFoundException;
 import dev.pack.modules.enums.FormPurchaseType;
+import dev.pack.modules.enums.Grade;
 import dev.pack.modules.registration_paths.RegistrationPaths;
 import dev.pack.modules.registration_paths.RegistrationPathsRepository;
 import dev.pack.modules.student.CountStudents;
 import dev.pack.modules.student.Student;
 import dev.pack.modules.student.StudentRepository;
 import dev.pack.utils.Validator;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -28,7 +32,8 @@ public class RegistrationBatchServiceImpl implements RegistrationBatchService{
     private final Validator validate;
 
     @Override
-    public RegistrationBatch store(RegistrationBatch bodyCreate, Integer regisId) {
+    @Transactional
+    public RegistrationBatch store(RegistrationBatch bodyCreate) {
         this.validate.dateValidate(
                 bodyCreate.getStart_date(),
                 bodyCreate.getEnd_date()
@@ -38,10 +43,11 @@ public class RegistrationBatchServiceImpl implements RegistrationBatchService{
             throw new IllegalArgumentException("Max quota only have 500 set");
         }
 
-        RegistrationPaths registrationPaths = registrationPathsRepository.findById(regisId)
+        RegistrationPaths registrationPaths = registrationPathsRepository.findById(bodyCreate.getPath_id())
                 .orElseThrow(() -> new DataNotFoundException(REGISTRATION_PATHS_ID_NOT_FOUND));
 
         bodyCreate.setRegistrationPaths(registrationPaths);
+        bodyCreate.setGrade(registrationPaths.getGrade());
 
         return this.registrationBatchRepository.save(bodyCreate);
     }
@@ -52,16 +58,18 @@ public class RegistrationBatchServiceImpl implements RegistrationBatchService{
     }
 
     @Override
-    public List<RegistrationBatch> index(Integer regisPathsId) {
-        this.registrationPathsRepository.findById(regisPathsId)
-                .orElseThrow(() -> new DataNotFoundException(REGISTRATION_PATHS_ID_NOT_FOUND));
-
-        return this.registrationBatchRepository.findTotalPendaftarPerBatchModel(regisPathsId);
+    public List<GetAllRegistrationBatch> index(Integer regisPathsId) {
+        return this.registrationBatchRepository.findAllRegistrationBatch(regisPathsId);
     }
 
     @Override
     public List<RegistrationBatch> getAllBatchByType(FormPurchaseType type) {
         return this.registrationBatchRepository.getAllByType(type);
+    }
+
+    @Override
+    public List<RegistrationBatch> getAllBatchByGrade(Grade grade) {
+        return this.registrationBatchRepository.getAllBatchByGrade(grade);
     }
 
     @Override
@@ -103,9 +111,9 @@ public class RegistrationBatchServiceImpl implements RegistrationBatchService{
 
     @Override
     public List<RegistrationBatch> countStudents(Integer regisPathsId) {
-        List<RegistrationBatch> resultData = this.registrationBatchRepository.findTotalPendaftarPerBatchModel(regisPathsId);
-        updateCountStudent(regisPathsId);
-        return resultData;
+//        List<RegistrationBatch> resultData = this.registrationBatchRepository.findTotalPendaftarPerBatchModel(regisPathsId);
+//        updateCountStudent(regisPathsId);
+        return null;
     }
 
     public void updateCountStudent(Integer regisPathsId){
@@ -132,8 +140,8 @@ public class RegistrationBatchServiceImpl implements RegistrationBatchService{
     }
 
     @Override
-    public List<Student> getStudentByBatchId(Integer batchId) {
-        return this.registrationBatchRepository.findAllStudentByBatchId(batchId);
+    public Page<GetAllStudentsByBatch> getStudentByBatchId(Integer batchId, Pageable pageable) {
+        return this.registrationBatchRepository.findAllStudentByBatchId(batchId, pageable);
     }
 
     @Override

@@ -2,6 +2,7 @@ package dev.pack.modules.alur_ppdb;
 
 import dev.pack.exception.DataNotFoundException;
 import dev.pack.exception.ErrorSoftDelete;
+import dev.pack.modules.enums.Grade;
 import dev.pack.modules.user.User;
 import dev.pack.modules.user.UserRepository;
 import jakarta.transaction.Transactional;

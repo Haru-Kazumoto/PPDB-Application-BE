@@ -1,5 +1,6 @@
 package dev.pack.modules.alur_ppdb;
 
+import dev.pack.modules.enums.Grade;
 import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -15,6 +16,9 @@ public interface AlurPpdbRepository extends JpaRepository<AlurPpdb, Integer> {
 
     @Query("SELECT t FROM AlurPpdb t WHERE t.title = :title")
     Optional<AlurPpdb> findByTitle(@Param("title") String title);
+
+    @Query("SELECT a FROM AlurPpdb a WHERE a.grade = :grade")
+    List<AlurPpdb> findAllByGrade(@Param("grade")Grade grade);
 
     @Transactional
     @Modifying
