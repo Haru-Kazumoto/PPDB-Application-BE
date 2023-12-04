@@ -1,8 +1,8 @@
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/PPDB-DB
-    username: postgres
-    password: admin
+    url: ${DATABASE_URL:jdbc:postgresql://localhost:5431/PPDB-DB}
+    username: ${DATABASE_USERNAME:postgres}
+    password: ${DATABASE_PASSWORD:admin}
     driver-class-name: org.postgresql.Driver # Use the PostgreSQL driver class
     hikari:
       connection-timeout: 3000
@@ -10,20 +10,26 @@ spring:
       minimum-idle: 4
       idle-timeout: 600000
       pool-name: PPDB Application Pool
+
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: ${DDL_AUTO:update}
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect # Use PostgreSQL dialect
         format_sql: true
     database: postgresql # Set the database type to PostgreSQL
+
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+
   servlet:
     multipart:
-      max-file-size: 5MB
+      max-request-size: 5MB
+
 application:
   version: 1
-
   security:
     jwt:
       secret-key: 404E635266556A586E3272357538782F413F4428472B4B6250645367566b5970
