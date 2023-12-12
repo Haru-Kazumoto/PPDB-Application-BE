@@ -104,13 +104,21 @@ public class RegistrationBatchServiceImpl implements RegistrationBatchService{
     }
 
     @Override
+    @Transactional
     public Map<String, String> delete(Integer id) {
         Map<String, String> res = new HashMap<>();
 
-        this.registrationBatchRepository.findById(id)
-                .orElseThrow(() -> new DataNotFoundException(BATCH_ID_NOT_FOUND));
-        this.registrationBatchRepository.deleteById(id);
+        RegistrationBatch registrationBatch = this.registrationBatchRepository.findById(id).orElseThrow(() -> new DataNotFoundException(BATCH_ID_NOT_FOUND));
+        FormPurchaseType type = registrationBatch.getRegistrationPaths().getType();
+        List<Student> students = this.studentRepository.findAllStudentByBatchId(id);
 
+        for(Student student : students){
+            this.studentLogsRepository.deleteStudentLogsByStudentId(student.getId(), type);
+            this.studentPaymentRepository.deleteStudentPaymentsByStudentId(student.getId(), type);
+            this.studentRepository.deleteStudentFromBatchByStudentId(student.getId());
+        }
+
+        this.registrationBatchRepository.delete(registrationBatch);
         res.put("status","SUCCESS");
 
         return res;
@@ -158,7 +166,7 @@ public class RegistrationBatchServiceImpl implements RegistrationBatchService{
                 () -> new DataNotFoundException("Id siswa tidak ditemukan")
         );
 
-        if(student.getBatch_id() == null && student.getPath_id() == null){
+        if(student.getBatch_id() == null && student.getPath_id() == null) {
             throw new DataNotFoundException("Siswa tidak atau belum terdaftar di gelombang manapun");
         }
 

@@ -13,6 +13,10 @@ import dev.pack.modules.registration_batch.RegistrationBatchRepository;
 import dev.pack.modules.registration_batch.ResponseRegistrationBatchDto;
 import dev.pack.modules.registration_general_information.RegistrationGeneralInformation;
 import dev.pack.modules.registration_general_information.ResponseGeneralInformationDto;
+import dev.pack.modules.student.Student;
+import dev.pack.modules.student.StudentRepository;
+import dev.pack.modules.student_logs.StudentLogsRepository;
+import dev.pack.modules.student_payments.StudentPaymentRepository;
 import dev.pack.modules.user.User;
 import dev.pack.utils.Validator;
 import lombok.RequiredArgsConstructor;
@@ -30,6 +34,9 @@ public class RegistrationPathsServiceImpl implements RegistrationPathsService {
 
     private final RegistrationPathsRepository registrationPathsRepository;
     private final RegistrationBatchRepository registrationBatchRepository;
+    private final StudentLogsRepository studentLogsRepository;
+    private final StudentRepository studentRepository;
+    private final StudentPaymentRepository studentPaymentRepository;
     private final AuthenticationService authenticationService;
     private final Validator validate;
 
@@ -178,6 +185,14 @@ public class RegistrationPathsServiceImpl implements RegistrationPathsService {
     public void delete(Integer id) {
         RegistrationPaths registrationPathsData = this.registrationPathsRepository.findById(id)
                 .orElseThrow(() -> new DataNotFoundException(REGISTRATION_PATHS_ID_NOT_FOUND));
+
+        var students = this.studentRepository.findAllStudentByPathId(id);
+
+        for(Student student : students){
+            this.studentPaymentRepository.deleteStudentPaymentsByStudentId(student.getId(), registrationPathsData.getType());
+            this.studentLogsRepository.deleteStudentLogsByStudentId(student.getId(), registrationPathsData.getType());
+            this.studentRepository.deleteStudentFromBatchByStudentId(student.getId());
+        }
 
         this.registrationPathsRepository.delete(registrationPathsData);
     }

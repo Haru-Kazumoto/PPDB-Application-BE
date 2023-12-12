@@ -29,6 +29,16 @@ public interface StudentRepository extends JpaRepository<Student, Integer> {
     @Query("UPDATE Student s SET s.batch_id = null, s.path_id = null, s.formulirId = NULL, s.lastInsertedNumber = NULL WHERE s.id = :studentId")
     void deleteStudentFromBatchByStudentId(@Param("studentId") Integer studentId);
 
+    @Query("""
+        SELECT s FROM Student s WHERE s.batch_id = :batchId
+    """)
+    List<Student> findAllStudentByBatchId(Integer batchId);
+
+    @Query("""
+        SELECT s FROM Student s WHERE s.path_id = :pathId
+    """)
+    List<Student> findAllStudentByPathId(Integer pathId);
+
     @Query("SELECT COUNT(s) FROM Student s WHERE s.batch_id = :batchId AND s.status = 'PEMBAYARAN_TERKONFIRMASI'")
     long countConfirmedPaymentStudentsByBatchId(@Param("batchId") Integer batchId);
 
