@@ -101,7 +101,7 @@ public class StudentController {
 
 
     @PutMapping(path = "/confirm-payment")
-    public ResponseEntity<?> confirmPayment(@RequestBody ConfirmPaymentDto paymentDto) {
+    public ResponseEntity<?> confirmPayment(@RequestBody PaymentDto.Confirm paymentDto) {
         return this.http.response(HttpStatus.OK.value(),new Date(),this.studentService.confirmPayment(
                 paymentDto
         ));

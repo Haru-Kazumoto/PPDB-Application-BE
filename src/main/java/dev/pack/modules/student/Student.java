@@ -44,33 +44,33 @@ public class Student extends Timestamps implements Serializable {
     @Column(unique = true)
     private String nisn;
 
-    private String name; //2
+    private String name;
 
     @Enumerated(EnumType.STRING)
     private Grade grade;
 
     @Column(unique = true)
-    private String phone; //1
+    private String phone;
 
     private String surname;
 
     private String gender;
     private String religion;
     private String birth_place;
-    private Date birth_date; //custom
-    private String address; //3
+    private Date birth_date;
+    private String address;
     private String province;
     private String city;
     private String district;
     private String sub_district;
     private String postal_code;
-    private String school_origin; //4
+    private String school_origin;
 
     private String profile_picture;
 
     private String status;
 
-    private String major; //mengambil data type dari lookup
+    private String major;
     private String first_major;
     private String second_major;
     private String fix_major;
@@ -81,6 +81,9 @@ public class Student extends Timestamps implements Serializable {
     private Integer path_id;
     private Integer batch_id;
     private String pathName;
+
+    private Boolean isPurchasingDone = false;
+    private Boolean isReturningDone = false;
 
     private String birth_card;
     private String family_card;
