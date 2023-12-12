@@ -122,8 +122,7 @@ public class AuthenticationService {
 
     var user = userRepository.
             findByUsername(request.getUsername()).
-            orElseThrow(() -> new UserNotFoundException(AUTHENTICATION_BAD_CREDENTIAL));
-
+            orElseThrow(() -> new UserNotFoundException("Username atau password invalid"));
 
     var jwtToken = jwtService.generateToken(user);
     var refreshToken = jwtService.generateRefreshToken(user);

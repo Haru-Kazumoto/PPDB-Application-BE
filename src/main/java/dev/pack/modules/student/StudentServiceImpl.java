@@ -155,8 +155,6 @@ public class StudentServiceImpl implements StudentService{
         Staging staging = this.stagingRepository.findByName("Pilih Jalur PPDB", batchDto.getGrade())
                 .orElseThrow(() -> new DataNotFoundException("Data yang diinput invalid"));
 
-//        RegistrationBatch registrationBatchBySession = this.registrationBatchRepo.findById(user.getStudent().getBatch_id()).orElseThrow();
-
         if(batchDto.getType() == FormPurchaseType.PEMBELIAN){
             staging = this.stagingRepository.findByName("Pilih Gelombang PPDB", batchDto.getGrade())
                     .orElseThrow(() -> new DataNotFoundException("Data yang diinput invalid"));

@@ -13,7 +13,6 @@ import java.util.Map;
 
 public interface RegistrationBatchService {
 
-//    RegistrationBatch store(RegistrationBatch bodyCreate, Integer regisId);
     RegistrationBatch store(RegistrationBatch bodyCreate);
 
     List<GetAllRegistrationBatch> index(Integer regisPathsId);
@@ -28,17 +27,13 @@ public interface RegistrationBatchService {
 
     List<RegistrationBatch> getAllGelombangWhereIsOpen(Boolean condition);
 
-    List<RegistrationBatch> countStudents(Integer regisPathsId);
-
     List<RegistrationBatch> getAllGelombangByPathsId(Integer pathsId);
-
-    List<RegistrationBatch> getRegisBatchByType(FormPurchaseType type);
 
     Page<GetAllStudentsByBatch> getStudentByBatchId(Integer batchId, Pageable pageable);
 
     CountStudents.DetailBatch countStudent(Integer batchId);
 
-    List<CountStudents.InfoBatch> countAllStudents();
-
     List<RegistrationBatch> getAllBatchByGrade(Grade grade);
+
+    Map<String, String> deleteStudentFromBatch(Integer studentId);
 }
