@@ -8,6 +8,10 @@ import dev.pack.modules.registration_paths.RegistrationPathsRepository;
 import dev.pack.modules.student.CountStudents;
 import dev.pack.modules.student.Student;
 import dev.pack.modules.student.StudentRepository;
+import dev.pack.modules.student_logs.StudentLogs;
+import dev.pack.modules.student_logs.StudentLogsRepository;
+import dev.pack.modules.student_payments.StudentPaymentRepository;
+import dev.pack.modules.student_payments.StudentPayments;
 import dev.pack.utils.Validator;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +22,7 @@ import org.springframework.stereotype.Service;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import static dev.pack.constraint.ErrorMessage.*;
 
@@ -27,6 +32,8 @@ public class RegistrationBatchServiceImpl implements RegistrationBatchService{
 
     private final RegistrationBatchRepository registrationBatchRepository;
     private final RegistrationPathsRepository registrationPathsRepository;
+    private final StudentLogsRepository studentLogsRepository;
+    private final StudentPaymentRepository studentPaymentRepository;
     private final StudentRepository studentRepository;
 
     private final Validator validate;
@@ -97,27 +104,24 @@ public class RegistrationBatchServiceImpl implements RegistrationBatchService{
     }
 
     @Override
+    @Transactional
     public Map<String, String> delete(Integer id) {
         Map<String, String> res = new HashMap<>();
 
-        this.registrationBatchRepository.findById(id)
-                .orElseThrow(() -> new DataNotFoundException(BATCH_ID_NOT_FOUND));
-        this.registrationBatchRepository.deleteById(id);
+        RegistrationBatch registrationBatch = this.registrationBatchRepository.findById(id).orElseThrow(() -> new DataNotFoundException(BATCH_ID_NOT_FOUND));
+        FormPurchaseType type = registrationBatch.getRegistrationPaths().getType();
+        List<Student> students = this.studentRepository.findAllStudentByBatchId(id);
 
+        for(Student student : students){
+            this.studentLogsRepository.deleteStudentLogsByStudentId(student.getId(), type);
+            this.studentPaymentRepository.deleteStudentPaymentsByStudentId(student.getId(), type);
+            this.studentRepository.deleteStudentFromBatchByStudentId(student.getId());
+        }
+
+        this.registrationBatchRepository.delete(registrationBatch);
         res.put("status","SUCCESS");
 
         return res;
-    }
-
-    @Override
-    public List<RegistrationBatch> countStudents(Integer regisPathsId) {
-//        List<RegistrationBatch> resultData = this.registrationBatchRepository.findTotalPendaftarPerBatchModel(regisPathsId);
-//        updateCountStudent(regisPathsId);
-        return null;
-    }
-
-    public void updateCountStudent(Integer regisPathsId){
-        this.registrationBatchRepository.updateCountStudent(regisPathsId);
     }
 
     @Override
@@ -132,11 +136,6 @@ public class RegistrationBatchServiceImpl implements RegistrationBatchService{
     public RegistrationBatch getById(Integer id) {
         return this.registrationBatchRepository.getRegistrationBatchById(id)
                 .orElseThrow(() -> new DataNotFoundException(BATCH_ID_NOT_FOUND));
-    }
-
-    @Override
-    public List<RegistrationBatch> getRegisBatchByType(FormPurchaseType type) {
-        return this.registrationBatchRepository.findRegistrationBatchByPathType(type);
     }
 
     @Override
@@ -159,7 +158,38 @@ public class RegistrationBatchServiceImpl implements RegistrationBatchService{
     }
 
     @Override
-    public List<CountStudents.InfoBatch> countAllStudents() {
-        return null;
+    @Transactional
+    public Map<String, String> deleteStudentFromBatch(Integer studentId) {
+        Map<String, String> response = new HashMap<>();
+
+        Student student = this.studentRepository.findById(studentId).orElseThrow(
+                () -> new DataNotFoundException("Id siswa tidak ditemukan")
+        );
+
+        if(student.getBatch_id() == null && student.getPath_id() == null) {
+            throw new DataNotFoundException("Siswa tidak atau belum terdaftar di gelombang manapun");
+        }
+
+        RegistrationPaths registrationPaths = this.registrationPathsRepository.findById(student.getPath_id())
+                .orElseThrow(() -> new DataNotFoundException("Jalur pendaftaran id tidak ditemukan"));
+
+        this.studentLogsRepository.deleteStudentLogsByStudentId(studentId, registrationPaths.getType());
+        this.studentPaymentRepository.deleteStudentPaymentsByStudentId(studentId, registrationPaths.getType());
+
+        List<StudentLogs> logs = this.studentLogsRepository.findAllLatestLogByStudentId(studentId);
+
+        if(registrationPaths.getType().equals(FormPurchaseType.PEMBELIAN)){
+            this.studentRepository.deleteStudentFromBatchByStudentId(studentId);
+        } else if (registrationPaths.getType().equals(FormPurchaseType.PENGEMBALIAN)){
+            StudentLogs latestLogs = logs.get(0);
+
+            student.setPath_id(latestLogs.getPath_id());
+            student.setBatch_id(latestLogs.getStudent().getBatch_id());
+        }
+
+        response.put("status","SUCCESS");
+        response.put("message","Siswa berhasil dihapus dari gelombang");
+
+        return response;
     }
 }

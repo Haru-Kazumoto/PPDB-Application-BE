@@ -94,15 +94,6 @@ public class RegistrationBatchController {
         return this.registrationBatchService.delete(id);
     }
 
-    @GetMapping(path = "/count")
-    public ResponseEntity<?> countStudentsByBatch(@RequestParam("regisPathsId")Integer regisPathsId){
-        return this.http.response(
-                OK.value(),
-                new Date(),
-                this.registrationBatchService.countStudents(regisPathsId)
-        );
-    }
-
     @GetMapping(path = "/get-batch-by-pathsId")
     public ResponseEntity<?> getAllRegisBatchByRegisPathsId(
             @RequestParam(name = "pathsId", defaultValue = "0") int pathsId
@@ -155,6 +146,11 @@ public class RegistrationBatchController {
                 new Date(),
                 this.registrationBatchService.countStudent(batchId)
         );
+    }
+
+    @DeleteMapping(path = "/delete-student-from-batch")
+    public Map<String, String> deleteStudentFromBatchIdByStudentId(@RequestParam("studentId") Integer studentId){
+        return this.registrationBatchService.deleteStudentFromBatch(studentId);
     }
 
 }

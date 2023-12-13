@@ -30,9 +30,8 @@ public interface StudentService {
 
     Student getDetailStudentPengembalian(Integer studentId);
 
-    StudentLogs confirmPayment(ConfirmPaymentDto dto);
+    StudentLogs confirmPayment(PaymentDto.Confirm dto);
 
-//    Student getStudentById(Integer studentId, Integer batchId);
     Student getStudentById(Integer studentId);
 
     StudentLogs updateBio(UpdateBioDto updateBioDto);

@@ -8,7 +8,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
-import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
 
 import java.util.ArrayList;
@@ -41,11 +40,10 @@ public class LookupSeeder implements ApplicationRunner {
     private void seedMajor(){
         List<List<String>> lookups = new ArrayList<>();
 
-
-//        lookups.add(List.of("Teknik Jaringan dan Komputer Telekomunikasi","TJKT","MAJOR"));
-//        lookups.add(List.of("Teknik Kendaraan Ringan","TKR","MAJOR"));
-//        lookups.add(List.of("Teknik Audio dan Video","TAV","MAJOR"));
-//        lookups.add(List.of("Akuntansi Keuangan Lembaga","AKL","MAJOR"));
+        lookups.add(List.of("Teknik Jaringan dan Komputer Telekomunikasi","TJKT","MAJOR"));
+        lookups.add(List.of("Teknik Kendaraan Ringan","TKR","MAJOR"));
+        lookups.add(List.of("Teknik Audio dan Video","TAV","MAJOR"));
+        lookups.add(List.of("Akuntansi Keuangan Lembaga","AKL","MAJOR"));
 
         lookups.add(List.of("Islam","ISLAM","RELIGION"));
         lookups.add(List.of("Kristen","KRISTEN","RELIGION"));

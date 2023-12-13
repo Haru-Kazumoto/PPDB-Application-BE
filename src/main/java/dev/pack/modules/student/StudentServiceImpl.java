@@ -155,8 +155,6 @@ public class StudentServiceImpl implements StudentService{
         Staging staging = this.stagingRepository.findByName("Pilih Jalur PPDB", batchDto.getGrade())
                 .orElseThrow(() -> new DataNotFoundException("Data yang diinput invalid"));
 
-//        RegistrationBatch registrationBatchBySession = this.registrationBatchRepo.findById(user.getStudent().getBatch_id()).orElseThrow();
-
         if(batchDto.getType() == FormPurchaseType.PEMBELIAN){
             staging = this.stagingRepository.findByName("Pilih Gelombang PPDB", batchDto.getGrade())
                     .orElseThrow(() -> new DataNotFoundException("Data yang diinput invalid"));
@@ -337,6 +335,7 @@ public class StudentServiceImpl implements StudentService{
 
     public StudentLogs printCard(PrintCardDto printCardDto) {
         User user = this.authenticationService.decodeJwt();
+        Student student = user.getStudent();
 
         Staging staging = this.stagingRepository.findByNameAndStagingType("Cetak Formulir",printCardDto.getType(), user.getStudent().getGrade())
                 .orElseThrow(() -> new DataNotFoundException("Staging tidak ditemukan"));
@@ -349,12 +348,13 @@ public class StudentServiceImpl implements StudentService{
         }
         String remark = "Cetak Formulir Proses Pembelian";
         String status = "PRINT_CARD_PURCHASED";
+        student.setIsPurchasingDone(true);
 
         if(printCardDto.getType() == FormPurchaseType.PENGEMBALIAN) {
             remark = "Cetak Formulir Proses Pengembalian";
             status = "PRINT_CARD_RETURNING";
+            student.setIsReturningDone(true);
         }
-
 
         return this.studentLogsRepository.save(
                 StudentLogs.builder()
@@ -372,7 +372,7 @@ public class StudentServiceImpl implements StudentService{
         );
     }
 
-    public StudentLogs confirmPayment(ConfirmPaymentDto dto) {
+    public StudentLogs confirmPayment(PaymentDto.Confirm dto) {
         User user = this.authenticationService.decodeJwt();
 
         if(Objects.equals(user.getRole_id().getRole_name(), "User")){

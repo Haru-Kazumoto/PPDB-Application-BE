@@ -32,6 +32,15 @@ import java.util.List;
 @ControllerAdvice
 public class GlobalException extends ResponseEntityExceptionHandler {
 
+    @Override
+    protected ResponseEntity<Object> handleExceptionInternal(Exception ex, Object body, HttpHeaders headers, HttpStatusCode statusCode, WebRequest request) {
+        ErrorResponse errorResponse = ErrorResponse.builder()
+                .statusResponse(HttpStatus.INTERNAL_SERVER_ERROR.name())
+                .message("Error server, silahkan hubungi admin atau tunggu beberapa saat")
+                .build();
+        return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     @ExceptionHandler(BadCredentialsException.class)
     public ResponseEntity<ErrorResponse> handleBadCredentialError(BadCredentialsException ex){
