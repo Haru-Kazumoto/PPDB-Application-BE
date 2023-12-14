@@ -12,6 +12,7 @@ import dev.pack.modules.student_logs.StudentLogs;
 import dev.pack.modules.student_logs.StudentLogsRepository;
 import dev.pack.modules.student_payments.StudentPaymentRepository;
 import dev.pack.modules.student_payments.StudentPayments;
+import dev.pack.utils.StudentUtils;
 import dev.pack.utils.Validator;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -37,6 +38,7 @@ public class RegistrationBatchServiceImpl implements RegistrationBatchService{
     private final StudentRepository studentRepository;
 
     private final Validator validate;
+    private final StudentUtils studentUtils;
 
     @Override
     @Transactional
@@ -180,7 +182,10 @@ public class RegistrationBatchServiceImpl implements RegistrationBatchService{
 
         if(registrationPaths.getType().equals(FormPurchaseType.PEMBELIAN)){
             this.studentRepository.deleteStudentFromBatchByStudentId(studentId);
+            this.adjustRunningNumberOnDelete(student.getBatch_id(), student.getLastInsertedNumber());
+
         } else if (registrationPaths.getType().equals(FormPurchaseType.PENGEMBALIAN)){
+            this.adjustRunningNumberOnDelete(student.getBatch_id(), student.getLastInsertedNumber());
             StudentLogs latestLogs = logs.get(0);
 
             student.setPath_id(latestLogs.getPath_id());
@@ -192,4 +197,21 @@ public class RegistrationBatchServiceImpl implements RegistrationBatchService{
 
         return response;
     }
+
+    private void adjustRunningNumberOnDelete(Integer batchId, String deletedRunningNumber){
+        List<Student> studentsToAdjusts = this.studentRepository.findStudentsToAdjust(batchId, deletedRunningNumber);
+        RegistrationBatch registrationBatch = this.registrationBatchRepository.findById(batchId).orElseThrow();
+
+        for(Student studentToAdjust : studentsToAdjusts){
+            long newRunningNumber = Long.parseLong(studentToAdjust.getLastInsertedNumber()) - 1;
+            String formattedRunningNumber = String.format("%03d", newRunningNumber);
+            String newFormulirId = this.studentUtils.generateIdStudent(formattedRunningNumber, registrationBatch.getBatchCode());
+
+            studentToAdjust.setLastInsertedNumber(String.valueOf(newRunningNumber));
+            studentToAdjust.setFormulirId(newFormulirId);
+        }
+
+        this.studentRepository.saveAll(studentsToAdjusts);
+    }
+
 }
