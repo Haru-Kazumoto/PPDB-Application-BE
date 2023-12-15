@@ -1,0 +1,1 @@
+import{k as s}from"./index-7cb0f30c.js";function u(n){const t=n||!0;return r=>typeof r=="string"?r.trim().length>0?null:t:Array.isArray(r)?r.length>0?null:t:r==null||r===!1?t:null}function c(n,t){const r=t||!0;return(i,e)=>!e||!(n in e)?r:i===e[n]?null:r}const f=async n=>(await s.put("/v1/admin/update-profile?id=",n)).data;export{f as c,u as i,c as m};

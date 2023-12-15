@@ -1,0 +1,1 @@
+import{r}from"./index-21f1c136.js";const a=async t=>{const s=await r.post("/v1/auth/register-student",t);return console.log(t),s.data},n=async t=>(await r.post("/v1/auth/register",t)).data;export{n as a,a as r};
