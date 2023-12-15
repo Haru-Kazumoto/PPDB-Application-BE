@@ -1,0 +1,1 @@
+function o(t){const n=t||!0;return r=>typeof r=="string"?r.trim().length>0?null:n:Array.isArray(r)?r.length>0?null:n:r==null||r===!1?n:null}function u(t,n){const r=n||!0;return(e,i)=>!i||!(t in i)?r:e===i[t]?null:r}export{o as i,u as m};

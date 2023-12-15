@@ -1,0 +1,1 @@
+import{o as r}from"./index-af637abb.js";const o=async t=>{const s=await r.post("/v1/auth/register-student",t);return console.log(t),s.data},a=async t=>(await r.post("/v1/auth/register",t)).data;export{a,o as r};
