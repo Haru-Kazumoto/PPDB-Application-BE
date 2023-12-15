@@ -29,7 +29,7 @@ public interface StudentRepository extends JpaRepository<Student, Integer> {
     List<Student> findStudentsToAdjust(@Param("batchId") Integer batchId, @Param("deletedRunningNumber") String deletedRunningNumber);
 
     @Modifying
-    @Query("UPDATE Student s SET s.batch_id = null, s.path_id = null, s.formulirId = NULL, s.lastInsertedNumber = NULL, s.status = NULL, s.registration_date = NULL WHERE s.id = :studentId")
+    @Query("UPDATE Student s SET s.batch_id = null, s.path_id = null, s.formulirId = NULL, s.lastInsertedNumber = NULL WHERE s.id = :studentId")
     void deleteStudentFromBatchByStudentId(@Param("studentId") Integer studentId);
 
     @Query("""
