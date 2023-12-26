@@ -512,6 +512,8 @@ public class StudentServiceImpl implements StudentService{
         student.setMother_address(updateBioDto.getMother_address());
         student.setStatus("FILLING_BIO");
 
+        this.studentRepository.save(student);
+
         response.put("message","Data siswa berhasil di perbarui!");
         response.put("status", HttpStatus.OK.name());
 

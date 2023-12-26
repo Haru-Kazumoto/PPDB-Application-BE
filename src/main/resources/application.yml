@@ -1,8 +1,11 @@
 spring:
   datasource:
+#    url: jdbc:postgresql://localhost:5432/PPDB-DB
     url: ${DATABASE_URL:jdbc:postgresql://localhost:5431/PPDB-DB}
     username: ${DATABASE_USERNAME:postgres}
     password: ${DATABASE_PASSWORD:admin}
+#    username: postgres
+#    password: admin
     driver-class-name: org.postgresql.Driver # Use the PostgreSQL driver class
     hikari:
       connection-timeout: 3000
@@ -13,7 +16,8 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: ${DDL_AUTO:update}
+      ddl-auto: ${DDL_AUTO:none}
+#      ddl-auto: update
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect # Use PostgreSQL dialect

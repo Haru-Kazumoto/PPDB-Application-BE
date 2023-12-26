@@ -178,9 +178,9 @@ public class StudentController {
     @PutMapping(path = "/update-bio")
     public ResponseEntity<?> updateBio(
             @RequestParam(value = "id") Integer id,
-            @RequestParam(value = "profile_picture") MultipartFile profile_picture,
-            @RequestParam(value = "family_card") MultipartFile family_card,
-            @RequestParam(value = "birth_card") MultipartFile birth_card,
+            @RequestParam(value = "profile_picture", required = false) MultipartFile profile_picture,
+            @RequestParam(value = "family_card", required = false) MultipartFile family_card,
+            @RequestParam(value = "birth_card", required = false) MultipartFile birth_card,
             @RequestParam(value = "nisn",required = false) String nisn,
             @RequestParam(value = "phone") String phone,
             @RequestParam(value = "name") String name,
