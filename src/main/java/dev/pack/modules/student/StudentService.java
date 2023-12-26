@@ -1,6 +1,5 @@
 package dev.pack.modules.student;
 
-import dev.pack.modules.enums.FormPurchaseType;
 import dev.pack.modules.registration_batch.ChooseBatchDto;
 import dev.pack.modules.registration_batch.GetStagingStatusDto;
 import dev.pack.modules.registration_batch.RegistrationBatch;
@@ -10,7 +9,7 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Optional;
+import java.util.Map;
 
 public interface StudentService {
 
@@ -34,7 +33,9 @@ public interface StudentService {
 
     Student getStudentById(Integer studentId);
 
-    StudentLogs updateBio(UpdateBioDto updateBioDto);
+    StudentLogs fillBio(UpdateBioDto updateBioDto);
+
+    Map<String, String> updateBio(Integer id, UpdateBioDto updateBioDto);
 
     StudentLogs chooseMajor(ChooseMajorDto major);
 
@@ -47,6 +48,5 @@ public interface StudentService {
     List<StudentPayments> getAllStudentPayments(Integer batchId, Integer studentId);
 
     void exportExcelDataStudent(HttpServletResponse response, Integer batchId) throws IOException;
-
 
 }

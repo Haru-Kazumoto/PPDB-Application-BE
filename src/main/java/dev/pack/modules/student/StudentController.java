@@ -17,7 +17,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.text.ParseException;
-import java.time.LocalDateTime;
 import java.util.Date;
 
 @RestController
@@ -115,8 +114,70 @@ public class StudentController {
         return this.http.response(HttpStatus.OK.value(), new Date(), this.studentService.getAllStudentPayments(batchId,studentId));
     }
 
+    @PutMapping(path = "/fill-bio")
+    public ResponseEntity<?> fillBio(
+            @RequestParam(value = "profile_picture") MultipartFile profile_picture,
+            @RequestParam(value = "family_card") MultipartFile family_card,
+            @RequestParam(value = "birth_card") MultipartFile birth_card,
+            @RequestParam(value = "nisn",required = false) String nisn,
+            @RequestParam(value = "phone") String phone,
+            @RequestParam(value = "name") String name,
+            @RequestParam(value = "surname",required = false) String surname,
+            @RequestParam(value = "gender") String gender,
+            @RequestParam(value = "religion") String religion,
+            @RequestParam(value = "birth_place") String birth_place,
+            @RequestParam(value = "birth_date") String birth_date,
+            @RequestParam(value = "address") String address,
+            @RequestParam(value = "province") String province,
+            @RequestParam(value = "city") String city,
+            @RequestParam(value = "district") String district,
+            @RequestParam(value = "sub_district") String sub_district,
+            @RequestParam(value = "postal_code",required = false) String postal_code,
+            @RequestParam(value = "school_origin") String school_origin,
+            @RequestParam(value = "dad_name") String dad_name,
+            @RequestParam(value = "dad_phone") String dad_phone,
+            @RequestParam(value = "dad_job",required = false) String dad_job,
+            @RequestParam(value = "dad_address",required = false) String dad_address,
+            @RequestParam(value = "mother_name") String mother_name,
+            @RequestParam(value = "mother_phone") String mother_phone,
+            @RequestParam(value = "mother_job",required = false) String mother_job,
+            @RequestParam(value = "mother_address",required = false) String mother_address
+    ) throws ParseException {
+        return this.http.response(HttpStatus.OK.value(),new Date(),this.studentService.fillBio(
+                UpdateBioDto.builder()
+                        .name(name)
+                        .profile_picture(profile_picture)
+                        .family_card(family_card)
+                        .birth_card(birth_card)
+                        .nisn(nisn)
+                        .phone(phone)
+                        .surname(surname)
+                        .gender(gender)
+                        .religion(religion)
+                        .birth_place(birth_place)
+                        .birth_date(StringUtils.toDate(birth_date))
+                        .address(address)
+                        .province(province)
+                        .city(city)
+                        .district(district)
+                        .sub_district(sub_district)
+                        .postal_code(postal_code)
+                        .school_origin(school_origin)
+                        .dad_name(dad_name)
+                        .dad_phone(dad_phone)
+                        .dad_job(dad_job)
+                        .dad_address(dad_address)
+                        .mother_name(mother_name)
+                        .mother_phone(mother_phone)
+                        .mother_job(mother_job)
+                        .mother_address(mother_address)
+                        .build()
+        ));
+    }
+
     @PutMapping(path = "/update-bio")
-    public ResponseEntity<?> updateCV(
+    public ResponseEntity<?> updateBio(
+            @RequestParam(value = "id") Integer id,
             @RequestParam(value = "profile_picture") MultipartFile profile_picture,
             @RequestParam(value = "family_card") MultipartFile family_card,
             @RequestParam(value = "birth_card") MultipartFile birth_card,
@@ -145,6 +206,7 @@ public class StudentController {
             @RequestParam(value = "mother_address",required = false) String mother_address
     ) throws ParseException {
         return this.http.response(HttpStatus.OK.value(),new Date(),this.studentService.updateBio(
+                id,
                 UpdateBioDto.builder()
                         .name(name)
                         .profile_picture(profile_picture)

@@ -30,6 +30,7 @@ import dev.pack.utils.excel.ExcelService;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -409,13 +410,12 @@ public class StudentServiceImpl implements StudentService{
 
     @Override
     public Student getStudentById(Integer studentId) {
-
-        return this.studentRepository.findById(studentId).orElseThrow(() -> new DataNotFoundException("Id tidka ditemukan"));
+        return this.studentRepository.findById(studentId).orElseThrow(() -> new DataNotFoundException("Id tidak ditemukan"));
     }
 
     @Override
     @Transactional
-    public StudentLogs updateBio(UpdateBioDto updateBioDto) {
+    public StudentLogs fillBio(UpdateBioDto updateBioDto) {
         User user = this.authenticationService.decodeJwt();
         Staging staging = this.stagingRepository.findByName("Isi Biodata", user.getStudent().getGrade())
                 .orElseThrow(() -> new DataNotFoundException("Data yang diinput invalid"));
@@ -473,6 +473,49 @@ public class StudentServiceImpl implements StudentService{
                         .student(student)
                         .build()
         );
+    }
+
+    @Override
+    public Map<String, String> updateBio(Integer id, UpdateBioDto updateBioDto) {
+        Student student = this.studentRepository.findById(id).orElseThrow();
+        Map<String, String> response = new HashMap<>();
+
+        String updated_profile_picture = this.saveFileToDisk(updateBioDto.getProfile_picture());
+        String updated_birth_card = this.saveFileToDisk(updateBioDto.getBirth_card());
+        String updated_family_card = this.saveFileToDisk(updateBioDto.getFamily_card());
+
+        student.setProfile_picture(updated_profile_picture);
+        student.setFamily_card(updated_family_card);
+        student.setBirth_card(updated_birth_card);
+        student.setNisn(updateBioDto.getNisn());
+        student.setName(updateBioDto.getName());
+        student.setPhone(updateBioDto.getPhone());
+        student.setSurname(updateBioDto.getSurname());
+        student.setGender(updateBioDto.getGender());
+        student.setReligion(updateBioDto.getReligion());
+        student.setBirth_place(updateBioDto.getBirth_place());
+        student.setBirth_date(updateBioDto.getBirth_date());
+        student.setAddress(updateBioDto.getAddress());
+        student.setProvince(updateBioDto.getProvince());
+        student.setCity(updateBioDto.getCity());
+        student.setDistrict(updateBioDto.getDistrict());
+        student.setSub_district(updateBioDto.getSub_district());
+        student.setPostal_code(updateBioDto.getPostal_code());
+        student.setSchool_origin(updateBioDto.getSchool_origin());
+        student.setDad_name(updateBioDto.getDad_name());
+        student.setDad_phone(updateBioDto.getDad_phone());
+        student.setDad_job(updateBioDto.getDad_job());
+        student.setDad_address(updateBioDto.getDad_address());
+        student.setMother_name(updateBioDto.getMother_name());
+        student.setMother_phone(updateBioDto.getMother_phone());
+        student.setMother_job(updateBioDto.getMother_job());
+        student.setMother_address(updateBioDto.getMother_address());
+        student.setStatus("FILLING_BIO");
+
+        response.put("message","Data siswa berhasil di perbarui!");
+        response.put("status", HttpStatus.OK.name());
+
+        return response;
     }
 
     @Override
