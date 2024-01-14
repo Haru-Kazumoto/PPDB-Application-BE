@@ -3,8 +3,6 @@ package dev.pack.modules.registration_batch;
 import dev.pack.modules.enums.FormPurchaseType;
 import dev.pack.modules.enums.Grade;
 import dev.pack.modules.student.CountStudents;
-import dev.pack.modules.student.Student;
-import jakarta.servlet.Registration;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -31,9 +29,10 @@ public interface RegistrationBatchService {
 
     Page<GetAllStudentsByBatch> getStudentByBatchId(Integer batchId, Pageable pageable);
 
-    CountStudents.DetailBatch countStudent(Integer batchId);
+    CountPerBatch countStudent(Integer batchId);
 
     List<RegistrationBatch> getAllBatchByGrade(Grade grade);
 
     Map<String, String> deleteStudentFromBatch(Integer studentId);
+
 }

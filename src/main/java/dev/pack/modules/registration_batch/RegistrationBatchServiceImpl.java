@@ -145,18 +145,14 @@ public class RegistrationBatchServiceImpl implements RegistrationBatchService{
         return this.registrationBatchRepository.findAllStudentByBatchId(batchId, pageable);
     }
 
+    //TODO : - Nomor formulir acak acakan [BUG - no implemented yet]
+    //- Tambah 1 field update untuk nomor telepon siswa dari admin [NEW - on progress]
+    //- Lepas require field untuk biaya pendaftaran formulir [NEW - not implemented yet]
+    //- Jumlah pendaftar [NEW - SOLVED]
+
     @Override
-    public CountStudents.DetailBatch countStudent(Integer batchId) {
-        RegistrationBatch data = this.registrationBatchRepository.findById(batchId)
-                .orElseThrow(() -> new DataNotFoundException(BATCH_ID_NOT_FOUND));
-
-        long total = this.studentRepository.countStudentsByBatchId(data.getId());
-        long accepted = this.studentRepository.countConfirmedPaymentStudentsByBatchId(data.getId());
-
-        return CountStudents.DetailBatch.builder()
-                .totalStudents(total)
-                .studentAccepted(accepted)
-                .build();
+    public CountPerBatch countStudent(Integer batchId) {
+        return this.studentRepository.countStudentDetailPerBatch(batchId);
     }
 
     @Override

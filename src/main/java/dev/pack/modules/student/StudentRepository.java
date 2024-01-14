@@ -2,6 +2,7 @@ package dev.pack.modules.student;
 
 import dev.pack.modules.dashboard_statistic.BaseDTO;
 import dev.pack.modules.enums.FormPurchaseType;
+import dev.pack.modules.registration_batch.CountPerBatch;
 import dev.pack.modules.registration_paths.RegistrationPaths;
 import dev.pack.modules.student_logs.StudentLogs;
 import dev.pack.modules.student_payments.StudentPayments;
@@ -22,7 +23,11 @@ public interface StudentRepository extends JpaRepository<Student, Integer> {
 
     Optional<Student> findByNisn(String nisn);
 
-    @Query("SELECT COUNT(s) FROM Student s WHERE s.batch_id = :batchId")
+    //TESTING
+//    @Query("SELECT COUNT(s) FROM Student s WHERE s.batch_id = :batchId")
+    @Query("""
+        SELECT COUNT(sl) FROM StudentLogs sl WHERE sl.registrationBatch.id = :batchId
+    """)
     long countStudentsByBatchId(@Param("batchId") Integer batchId);
 
     @Query("SELECT s FROM Student s WHERE s.batch_id = :batchId AND s.lastInsertedNumber > :deletedRunningNumber")
@@ -42,8 +47,39 @@ public interface StudentRepository extends JpaRepository<Student, Integer> {
     """)
     List<Student> findAllStudentByPathId(Integer pathId);
 
-    @Query("SELECT COUNT(s) FROM Student s WHERE s.batch_id = :batchId AND s.status = 'PEMBAYARAN_TERKONFIRMASI'")
+    //TESTING
+    // @Query("SELECT COUNT(s) FROM Student s WHERE s.batch_id = :batchId AND s.status = 'PRINT_CARD_PURCHASED'")
+    // @Query("SELECT COUNT(s) FROM Student s JOIN StudentLogs sl WHERE s.batch_id = :batchId AND sl.status = 'PRINT_CARD_PURCHASED'")
+    @Query("""
+        SELECT COUNT(s) FROM Student s, StudentLogs sl WHERE s.batch_id = :batchId AND sl.status = 'PRINT_CARD_PURCHASED'
+    """)
     long countConfirmedPaymentStudentsByBatchId(@Param("batchId") Integer batchId);
+
+    @Query(
+        value = """
+            select
+            count(*) as registered,
+            count(
+              case when student_logs.status = 'PRINT_CARD_PURCHASED' then 1 end
+            ) as diterima
+          from
+            students
+            inner join student_logs on students.id = student_logs.student_id
+          where
+            student_logs.batch_id = :batchId
+            and student_logs.id = (
+              select
+                max(f.id)
+              from
+                student_logs f
+              where
+                f.student_id = students.id
+                and f.batch_id = student_logs.batch_id
+            )
+                """,
+        nativeQuery = true
+    )
+    CountPerBatch countStudentDetailPerBatch(@Param("batchId") Integer batchId);
 
     @Query("SELECT s FROM Student s WHERE s.grade = :grade ORDER BY s.id ASC")
     List<Student> findAllStudentByGrade(@Param("grade") String grade);

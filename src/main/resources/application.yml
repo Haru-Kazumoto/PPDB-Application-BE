@@ -1,11 +1,12 @@
 spring:
   datasource:
-#    url: jdbc:postgresql://localhost:5432/PPDB-DB
-    url: ${DATABASE_URL:jdbc:postgresql://localhost:5431/PPDB-DB}
-    username: ${DATABASE_USERNAME:postgres}
-    password: ${DATABASE_PASSWORD:admin}
-#    username: postgres
-#    password: admin
+    # ENABLE THIS AFTER DEVELOPMENT
+    # url: ${DATABASE_URL:jdbc:postgresql://localhost:5431/PPDB-DB}
+    # username: ${DATABASE_USERNAME:postgres}
+    # password: ${DATABASE_PASSWORD:admin}
+    url: jdbc:postgresql://localhost:5432/PPDB-DB
+    username: postgres
+    password: admin
     driver-class-name: org.postgresql.Driver # Use the PostgreSQL driver class
     hikari:
       connection-timeout: 3000
@@ -16,17 +17,17 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: ${DDL_AUTO:none}
-#      ddl-auto: update
+      # ddl-auto: ${DDL_AUTO:none}
+      ddl-auto: update
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect # Use PostgreSQL dialect
         format_sql: true
     database: postgresql # Set the database type to PostgreSQL
 
-  mvc:
-    pathmatch:
-      matching-strategy: ant_path_matcher
+  # mvc:
+  #   pathmatch:
+  #     matching-strategy: ant_path_matcher
 
   servlet:
     multipart:
@@ -40,3 +41,8 @@ application:
       expiration: 86400000 # a day
       refresh-token:
         expiration: 604800000 # 7 days
+
+# SWAGGER
+springdoc: 
+  api-docs: 
+    path: /api

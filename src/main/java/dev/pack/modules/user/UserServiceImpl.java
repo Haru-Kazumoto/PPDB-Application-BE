@@ -83,6 +83,7 @@ public class UserServiceImpl implements UserService{
         );
 
         user.setPassword(this.password.encode(body.getPassword()));
+        user.setUsername(body.getUsername());
 
         this.userRepository.save(user);
     }

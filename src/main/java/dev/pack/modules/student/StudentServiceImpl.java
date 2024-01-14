@@ -173,7 +173,7 @@ public class StudentServiceImpl implements StudentService{
 
         long runningNumber = lastInsertedCount+1;
 
-        String formattedRunningNumber = String.format("%02d", runningNumber);
+        String formattedRunningNumber = String.format("%03d", runningNumber);
 
         String formulirId = studentUtils.generateIdStudent(formattedRunningNumber,registrationBatch.getBatchCode());
 
@@ -183,7 +183,6 @@ public class StudentServiceImpl implements StudentService{
         student.setBatch_id(batchDto.getBatch_id());
         student.setStatus("REGISTERED");
         student.setPath_id(registrationBatch.getRegistrationPaths().getId());
-//        student.setPathName(registrationBatchBySession.getName());
         Integer runningCount = registrationBatch.getCountStudent() + 1;
 
         registrationBatch.setCountStudent(runningCount);

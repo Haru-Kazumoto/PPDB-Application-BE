@@ -152,5 +152,4 @@ public class RegistrationBatchController {
     public Map<String, String> deleteStudentFromBatchIdByStudentId(@RequestParam("studentId") Integer studentId){
         return this.registrationBatchService.deleteStudentFromBatch(studentId);
     }
-
 }
