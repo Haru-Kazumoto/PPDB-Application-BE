@@ -56,7 +56,6 @@ public class UserDto {
     @AllArgsConstructor
     @NoArgsConstructor
     public static class UpdateProfile{
-
         private String password;
         private String username;
 

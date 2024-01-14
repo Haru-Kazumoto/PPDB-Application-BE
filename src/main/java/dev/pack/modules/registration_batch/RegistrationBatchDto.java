@@ -48,7 +48,7 @@ public class RegistrationBatchDto {
         @NotNull()
         private String bank_user; //nama punya akun
 
-        @NotNull()
+//        @NotNull()
         private Double price;
 
         @NotNull()
@@ -91,7 +91,7 @@ public class RegistrationBatchDto {
         @NotNull()
         private String bank_user; //nama punya akun
 
-        @NotNull()
+//        @NotNull()
         private Double price;
 
         @NotNull()

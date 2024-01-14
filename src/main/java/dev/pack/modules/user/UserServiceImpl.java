@@ -82,8 +82,13 @@ public class UserServiceImpl implements UserService{
                 () -> new DataNotFoundException("Id akun siswa tidak ditemukan")
         );
 
-        user.setPassword(this.password.encode(body.getPassword()));
-        user.setUsername(body.getUsername());
+        if (!body.getUsername().isEmpty()) {
+            user.setUsername(body.getUsername());
+        }
+
+        if (!body.getPassword().isEmpty()) {
+            user.setPassword(password.encode(body.getPassword()));
+        }
 
         this.userRepository.save(user);
     }
