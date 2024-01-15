@@ -14,7 +14,7 @@ import static dev.pack.constraint.ErrorMessage.*;
 
 @Service
 @RequiredArgsConstructor
-public class UserServiceImpl implements UserService{
+public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder password;
@@ -22,7 +22,7 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public User createAdmin(User bodyAdminCreate) {
-        //Validating
+        // Validating
         checkDuplicateUsername(bodyAdminCreate.getUsername());
 
         String hashedPassword = this.password.encode(bodyAdminCreate.getPassword());
@@ -56,8 +56,7 @@ public class UserServiceImpl implements UserService{
         User user = this.userRepository
                 .findById(id)
                 .orElseThrow(
-                        () -> new DataNotFoundException(String.format(USER_ID_NOT_FOUND, id))
-                );
+                        () -> new DataNotFoundException(String.format(USER_ID_NOT_FOUND, id)));
 
         checkDuplicateUsernameForUpdate(user.getUsername(), bodyUpdate.getUsername());
 
@@ -69,7 +68,8 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public UserDto.Profile updatePasswordStudent(Integer id) {
-        User user = this.userRepository.findById(id).orElseThrow(() -> new DataNotFoundException("Id siswa tidak ditemukan"));
+        User user = this.userRepository.findById(id)
+                .orElseThrow(() -> new DataNotFoundException("Id siswa tidak ditemukan"));
 
         User data = this.userRepository.findById(user.getId()).orElseThrow();
 
@@ -79,14 +79,13 @@ public class UserServiceImpl implements UserService{
     @Override
     public void updatePasswordStudent(UserDto.UpdateProfile body, Integer id) {
         var user = this.userRepository.findUserByStudentId(id).orElseThrow(
-                () -> new DataNotFoundException("Id akun siswa tidak ditemukan")
-        );
+                () -> new DataNotFoundException("Id akun siswa tidak ditemukan"));
 
-        if (!body.getUsername().isEmpty()) {
+        if (body.getUsername().length() > 0) {
             user.setUsername(body.getUsername());
         }
 
-        if (!body.getPassword().isEmpty()) {
+        if (body.getPassword().length() > 0) {
             user.setPassword(password.encode(body.getPassword()));
         }
 
@@ -96,27 +95,26 @@ public class UserServiceImpl implements UserService{
     @Override
     public void updatePasswordAdmin(UserDto.UpdateProfile body, Integer id) {
         var user = this.userRepository.findById(id).orElseThrow(
-                () -> new DataNotFoundException("Id akun admin tidak ditemukan")
-        );
+                () -> new DataNotFoundException("Id akun admin tidak ditemukan"));
 
         user.setPassword(this.password.encode(body.getPassword()));
 
         this.userRepository.save(user);
     }
 
-    private UserDto.UpdateProfile mapToUpdatePasswordProfile(User data){
+    private UserDto.UpdateProfile mapToUpdatePasswordProfile(User data) {
         UserDto.UpdateProfile.UpdateProfileBuilder profileBuilder = UserDto.UpdateProfile.builder()
                 .password(data.getPassword());
 
         return profileBuilder.build();
     }
 
-    private UserDto.Profile mapToProfileResponse(User data){
+    private UserDto.Profile mapToProfileResponse(User data) {
         UserDto.Profile.ProfileBuilder profileBuilder = UserDto.Profile.builder()
                 .fullname(data.getFullname())
                 .username(data.getUsername());
 
-        if(data.getStudent() != null){
+        if (data.getStudent() != null) {
             profileBuilder.name(data.getStudent().getName());
             profileBuilder.address(data.getStudent().getAddress());
             profileBuilder.school_origin(data.getStudent().getSchool_origin());
@@ -129,9 +127,7 @@ public class UserServiceImpl implements UserService{
         return profileBuilder.build();
     }
 
-
-
-    private void checkDuplicateUsername(String username){
+    private void checkDuplicateUsername(String username) {
         this.userRepository
                 .findByUsername(username)
                 .ifPresent(user -> {
