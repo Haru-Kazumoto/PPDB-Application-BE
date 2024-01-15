@@ -27,6 +27,37 @@ public interface RegistrationBatchRepository extends JpaRepository<RegistrationB
     """)
     List<CountBatchRegistrar> findTotalPendaftarPerBatch();
 
+    // @Query(
+    //     value = """
+    //         select 
+    //             rb.id, 
+    //             rb."name", 
+    //             rb.grade,
+    //             rp."type",
+    //             count(sl.*) as total 
+    //         from 
+    //             registration_batch rb 
+    //             inner join student_logs sl on sl.batch_id = rb.id 
+    //             inner join students s on s.id = sl.student_id 
+    //             inner join registration_paths rp on rp.id = rb.registration_paths_id
+    //         where 
+    //             sl.id = (
+    //                 select 
+    //                 max(sl2.id) 
+    //                 from 
+    //                 student_logs sl2 
+    //                 where 
+    //                 sl2.student_id = s.id 
+    //                 and sl2.batch_id = sl.batch_id
+    //             ) 
+    //         group by 
+    //             rb.id, 
+    //             rb."name",
+    //             rb.grade,
+    //             rp."type"
+    //         """,
+    //     nativeQuery = true
+    // )
     @Query(
         value = """
             select 
@@ -34,31 +65,24 @@ public interface RegistrationBatchRepository extends JpaRepository<RegistrationB
                 rb."name", 
                 rb.grade,
                 rp."type",
-                count(sl.*) as total 
+                (
+                    select count(distinct sl.student_id)
+                    from student_logs sl 
+                    where sl.batch_id = rb.id
+                ) as total 
             from 
                 registration_batch rb 
-                inner join student_logs sl on sl.batch_id = rb.id 
-                inner join students s on s.id = sl.student_id 
                 inner join registration_paths rp on rp.id = rb.registration_paths_id
-            where 
-                sl.id = (
-                    select 
-                    max(sl2.id) 
-                    from 
-                    student_logs sl2 
-                    where 
-                    sl2.student_id = s.id 
-                    and sl2.batch_id = sl.batch_id
-                ) 
             group by 
-                rb.id, 
-                rb."name",
-                rb.grade,
-                rp."type"
-            """,
+            rb.id,
+            rb."name",
+            rb.grade,
+            rp."type" 
+        """,
         nativeQuery = true
     )
     List<CountAllBatchStudents> countAllTotalPendaftarPerBatch();
+    
 
     @Query("""
         select s from RegistrationBatch s
