@@ -36,6 +36,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.time.Year;
 import java.util.*;
 
@@ -112,6 +113,7 @@ public class StudentServiceImpl implements StudentService{
             );
 
             List<List<Object>> data = new ArrayList<>();
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
             Year year = Year.now();
 
             for(Student student : students){
@@ -126,7 +128,7 @@ public class StudentServiceImpl implements StudentService{
                 rowData.add(student.getReligion());
                 rowData.add(student.getSchool_origin());
                 rowData.add(student.getMajor());
-                rowData.add(student.getRegistrationDate());
+                rowData.add(dateFormat.format(student.getRegistrationDate()));
 
                 data.add(rowData);
             }
