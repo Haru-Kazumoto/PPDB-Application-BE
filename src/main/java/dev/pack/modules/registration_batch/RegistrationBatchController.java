@@ -148,6 +148,11 @@ public class RegistrationBatchController {
         );
     }
 
+    @GetMapping(path = "/all-batch")
+    public ResponseEntity<?> countAllDataStudents(){
+        return this.http.response(OK.value(), new Date(), this.registrationBatchService.countAllStudentsPerBatch());
+    }
+
     @DeleteMapping(path = "/delete-student-from-batch")
     public Map<String, String> deleteStudentFromBatchIdByStudentId(@RequestParam("studentId") Integer studentId){
         return this.registrationBatchService.deleteStudentFromBatch(studentId);

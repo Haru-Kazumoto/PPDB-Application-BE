@@ -57,10 +57,12 @@ public interface StudentRepository extends JpaRepository<Student, Integer> {
 
     @Query(
         value = """
-            select
+          select
             count(*) as registered,
             count(
-              case when student_logs.status = 'PRINT_CARD_PURCHASED' then 1 end
+              case when student_logs.status = 'PRINT_CARD_PURCHASED'
+              or
+              student_logs.status = 'PRINT_CARD_RETURNING' then 1 end
             ) as diterima
           from
             students
