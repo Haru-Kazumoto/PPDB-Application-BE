@@ -1,5 +1,7 @@
 package dev.pack.modules.registration_paths;
 
+import dev.pack.modules.dashboard_statistic.StatisticCount;
+import dev.pack.modules.dashboard_statistic.StatisticPaths;
 import dev.pack.modules.enums.FormPurchaseType;
 import dev.pack.modules.enums.Grade;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -21,23 +23,39 @@ public interface RegistrationPathsRepository extends JpaRepository<RegistrationP
     @Query("SELECT g FROM RegistrationPaths g WHERE g.grade = :grade")
     List<RegistrationPaths> findAllByGrade(Grade grade);
 
-//    List<RegistrationPaths> findAllBy
+    @Query(
+        value = """
+            select 
+                count(s.id) as registered, 
+                count(case when status = 'WAITING_PAYMENT' then 1 end) as waiting_payment,
+                (
+                    count (
+                        case when (
+                            select count(*)
+                            from student_payments sp where sp.student_id = s.id and sp.status = 'PAYMENT_CONFIRMED'
+                        ) > 1 then 1 end 
+                    )
+                ) as payment_confirmed
+            from students s        
+        """,
+        nativeQuery = true
+    )
+    StatisticCount countStatistics();
 
-//    @Query(value = """
-//        SELECT new dev.pack.modules.registration_paths.RegistrationPaths(
-//            rp.id,
-//            rp.name,
-//            rp.type,
-//            rp.start_date,
-//            rp.end_date,
-//            rp.price,
-//            COUNT(rb.id)
-//        )
-//        FROM RegistrationPaths rp
-//        LEFT JOIN RegistrationBatch rb ON rp.id = rb.registrationPaths.id
-//        GROUP BY rp.id, rp.name, rp.type, rp.start_date, rp.end_date, rp.price
-//    """)
-//    List<RegistrationPaths> calculateTotalStudentInPaths();
+    @Query(
+        value = """
+            select 
+                *,
+                (
+                    select count(distinct sl.student_id )
+                    from student_logs sl 
+                    where sl.path_id = rp.id
+                ) as registered
+            from registration_paths rp         
+        """,
+        nativeQuery = true
+    )
+    List<StatisticPaths> countPathStatistics();
 
     @Query(value = """
         select\s

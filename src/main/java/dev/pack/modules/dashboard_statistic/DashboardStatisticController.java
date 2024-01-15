@@ -18,13 +18,21 @@ public class DashboardStatisticController {
     private final DashboardStatisticService dashboardStatisticService;
     private final HttpResponse http;
 
-    @GetMapping("/get-stat")
-    public ResponseEntity<?> getDashboardStatistic(){
+    @GetMapping("/count-statistics")
+    public ResponseEntity<?> countStatistics(){
         return http.response(
                 HttpStatus.OK.value(),
                 new Date(),
-                this.dashboardStatisticService.getDashboardStatisticData()
+                this.dashboardStatisticService.getStatisticsCount()
         );
     }
 
+    @GetMapping("/count-all-path-statistics")
+    public ResponseEntity<?> countPathStatistics(){
+        return http.response(
+                HttpStatus.OK.value(),
+                new Date(),
+                this.dashboardStatisticService.countPathStatistics()
+        );
+    }
 }
