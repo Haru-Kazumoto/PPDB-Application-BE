@@ -13,8 +13,6 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class DashboardStatisticService {
 
-    private final StudentRepository studentRepository;
-    private final RegistrationBatchRepository registrationBatchRepository;
     private final RegistrationPathsRepository registrationPathsRepository;
 
     public StatisticCount getStatisticsCount(){

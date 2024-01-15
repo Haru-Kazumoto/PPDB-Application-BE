@@ -90,6 +90,18 @@ public class StudentController {
         this.studentService.exportExcelDataStudent(response,batchId);
     }
 
+    @GetMapping(path = "/get-students-to-excel")
+    public void exportStudentsToExcel(HttpServletResponse response) throws IOException {
+        response.setContentType("application/octet-stream");
+
+        String headerKey = "Content-Disposition";
+        String headerValue = "attachment;filename=data_seluruh_siswa.xls";
+
+        response.setHeader(headerKey, headerValue);
+
+        this.studentService.exportExcelAllDataStudent(response);
+    }
+
     @GetMapping(path = "/get-student")
     public ResponseEntity<?> findStudentByIdAndBatchId(
             @RequestParam("studentId") Integer studentId

@@ -49,4 +49,6 @@ public interface StudentService {
 
     void exportExcelDataStudent(HttpServletResponse response, Integer batchId) throws IOException;
 
+    void exportExcelAllDataStudent(HttpServletResponse response) throws IOException;
+
 }
