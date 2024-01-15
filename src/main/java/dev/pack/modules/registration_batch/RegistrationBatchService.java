@@ -2,7 +2,6 @@ package dev.pack.modules.registration_batch;
 
 import dev.pack.modules.enums.FormPurchaseType;
 import dev.pack.modules.enums.Grade;
-import dev.pack.modules.student.CountStudents;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -30,6 +29,8 @@ public interface RegistrationBatchService {
     Page<GetAllStudentsByBatch> getStudentByBatchId(Integer batchId, Pageable pageable);
 
     CountPerBatch countStudent(Integer batchId);
+
+    List<CountAllBatchStudents> countAllStudentsPerBatch();
 
     List<RegistrationBatch> getAllBatchByGrade(Grade grade);
 

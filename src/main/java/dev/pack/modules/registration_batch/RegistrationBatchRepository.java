@@ -27,6 +27,34 @@ public interface RegistrationBatchRepository extends JpaRepository<RegistrationB
     """)
     List<CountBatchRegistrar> findTotalPendaftarPerBatch();
 
+    @Query(
+        value = """
+                select 
+                rb.id, 
+                rb."name", 
+                count(sl.*) as total 
+            from 
+                registration_batch rb 
+                inner join student_logs sl on sl.batch_id = rb.id 
+                inner join students s on s.id = sl.student_id 
+            where 
+                sl.id = (
+                select 
+                    max(sl2.id) 
+                from 
+                    student_logs sl2 
+                where 
+                    sl2.student_id = s.id 
+                    and sl2.batch_id = sl.batch_id
+                ) 
+            group by 
+                rb.id, 
+                rb."name"
+            """,
+        nativeQuery = true
+    )
+    List<CountAllBatchStudents> countAllTotalPendaftarPerBatch();
+
     @Query("""
         select s from RegistrationBatch s
         inner join s.registrationPaths d
@@ -42,7 +70,7 @@ public interface RegistrationBatchRepository extends JpaRepository<RegistrationB
     @Query("UPDATE RegistrationBatch rb SET rb.countStudent = (SELECT COUNT(s) FROM Student s WHERE s.batch_id = :batchId) WHERE rb.id = :batchId")
     void countStudentFromBatch(@Param("batchId") Integer batchId);
 
-    @Lock(LockModeType.OPTIMISTIC_FORCE_INCREMENT)
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
     @Query("SELECT COUNT(s) FROM Student s WHERE s.batch_id = :batchId")
     long countStudentsForRunningNumber(@Param("batchId") Integer batchId);
 
