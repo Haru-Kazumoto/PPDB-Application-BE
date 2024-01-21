@@ -43,10 +43,10 @@ public class RegistrationBatchServiceImpl implements RegistrationBatchService{
     @Override
     @Transactional
     public RegistrationBatch store(RegistrationBatch bodyCreate) {
-        this.validate.dateValidate(
-                bodyCreate.getStart_date(),
-                bodyCreate.getEnd_date()
-        );
+        // this.validate.dateValidate(
+        //         bodyCreate.getStart_date(),
+        //         bodyCreate.getEnd_date()
+        // );
 
         if(bodyCreate.getMax_quota() > 500){
             throw new IllegalArgumentException("Max quota only have 500 set");

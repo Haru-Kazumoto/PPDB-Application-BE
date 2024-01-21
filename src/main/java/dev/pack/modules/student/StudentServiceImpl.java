@@ -12,6 +12,7 @@ import dev.pack.modules.enums.PaymentMethod;
 import dev.pack.modules.lookup.Lookup;
 import dev.pack.modules.lookup.LookupRepository;
 import dev.pack.modules.registration_batch.ChooseBatchDto;
+import dev.pack.modules.registration_batch.GetAllStudentForExport;
 import dev.pack.modules.registration_batch.GetStagingStatusDto;
 import dev.pack.modules.registration_batch.RegistrationBatch;
 import dev.pack.modules.registration_batch.RegistrationBatchRepository;
@@ -97,7 +98,7 @@ public class StudentServiceImpl implements StudentService{
             this.registrationBatchRepo.findById(batchId)
                     .orElseThrow(() -> new DataNotFoundException("Id gelombang tidak ditemukan"));
 
-            List<Student> students = this.registrationBatchRepo.findAllStudentByBatchId(batchId);
+            List<GetAllStudentForExport> students = this.registrationBatchRepo.findAllStudentByBatchId(batchId);
 
             List<String> headers = Arrays.asList(
                     "Formulir-id",
@@ -116,19 +117,19 @@ public class StudentServiceImpl implements StudentService{
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
             Year year = Year.now();
 
-            for(Student student : students){
+            for(GetAllStudentForExport student : students){
                 List<Object> rowData = new ArrayList<>();
 
-                rowData.add(student.getFormulirId());
-                rowData.add(student.getLastInsertedNumber());
+                rowData.add(student.getFormulir_Id());
+                rowData.add(student.getLast_Inserted_Number());
                 rowData.add(student.getName());
                 rowData.add(student.getPhone());
                 rowData.add(student.getAddress());
                 rowData.add(student.getGender());
                 rowData.add(student.getReligion());
-                rowData.add(student.getSchool_origin());
+                rowData.add(student.getSchool_Origin());
                 rowData.add(student.getMajor());
-                rowData.add(dateFormat.format(student.getRegistrationDate()));
+                rowData.add(dateFormat.format(student.getRegistration_Date()));
 
                 data.add(rowData);
             }
@@ -220,13 +221,35 @@ public class StudentServiceImpl implements StudentService{
                 .orElseThrow(() -> new DataNotFoundException("Data not found"));
 
         long runningNumber = lastInsertedCount+1;
+        
+        //------------------------------------------------------------------------------------------------------------------
 
-        String formattedRunningNumber = String.format("%03d", runningNumber);
+        //OLD ONE (ALWAYS CHANGE THE FORMULIR ID IF THE STUDENT REGISTER ANOTHER BATCH)
 
-        String formulirId = studentUtils.generateIdStudent(formattedRunningNumber,registrationBatch.getBatchCode());
+        // String formattedRunningNumber = String.format("%03d", runningNumber);
 
-        student.setFormulirId(formulirId);
-        student.setLastInsertedNumber(String.valueOf(runningNumber));
+        // String formulirId = studentUtils.generateIdStudent(formattedRunningNumber,registrationBatch.getBatchCode());
+
+        // student.setFormulirId(formulirId);
+        // student.setLastInsertedNumber(String.valueOf(runningNumber));
+
+        //------------------------------------------------------------------------------------------------------------------
+
+        //NEW (IF THE FORMULIR ID IS NULL THEN CREATE NEW, OTHERWISE NO.)
+        // String formulirId = studentUtils.generateIdStudent(formattedRunningNumber,registrationBatch.getBatchCode());
+        
+        if (student.getFormulirId() == null || student.getFormulirId().isEmpty()) {
+            String formattedRunningNumber = String.format("%03d", runningNumber);
+            String formulirId = studentUtils.generateIdStudent(formattedRunningNumber, registrationBatch.getBatchCode());
+            student.setFormulirId(formulirId);
+            student.setLastInsertedNumber(formattedRunningNumber);
+        }
+
+        // student.setFormulirId(student.getFormulirId());
+        // student.setLastInsertedNumber(student.getLastInsertedNumber());
+
+        //------------------------------------------------------------------------------------------------------------------
+
         student.setRegistrationDate(new Date());
         student.setBatch_id(batchDto.getBatch_id());
         student.setStatus("REGISTERED");
