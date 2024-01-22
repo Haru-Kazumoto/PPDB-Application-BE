@@ -128,18 +128,6 @@ public interface RegistrationBatchRepository extends JpaRepository<RegistrationB
     @Query("SELECT rb FROM RegistrationBatch rb WHERE rb.registrationPaths.type = :type")
     List<RegistrationBatch> findRegistrationBatchByPathType(@Param("type") FormPurchaseType type);
 
-
-    //TODO : 
-    /**
-     * Jadi di chooseRegistrationBatch itu kasih logika kalau user pertama kali daftar gelombang 
-     * dengan logika jika formulir_id nya null maka buat atau di generate formulir id nya,
-     * tapi kalau formulir_id is not null maka jangan generate lagi, tinggal tarik aja fomulir_id lama
-     * ke batch baru, karna kan chooseRegistrationBatch itu kan path HTTP nya, jadi ya tinggal di get aja yang lama
-     * 
-     * dah tinggal ini aje udah
-     */
-
-
     //CHANGE SELECTING DATA TO ASC
     @Query(
             value = """
@@ -203,46 +191,49 @@ public interface RegistrationBatchRepository extends JpaRepository<RegistrationB
     //FOR EXPORTING STUDENT TO EXCEL
     @Query(
         value = """
-            SELECT 
-                s.id, 
-                s.formulir_id, 
-                s.last_inserted_number, 
-                s.name, 
-                s.religion,
-                s.phone, 
-                s.address, 
-                s.gender, 
-                s.school_origin, 
-                s.major, 
-                s.registration_date 
-            FROM 
-                students s 
-            LEFT JOIN student_logs sl ON sl.student_id = s.id 
-            WHERE 
-                sl.batch_id = :batchId 
-            AND sl.id = (
-                    SELECT 
-                    MAX(id) 
-                    FROM 
-                    student_logs 
-                    WHERE 
-                    student_id = s.id 
+                SELECT\s
+                  s.id,\s
+                  s.formulir_id,\s
+                  s.last_inserted_number,\s
+                  s.name,\s
+                  s.batch_id,
+                  s.religion,\s
+                  s.phone,\s
+                  s.address,\s
+                  s.gender,\s
+                  s.school_origin,\s
+                  s.major,\s
+                  s.registration_date\s
+                FROM\s
+                  students s\s
+                  LEFT JOIN student_logs sl ON sl.student_id = s.id\s
+                WHERE\s
+                  sl.batch_id = :batchId
+                  AND sl.id = (
+                    SELECT\s
+                      MAX(id)\s
+                    FROM\s
+                      student_logs\s
+                    WHERE\s
+                      student_id = s.id\s
                     AND batch_id = sl.batch_id
-                ) 
-            GROUP BY 
-                s.id, 
-                s.formulir_id, 
-                s.last_inserted_number, 
-                s.name, 
-                s.religion,
-                s.phone, 
-                s.address, 
-                s.gender, 
-                s.school_origin, 
-                s.major, 
-                s.registration_date 
-            ORDER BY 
-                s.registration_date ASC
+                    order by s.registration_date asc
+                  )\s
+                GROUP BY\s
+                  s.id,\s
+                  s.formulir_id,\s
+                  s.last_inserted_number,\s
+                  s.name,\s
+                  s.gender,
+                  s.batch_id,
+                  s.phone,\s
+                  s.address,\s
+                  s.gender,\s
+                  s.school_origin,\s
+                  s.major,\s
+                  s.registration_date\s
+                ORDER BY\s
+                  s.registration_date asc
                 """,
         nativeQuery = true
     )

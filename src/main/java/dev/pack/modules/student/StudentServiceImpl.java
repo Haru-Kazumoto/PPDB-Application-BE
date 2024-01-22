@@ -221,34 +221,27 @@ public class StudentServiceImpl implements StudentService{
                 .orElseThrow(() -> new DataNotFoundException("Data not found"));
 
         long runningNumber = lastInsertedCount+1;
-        
-        //------------------------------------------------------------------------------------------------------------------
 
-        //OLD ONE (ALWAYS CHANGE THE FORMULIR ID IF THE STUDENT REGISTER ANOTHER BATCH)
+        String formattedRunningNumber = String.format("%03d", runningNumber);
+        String formulirId = studentUtils.generateIdStudent(formattedRunningNumber, registrationBatch.getBatchCode());
 
-        // String formattedRunningNumber = String.format("%03d", runningNumber);
-
-        // String formulirId = studentUtils.generateIdStudent(formattedRunningNumber,registrationBatch.getBatchCode());
-
-        // student.setFormulirId(formulirId);
-        // student.setLastInsertedNumber(String.valueOf(runningNumber));
-
-        //------------------------------------------------------------------------------------------------------------------
-
-        //NEW (IF THE FORMULIR ID IS NULL THEN CREATE NEW, OTHERWISE NO.)
-        // String formulirId = studentUtils.generateIdStudent(formattedRunningNumber,registrationBatch.getBatchCode());
-        
+        //Check formulir id nya itu null apa kagak, kalo null berarti buat baru formulir id nya (siswa belom beli formulir)
         if (student.getFormulirId() == null || student.getFormulirId().isEmpty()) {
-            String formattedRunningNumber = String.format("%03d", runningNumber);
-            String formulirId = studentUtils.generateIdStudent(formattedRunningNumber, registrationBatch.getBatchCode());
             student.setFormulirId(formulirId);
             student.setLastInsertedNumber(formattedRunningNumber);
         }
 
-        // student.setFormulirId(student.getFormulirId());
-        // student.setLastInsertedNumber(student.getLastInsertedNumber());
+        //Kalo siswa ada formulir id nya di cek lagi kalo batch code dari gelombang itu beda di ganti batch code nya.
+        if (!student.getFormulirId().isEmpty()) {
+            String currentFormulirId = student.getFormulirId();
+            String existingBatchCode = currentFormulirId.substring(5, 7);
+            String currentRunningNumber = student.getLastInsertedNumber();
+            Year currentYear = Year.now();
 
-        //------------------------------------------------------------------------------------------------------------------
+            if (!existingBatchCode.equals(registrationBatch.getBatchCode())) {
+                student.setFormulirId(String.format("%s-%s-%s", currentYear, registrationBatch.getBatchCode(), currentRunningNumber));
+            }
+        }
 
         student.setRegistrationDate(new Date());
         student.setBatch_id(batchDto.getBatch_id());

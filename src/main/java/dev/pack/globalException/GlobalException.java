@@ -63,7 +63,7 @@ public class GlobalException extends ResponseEntityExceptionHandler {
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MaxQuotaReachedException.class)
-    public ResponseEntity<ErrorResponse> handleViolatesConstraints(MaxQuotaReachedException ex){
+    public ResponseEntity<ErrorResponse> handleMaxQuotaReached(MaxQuotaReachedException ex){
         ErrorResponse errorResponse = ErrorResponse.builder()
                 .statusResponse(HttpStatus.BAD_REQUEST.name())
                 .message(ex.getMessage())

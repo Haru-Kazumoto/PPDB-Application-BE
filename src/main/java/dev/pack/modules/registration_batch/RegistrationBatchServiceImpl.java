@@ -168,6 +168,10 @@ public class RegistrationBatchServiceImpl implements RegistrationBatchService{
             throw new DataNotFoundException("Siswa tidak atau belum terdaftar di gelombang manapun");
         }
 
+        assert student.getBatch_id() != null;
+        RegistrationBatch registrationBatch = this.registrationBatchRepository.findById(student.getBatch_id())
+                .orElseThrow();
+
         RegistrationPaths registrationPaths = this.registrationPathsRepository.findById(student.getPath_id())
                 .orElseThrow(() -> new DataNotFoundException("Jalur pendaftaran id tidak ditemukan"));
 
@@ -180,12 +184,45 @@ public class RegistrationBatchServiceImpl implements RegistrationBatchService{
             this.studentRepository.deleteStudentFromBatchByStudentId(studentId);
             this.adjustRunningNumberOnDelete(student.getBatch_id(), student.getLastInsertedNumber());
 
+            student.setIsPurchasingDone(false);
+            student.setRegistrationDate(null);
+
         } else if (registrationPaths.getType().equals(FormPurchaseType.PENGEMBALIAN)){
             this.adjustRunningNumberOnDelete(student.getBatch_id(), student.getLastInsertedNumber());
             StudentLogs latestLogs = logs.get(0);
 
             student.setPath_id(latestLogs.getPath_id());
             student.setBatch_id(latestLogs.getStudent().getBatch_id());
+
+            student.setProfile_picture(null);
+            student.setFamily_card(null);
+            student.setBirth_card(null);
+            student.setNisn(null);
+//            student.setName(null);
+//            student.setPhone(null);
+            student.setSurname(null);
+            student.setGender(null);
+            student.setReligion(null);
+            student.setBirth_place(null);
+            student.setBirth_date(null);
+//            student.setAddress(null);
+            student.setProvince(null);
+            student.setCity(null);
+            student.setDistrict(null);
+            student.setSub_district(null);
+            student.setPostal_code(null);
+//            student.setSchool_origin(null);
+            student.setDad_name(null);
+            student.setDad_phone(null);
+            student.setDad_job(null);
+            student.setDad_address(null);
+            student.setMother_name(null);
+            student.setMother_phone(null);
+            student.setMother_job(null);
+            student.setMother_address(null);
+            student.setPathName(registrationBatch.getName());
+            student.setIsReturningDone(false);
+//            student.setStatus("FILLING_BIO");
         }
 
         response.put("status","SUCCESS");
@@ -203,7 +240,7 @@ public class RegistrationBatchServiceImpl implements RegistrationBatchService{
             String formattedRunningNumber = String.format("%03d", newRunningNumber);
             String newFormulirId = this.studentUtils.generateIdStudent(formattedRunningNumber, registrationBatch.getBatchCode());
 
-            studentToAdjust.setLastInsertedNumber(String.valueOf(newRunningNumber));
+            studentToAdjust.setLastInsertedNumber(formattedRunningNumber);
             studentToAdjust.setFormulirId(newFormulirId);
         }
 
