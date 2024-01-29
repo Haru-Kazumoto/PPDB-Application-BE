@@ -10,7 +10,7 @@ import dev.pack.modules.prices.PriceDetails;
 import dev.pack.modules.prices.ResponsePriceDetailsDto;
 import dev.pack.modules.registration_batch.RegistrationBatch;
 import dev.pack.modules.registration_batch.RegistrationBatchRepository;
-import dev.pack.modules.registration_batch.ResponseRegistrationBatchDto;
+import dev.pack.modules.registration_batch.dto.ResponseRegistrationBatchDto;
 import dev.pack.modules.registration_general_information.RegistrationGeneralInformation;
 import dev.pack.modules.registration_general_information.ResponseGeneralInformationDto;
 import dev.pack.modules.student.Student;

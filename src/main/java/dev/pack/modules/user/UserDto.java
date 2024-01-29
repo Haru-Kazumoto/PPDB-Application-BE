@@ -1,7 +1,7 @@
 package dev.pack.modules.user;
 
 import dev.pack.modules.enums.Role;
-import dev.pack.modules.student.StudentDto;
+import dev.pack.modules.student.dto.StudentDto;
 import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;

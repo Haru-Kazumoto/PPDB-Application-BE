@@ -1,9 +1,13 @@
 package dev.pack.modules.student;
 
 import dev.pack.modules.enums.FormPurchaseType;
-import dev.pack.modules.registration_batch.ChooseBatchDto;
-import dev.pack.modules.registration_batch.GetStagingStatusDto;
 import dev.pack.modules.registration_batch.RegistrationBatchRepository;
+import dev.pack.modules.registration_batch.dto.ChooseBatchDto;
+import dev.pack.modules.registration_batch.dto.GetStagingStatusDto;
+import dev.pack.modules.student.dto.ChooseMajorDto;
+import dev.pack.modules.student.dto.PaymentDto;
+import dev.pack.modules.student.dto.PrintCardDto;
+import dev.pack.modules.student.dto.UpdateBioDto;
 import dev.pack.payloads.HttpResponse;
 import dev.pack.utils.StringUtils;
 import jakarta.servlet.http.HttpServletResponse;
@@ -29,14 +33,6 @@ public class StudentController {
     private final ModelMapper modelMapper;
     private final HttpResponse http;
 
-    @PatchMapping(path = "/update")
-    public ResponseEntity<?> store(
-            @RequestParam(name = "id", defaultValue = "0") int id,
-            @RequestBody @Valid StudentDto.onUpdate dto
-    ){
-        Student student = this.modelMapper.map(dto, Student.class);
-        return http.response(HttpStatus.OK.value(), new Date(), this.studentService.createStudent(student, id));
-    }
 
     @PutMapping(path = "/choose-batch")
     public ResponseEntity<?> chooseBatch(@RequestBody @Valid ChooseBatchDto chooseBatchDto) {
@@ -88,18 +84,6 @@ public class StudentController {
         response.setHeader(headerKey, headerValue);
 
         this.studentService.exportExcelDataStudent(response,batchId);
-    }
-
-    @GetMapping(path = "/get-students-to-excel")
-    public void exportStudentsToExcel(HttpServletResponse response) throws IOException {
-        response.setContentType("application/octet-stream");
-
-        String headerKey = "Content-Disposition";
-        String headerValue = "attachment;filename=data_seluruh_siswa.xls";
-
-        response.setHeader(headerKey, headerValue);
-
-        this.studentService.exportExcelAllDataStudent(response);
     }
 
     @GetMapping(path = "/get-student")
@@ -279,12 +263,4 @@ public class StudentController {
         this.studentService.deleteById(studentId);
     }
 
-    @GetMapping(path = "/get-students-by")
-    public ResponseEntity<?> findAllStudentByGrade(@RequestParam("grade") String grade){
-        return this.http.response(
-                HttpStatus.OK.value(),
-                new Date(),
-                this.studentService.getAllStudentByGrade(grade)
-        );
-    }
 }

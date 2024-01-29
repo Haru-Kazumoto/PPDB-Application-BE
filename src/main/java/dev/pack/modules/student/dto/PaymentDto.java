@@ -1,4 +1,4 @@
-package dev.pack.modules.student;
+package dev.pack.modules.student.dto;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;

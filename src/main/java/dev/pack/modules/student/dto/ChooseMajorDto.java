@@ -1,4 +1,4 @@
-package dev.pack.modules.student;
+package dev.pack.modules.student.dto;
 
 import dev.pack.modules.enums.FormPurchaseType;
 import jakarta.validation.constraints.NotNull;

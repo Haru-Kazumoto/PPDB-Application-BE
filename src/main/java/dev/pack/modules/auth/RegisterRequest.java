@@ -1,7 +1,7 @@
 package dev.pack.modules.auth;
 
 import dev.pack.modules.enums.Role;
-import dev.pack.modules.student.StudentDto;
+import dev.pack.modules.student.dto.StudentDto;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;

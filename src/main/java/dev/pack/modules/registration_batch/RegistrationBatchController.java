@@ -2,6 +2,7 @@ package dev.pack.modules.registration_batch;
 
 import dev.pack.modules.enums.FormPurchaseType;
 import dev.pack.modules.enums.Grade;
+import dev.pack.modules.registration_batch.dto.RegistrationBatchDto;
 import dev.pack.modules.student.StudentRepository;
 import dev.pack.modules.student.StudentService;
 import dev.pack.modules.user.UserService;
@@ -82,11 +83,6 @@ public class RegistrationBatchController {
     ){
         RegistrationBatch entity = this.modelMapper.map(dto, RegistrationBatch.class);
         return this.http.response(OK.value(), new Date(), this.registrationBatchService.update(id, entity));
-    }
-
-    @GetMapping(path = "/index-path")
-    public ResponseEntity<?> indexByGelombangIsOpen(@RequestParam("is")Boolean is){
-        return this.http.response(OK.value(), new Date(), this.registrationBatchService.getAllGelombangWhereIsOpen(is));
     }
 
     @DeleteMapping(path = "/delete")

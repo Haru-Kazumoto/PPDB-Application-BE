@@ -1,4 +1,4 @@
-package dev.pack.modules.registration_batch;
+package dev.pack.modules.registration_batch.dto;
 
 import dev.pack.modules.enums.Banks;
 import jakarta.persistence.EnumType;

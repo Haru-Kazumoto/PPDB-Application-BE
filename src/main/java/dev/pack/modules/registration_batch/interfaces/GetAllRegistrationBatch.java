@@ -1,8 +1,4 @@
-package dev.pack.modules.registration_batch;
-
-import dev.pack.modules.enums.Banks;
-import dev.pack.modules.enums.FormPurchaseType;
-import jakarta.persistence.Column;
+package dev.pack.modules.registration_batch.interfaces;
 
 import java.util.Date;
 

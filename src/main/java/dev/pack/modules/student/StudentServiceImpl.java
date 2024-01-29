@@ -11,15 +11,20 @@ import dev.pack.modules.enums.Grade;
 import dev.pack.modules.enums.PaymentMethod;
 import dev.pack.modules.lookup.Lookup;
 import dev.pack.modules.lookup.LookupRepository;
-import dev.pack.modules.registration_batch.ChooseBatchDto;
-import dev.pack.modules.registration_batch.GetAllStudentForExport;
-import dev.pack.modules.registration_batch.GetStagingStatusDto;
 import dev.pack.modules.registration_batch.RegistrationBatch;
 import dev.pack.modules.registration_batch.RegistrationBatchRepository;
+import dev.pack.modules.registration_batch.dto.ChooseBatchDto;
+import dev.pack.modules.registration_batch.dto.GetStagingStatusDto;
+import dev.pack.modules.registration_batch.interfaces.GetAllStudentForExport;
 import dev.pack.modules.registration_paths.RegistrationPaths;
 import dev.pack.modules.registration_paths.RegistrationPathsRepository;
 import dev.pack.modules.staging.Staging;
 import dev.pack.modules.staging.StagingRepository;
+import dev.pack.modules.student.dto.ChooseMajorDto;
+import dev.pack.modules.student.dto.GetStudentAchievementDto;
+import dev.pack.modules.student.dto.PaymentDto;
+import dev.pack.modules.student.dto.PrintCardDto;
+import dev.pack.modules.student.dto.UpdateBioDto;
 import dev.pack.modules.student_logs.StudentLogs;
 import dev.pack.modules.student_logs.StudentLogsRepository;
 import dev.pack.modules.student_payments.StudentPaymentRepository;
@@ -54,30 +59,8 @@ public class StudentServiceImpl implements StudentService{
     private final AuthenticationService authenticationService;
     private final StudentPaymentRepository studentPaymentRepository;
     private final FilesStorageService filesStorageService;
-    private final StudentUtils studentUtils;
     private final StudentAchievementRepository studentAchievementRepository;
     private final ExcelService excelService;
-
-    @Override
-    @Transactional
-    public Student createStudent(Student bodyStudent, Integer idStudent) {
-        checkIfNISNExists(bodyStudent.getNisn());
-
-        Student existingStudent = studentRepository.findById(idStudent)
-                .orElseThrow(() -> new DataNotFoundException(ErrorMessage.STUDENT_ID_NOT_FOUND));
-
-        Lookup dataLookup = getLookupByType(bodyStudent.getMajor());
-
-        assert dataLookup != null;
-        existingStudent.setMajor(dataLookup.getType());
-
-        return studentRepository.save(existingStudent);
-    }
-
-    @Override
-    public List<Student> getAll() {
-        return studentRepository.findAll();
-    }
 
     @Override
     public ResponseStudentDto getDetailStudentPembelian(Integer studentId) {
@@ -92,6 +75,7 @@ public class StudentServiceImpl implements StudentService{
                 .build();
     }
 
+    //Use this instead
     @Override
     public void exportExcelDataStudent(HttpServletResponse response, Integer batchId) throws IOException {
         try{
@@ -102,7 +86,7 @@ public class StudentServiceImpl implements StudentService{
 
             List<String> headers = Arrays.asList(
                     "Formulir-id",
-                    "Pendaftar ke",
+//                    "Pendaftar ke",
                     "Nama siswa",
                     "Nomor telepon",
                     "Alamat",
@@ -121,7 +105,7 @@ public class StudentServiceImpl implements StudentService{
                 List<Object> rowData = new ArrayList<>();
 
                 rowData.add(student.getFormulir_Id());
-                rowData.add(student.getLast_Inserted_Number());
+//                rowData.add(student.getLast_Inserted_Number());
                 rowData.add(student.getName());
                 rowData.add(student.getPhone());
                 rowData.add(student.getAddress());
@@ -140,52 +124,6 @@ public class StudentServiceImpl implements StudentService{
         }
     }
 
-    
-    @Override
-    public void exportExcelAllDataStudent(HttpServletResponse response) throws IOException {
-        try{
-            List<Student> students = this.studentRepository.findAll();
-
-            List<String> headers = Arrays.asList(
-                    "Formulir-id",
-                    "Pendaftar ke",
-                    "Nama siswa",
-                    "Nomor telepon",
-                    "Alamat",
-                    "Jenis kelamin",
-                    "Agama",
-                    "Asal sekolah",
-                    "Jurusan",
-                    "Tanggal mendaftar"
-            );
-
-            List<List<Object>> data = new ArrayList<>();
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-            Year year = Year.now();
-
-            for(Student student : students){
-                List<Object> rowData = new ArrayList<>();
-
-                rowData.add(student.getFormulirId());
-                rowData.add(student.getLastInsertedNumber());
-                rowData.add(student.getName());
-                rowData.add(student.getPhone());
-                rowData.add(student.getAddress());
-                rowData.add(student.getGender());
-                rowData.add(student.getReligion());
-                rowData.add(student.getSchool_origin());
-                rowData.add(student.getMajor());
-                rowData.add(dateFormat.format(student.getRegistrationDate()));
-
-                data.add(rowData);
-            }
-
-            excelService.generateExcelCustomHeader(response,String.format("Data siswa %s",year), headers, data);
-        } catch (Exception err){
-            throw new IOException(err);
-        }
-    }
-
     @Override
     public Student getDetailStudentPengembalian(Integer studentId) {
         return this.studentRepository.findById(studentId).orElseThrow(() -> new DataNotFoundException("Id siswa tidak ditemukan."));
@@ -194,13 +132,13 @@ public class StudentServiceImpl implements StudentService{
     @Override
     @Transactional
     public RegistrationBatch chooseRegistrationBatch(ChooseBatchDto batchDto) {
+        User user = this.authenticationService.decodeJwt();
+
         RegistrationBatch registrationBatch = this.registrationBatchRepo.findById(batchDto.getBatch_id())
                 .orElseThrow(() -> new DataNotFoundException("Gelombang tidak ditemukan"));
 
         RegistrationPaths registrationPaths = this.registrationPathsRepository.findById(registrationBatch.getPath_id())
                 .orElseThrow(() -> new DataNotFoundException("Jalur tidak ditemukan."));
-
-        User user = this.authenticationService.decodeJwt();
 
         Staging staging = this.stagingRepository.findByName("Pilih Jalur PPDB", batchDto.getGrade())
                 .orElseThrow(() -> new DataNotFoundException("Data yang diinput invalid"));
@@ -212,45 +150,45 @@ public class StudentServiceImpl implements StudentService{
             user.getStudent().setPathName(registrationBatch.getName());
         }
 
-        long lastInsertedCount = this.registrationBatchRepo.countStudentsForRunningNumber(batchDto.getBatch_id());
-        if(lastInsertedCount+1 > registrationBatch.getMax_quota()){
+        //Check total student in batch if the student has reached the max quota of batch it will send warning
+        var totalStudents = this.studentRepository.countStudentDetailPerBatch(batchDto.getBatch_id());
+        if(totalStudents.getRegistered() > registrationBatch.getMax_quota()){
             throw new MaxQuotaReachedException("Kuota gelombang sudah penuh, harap pilih gelombang lain.");
         }
 
         Student student = this.studentRepository.findById(user.getStudent().getId())
                 .orElseThrow(() -> new DataNotFoundException("Data not found"));
 
-        long runningNumber = lastInsertedCount+1;
-
-        String formattedRunningNumber = String.format("%03d", runningNumber);
-        String formulirId = studentUtils.generateIdStudent(formattedRunningNumber, registrationBatch.getBatchCode());
-
-        //Check formulir id nya itu null apa kagak, kalo null berarti buat baru formulir id nya (siswa belom beli formulir)
-        if (student.getFormulirId() == null || student.getFormulirId().isEmpty()) {
-            student.setFormulirId(formulirId);
-            student.setLastInsertedNumber(formattedRunningNumber);
+        var allStudents = this.registrationBatchRepo.findAllStudentByGrade(String.valueOf(student.getGrade()));
+        for(GetAllStudentForExport studentOnBatch : allStudents) {
+            if(student.getId().equals(studentOnBatch.getId())){
+                student.setFormulirId(studentOnBatch.getFormulir_Id());
+            }
         }
+        
+        //If the student has the formulir id, it will cross check the batch code of the formulir id. If its not equals, it will change it
+        if (student.getFormulirId() != null) {
+            for(GetAllStudentForExport getStudent : allStudents){
+                if(student.getId().equals(getStudent.getId())){
+                    String currentBatchCode = getStudent.getFormulir_Id().substring(5, 7);
+                    String currentRunningNumber = getStudent.getFormulir_Id().substring(8,11);
+                    String currentYearDate = getStudent.getFormulir_Id().substring(0,4);
+                    String batchCode = registrationBatch.getBatchCode();
 
-        //Kalo siswa ada formulir id nya di cek lagi kalo batch code dari gelombang itu beda di ganti batch code nya.
-        if (!student.getFormulirId().isEmpty()) {
-            String currentFormulirId = student.getFormulirId();
-            String existingBatchCode = currentFormulirId.substring(5, 7);
-            String currentRunningNumber = student.getLastInsertedNumber();
-            Year currentYear = Year.now();
-
-            if (!existingBatchCode.equals(registrationBatch.getBatchCode())) {
-                student.setFormulirId(String.format("%s-%s-%s", currentYear, registrationBatch.getBatchCode(), currentRunningNumber));
+                    if (!currentBatchCode.equals(registrationBatch.getBatchCode())) {
+                        student.setFormulirId(String.format("%s-%s-%s", currentYearDate, batchCode, currentRunningNumber));
+                    }
+                }
             }
         }
 
-        student.setRegistrationDate(new Date());
+        //kalau type nya pembelian gak update registration datenya.
+        if(registrationPaths.getType().equals(FormPurchaseType.PEMBELIAN)){
+            student.setRegistrationDate(new Date());
+        }
         student.setBatch_id(batchDto.getBatch_id());
         student.setStatus("REGISTERED");
         student.setPath_id(registrationBatch.getRegistrationPaths().getId());
-        Integer runningCount = registrationBatch.getCountStudent() + 1;
-
-        registrationBatch.setCountStudent(runningCount);
-        registrationPaths.setCountStudent(runningCount);
 
         this.studentRepository.save(student);
 
@@ -267,24 +205,6 @@ public class StudentServiceImpl implements StudentService{
         );
 
         return registrationBatch;
-    }
-
-    private void checkIfNISNExists(String nisn) {
-        studentRepository.findByNisn(nisn)
-                .ifPresent(nisnResult -> {
-                    throw new DuplicateDataException(ErrorMessage.NISN_EXISTS);
-                });
-    }
-
-    private Lookup getLookupByType(String major) {
-//        return lookupRepository.getLookupByType(major);
-
-        return null;
-    }
-
-    private RegistrationBatch getRegistrationBatchById(Integer batchId) {
-        return registrationBatchRepo.findById(batchId)
-                .orElseThrow(() -> new DataNotFoundException(ErrorMessage.BATCH_ID_NOT_FOUND));
     }
 
     @Override
@@ -630,13 +550,6 @@ public class StudentServiceImpl implements StudentService{
         Student data = this.studentRepository.findById(studentId).orElseThrow(() -> new DataNotFoundException("Id not found"));
 
         this.studentRepository.delete(data);
-    }
-
-    @Override
-    public List<Student> getAllStudentByGrade(String grade) {
-        List<Student> datas = this.studentRepository.findAllStudentByGrade(grade);
-        if( !Objects.equals(grade, "SMK") && !Objects.equals(grade, "SMP") ) throw new DataNotFoundException("Grade is invalid");
-        return datas;
     }
 
     @Override

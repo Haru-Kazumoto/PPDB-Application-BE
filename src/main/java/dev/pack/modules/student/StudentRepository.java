@@ -2,7 +2,7 @@ package dev.pack.modules.student;
 
 import dev.pack.modules.dashboard_statistic.BaseDTO;
 import dev.pack.modules.enums.FormPurchaseType;
-import dev.pack.modules.registration_batch.CountPerBatch;
+import dev.pack.modules.registration_batch.interfaces.CountPerBatch;
 import dev.pack.modules.registration_paths.RegistrationPaths;
 import dev.pack.modules.student_logs.StudentLogs;
 import dev.pack.modules.student_payments.StudentPayments;
@@ -33,8 +33,9 @@ public interface StudentRepository extends JpaRepository<Student, Integer> {
     @Query("SELECT s FROM Student s WHERE s.batch_id = :batchId AND s.lastInsertedNumber > :deletedRunningNumber")
     List<Student> findStudentsToAdjust(@Param("batchId") Integer batchId, @Param("deletedRunningNumber") String deletedRunningNumber);
 
+    @Transactional
     @Modifying
-    @Query("UPDATE Student s SET s.batch_id = null, s.path_id = null, s.formulirId = NULL, s.lastInsertedNumber = NULL WHERE s.id = :studentId")
+    @Query("UPDATE Student s SET s.batch_id = NULL, s.path_id = NULL, s.formulirId = NULL, s.lastInsertedNumber = NULL WHERE s.id = :studentId")
     void deleteStudentFromBatchByStudentId(@Param("studentId") Integer studentId);
 
     @Query("""

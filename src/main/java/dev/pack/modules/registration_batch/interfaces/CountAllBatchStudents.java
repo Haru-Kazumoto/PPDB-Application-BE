@@ -1,4 +1,4 @@
-package dev.pack.modules.registration_batch;
+package dev.pack.modules.registration_batch.interfaces;
 
 public interface CountAllBatchStudents {
     Integer getId();

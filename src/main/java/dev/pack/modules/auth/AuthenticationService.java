@@ -7,6 +7,8 @@ import dev.pack.exception.DuplicateDataException;
 import dev.pack.exception.UserNotFoundException;
 import dev.pack.modules.enums.Grade;
 import dev.pack.modules.enums.Role;
+import dev.pack.modules.registration_batch.RegistrationBatchRepository;
+import dev.pack.modules.registration_batch.interfaces.GetAllStudentForExport;
 import dev.pack.modules.role.RoleRepository;
 import dev.pack.modules.role.Roles;
 import dev.pack.modules.student.Student;
@@ -33,6 +35,7 @@ import org.springframework.web.client.HttpServerErrorException;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Objects;
 
 import static dev.pack.constraint.ErrorMessage.*;
 
@@ -43,11 +46,11 @@ public class AuthenticationService {
   private final PasswordEncoder passwordEncoder;
   private final AuthenticationManager authenticationManager;
   private final JwtService jwtService;
-
   private final UserRepository userRepository;
   private final StudentRepository studentRepository;
   private final TokenRepository tokenRepository;
   private final RoleRepository roleRepository;
+  private final RegistrationBatchRepository registrationBatchRepository;
 
   public User registerAdmin(RegisterRequest.Admin request) {
     Roles role = this.roleRepository.findRolesByName("Admin").orElseThrow(() -> new DataNotFoundException("Data tidak ditemukan untuk Role Admin"));
@@ -168,17 +171,28 @@ public class AuthenticationService {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
     var userData =  (org.springframework.security.core.userdetails.User)authentication.getPrincipal();
-    var user = userRepository.findByUsername(userData.getUsername()).orElseThrow(() -> new DataNotFoundException(AUTHENTICATION_BAD_SESSION));
+    var user = userRepository.findByUsername(userData.getUsername())
+            .orElseThrow(() -> new DataNotFoundException(AUTHENTICATION_BAD_SESSION));
+    var student = user.getStudent();
 
+    if(student != null){
+//      var getAllStudents = this.registrationBatchRepository.findAllStudentByBatchId(student.getBatch_id());
+      var getAllStudents = this.registrationBatchRepository.findAllStudentByGrade(String.valueOf(student.getGrade()));
+
+      for(GetAllStudentForExport studentObject : getAllStudents){
+        if(Objects.equals(student.getId(), studentObject.getId())){
+          student.setFormulirId(studentObject.getFormulir_Id());
+        }
+      }
+    }
 
     return User.builder()
             .id(user.getId())
             .role_id(user.getRole_id())
             .username(user.getUsername())
             .fullname(user.getFullname())
-            .student(user.getStudent())
+            .student(student)
             .build();
-
   }
 
   public User findUserByUsername(String username){

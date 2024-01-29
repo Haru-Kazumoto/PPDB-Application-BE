@@ -1,7 +1,9 @@
-package dev.pack.modules.student;
+package dev.pack.modules.registration_batch.dto;
 
 import dev.pack.modules.enums.FormPurchaseType;
 import dev.pack.modules.enums.Grade;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,18 +11,16 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class PrintCardDto {
+@Builder
+public class ChooseBatchDto {
+    @NotNull
+    private Integer batch_id;
 
     @NotNull
-    FormPurchaseType type;
+    private Grade grade;
 
-    @NotNull
-    Integer stagingId;
-
-    @NotNull
-    Grade grade;
+    @Enumerated(EnumType.STRING)
+    private FormPurchaseType type;
 }
-

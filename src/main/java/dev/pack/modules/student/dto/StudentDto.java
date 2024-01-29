@@ -1,10 +1,7 @@
-package dev.pack.modules.student;
+package dev.pack.modules.student.dto;
 
 import dev.pack.modules.enums.Genders;
 import dev.pack.modules.enums.Grade;
-import jakarta.persistence.Column;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;

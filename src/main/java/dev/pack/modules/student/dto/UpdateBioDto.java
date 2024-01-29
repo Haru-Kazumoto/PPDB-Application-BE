@@ -1,4 +1,4 @@
-package dev.pack.modules.student;
+package dev.pack.modules.student.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import dev.pack.modules.registration_batch.RegistrationBatch;

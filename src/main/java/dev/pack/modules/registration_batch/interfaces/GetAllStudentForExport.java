@@ -1,11 +1,10 @@
-package dev.pack.modules.registration_batch;
+package dev.pack.modules.registration_batch.interfaces;
 
 import java.util.*;
 
 public interface GetAllStudentForExport {
     Integer getId();
     String getFormulir_Id();
-    String getLast_Inserted_Number();
     String getName();
     String getReligion();
     String getPhone();

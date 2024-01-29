@@ -2,6 +2,11 @@ package dev.pack.modules.registration_batch;
 
 import dev.pack.modules.enums.FormPurchaseType;
 import dev.pack.modules.enums.Grade;
+import dev.pack.modules.registration_batch.interfaces.CountAllBatchStudents;
+import dev.pack.modules.registration_batch.interfaces.CountPerBatch;
+import dev.pack.modules.registration_batch.interfaces.GetAllRegistrationBatch;
+import dev.pack.modules.registration_batch.interfaces.GetAllStudentsByBatch;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -21,8 +26,6 @@ public interface RegistrationBatchService {
     RegistrationBatch update(Integer id, RegistrationBatch bodyUpdate);
 
     Map<String, String> delete(Integer id);
-
-    List<RegistrationBatch> getAllGelombangWhereIsOpen(Boolean condition);
 
     List<RegistrationBatch> getAllGelombangByPathsId(Integer pathsId);
 

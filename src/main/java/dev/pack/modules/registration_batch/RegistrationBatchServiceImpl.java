@@ -3,16 +3,18 @@ package dev.pack.modules.registration_batch;
 import dev.pack.exception.DataNotFoundException;
 import dev.pack.modules.enums.FormPurchaseType;
 import dev.pack.modules.enums.Grade;
+import dev.pack.modules.registration_batch.interfaces.CountAllBatchStudents;
+import dev.pack.modules.registration_batch.interfaces.CountPerBatch;
+import dev.pack.modules.registration_batch.interfaces.GetAllRegistrationBatch;
+import dev.pack.modules.registration_batch.interfaces.GetAllStudentForExport;
+import dev.pack.modules.registration_batch.interfaces.GetAllStudentsByBatch;
 import dev.pack.modules.registration_paths.RegistrationPaths;
 import dev.pack.modules.registration_paths.RegistrationPathsRepository;
-import dev.pack.modules.student.CountStudents;
 import dev.pack.modules.student.Student;
 import dev.pack.modules.student.StudentRepository;
 import dev.pack.modules.student_logs.StudentLogs;
 import dev.pack.modules.student_logs.StudentLogsRepository;
 import dev.pack.modules.student_payments.StudentPaymentRepository;
-import dev.pack.modules.student_payments.StudentPayments;
-import dev.pack.utils.StudentUtils;
 import dev.pack.utils.Validator;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -23,7 +25,6 @@ import org.springframework.stereotype.Service;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 import static dev.pack.constraint.ErrorMessage.*;
 
@@ -38,16 +39,10 @@ public class RegistrationBatchServiceImpl implements RegistrationBatchService{
     private final StudentRepository studentRepository;
 
     private final Validator validate;
-    private final StudentUtils studentUtils;
 
     @Override
     @Transactional
     public RegistrationBatch store(RegistrationBatch bodyCreate) {
-        // this.validate.dateValidate(
-        //         bodyCreate.getStart_date(),
-        //         bodyCreate.getEnd_date()
-        // );
-
         if(bodyCreate.getMax_quota() > 500){
             throw new IllegalArgumentException("Max quota only have 500 set");
         }
@@ -58,12 +53,7 @@ public class RegistrationBatchServiceImpl implements RegistrationBatchService{
         bodyCreate.setRegistrationPaths(registrationPaths);
         bodyCreate.setGrade(registrationPaths.getGrade());
 
-        return this.registrationBatchRepository.save(bodyCreate);
-    }
-
-    @Override
-    public List<RegistrationBatch> getAllGelombangWhereIsOpen(Boolean condition) {
-        return this.registrationBatchRepository.findRegistrationBatchByIsOpen(condition);
+        return  this.registrationBatchRepository.save(bodyCreate);
     }
 
     @Override
@@ -179,39 +169,57 @@ public class RegistrationBatchServiceImpl implements RegistrationBatchService{
         this.studentPaymentRepository.deleteStudentPaymentsByStudentId(studentId, registrationPaths.getType());
 
         List<StudentLogs> logs = this.studentLogsRepository.findAllLatestLogByStudentId(studentId);
+        List<GetAllStudentForExport> studentsData = this.registrationBatchRepository.findAllStudentByGrade(String.valueOf(student.getGrade()));
 
         if(registrationPaths.getType().equals(FormPurchaseType.PEMBELIAN)){
             this.studentRepository.deleteStudentFromBatchByStudentId(studentId);
-            this.adjustRunningNumberOnDelete(student.getBatch_id(), student.getLastInsertedNumber());
+
+            student.setBatch_id(null);
+            student.setPath_id(null);
+            student.setFormulirId(null);
+            student.setLastInsertedNumber(null);
+            student.setRegistrationDate(null);
+
+//            this.adjustRunningNumberOnDelete(student.getBatch_id());
+            for(GetAllStudentForExport studentData : studentsData){
+                if(student.getId().equals(studentData.getId())){
+                    String existingLastInsertedNumber = studentData.getFormulir_Id()
+                            .substring(studentData.getFormulir_Id().lastIndexOf("-") + 1);
+                    student.setFormulirId(studentData.getFormulir_Id());
+                    student.setLastInsertedNumber(existingLastInsertedNumber);
+                }
+            }
 
             student.setIsPurchasingDone(false);
             student.setRegistrationDate(null);
 
         } else if (registrationPaths.getType().equals(FormPurchaseType.PENGEMBALIAN)){
-            this.adjustRunningNumberOnDelete(student.getBatch_id(), student.getLastInsertedNumber());
+            for(GetAllStudentForExport studentData : studentsData){
+                if(student.getId().equals(studentData.getId())){
+                    String existingLastInsertedNumber = studentData.getFormulir_Id()
+                            .substring(studentData.getFormulir_Id().lastIndexOf("-") + 1);
+                    student.setFormulirId(studentData.getFormulir_Id());
+                    student.setLastInsertedNumber(existingLastInsertedNumber);
+                }
+            }
             StudentLogs latestLogs = logs.get(0);
 
             student.setPath_id(latestLogs.getPath_id());
             student.setBatch_id(latestLogs.getStudent().getBatch_id());
-
             student.setProfile_picture(null);
             student.setFamily_card(null);
             student.setBirth_card(null);
             student.setNisn(null);
-//            student.setName(null);
-//            student.setPhone(null);
             student.setSurname(null);
             student.setGender(null);
             student.setReligion(null);
             student.setBirth_place(null);
             student.setBirth_date(null);
-//            student.setAddress(null);
             student.setProvince(null);
             student.setCity(null);
             student.setDistrict(null);
             student.setSub_district(null);
             student.setPostal_code(null);
-//            student.setSchool_origin(null);
             student.setDad_name(null);
             student.setDad_phone(null);
             student.setDad_job(null);
@@ -222,7 +230,6 @@ public class RegistrationBatchServiceImpl implements RegistrationBatchService{
             student.setMother_address(null);
             student.setPathName(registrationBatch.getName());
             student.setIsReturningDone(false);
-//            student.setStatus("FILLING_BIO");
         }
 
         response.put("status","SUCCESS");
@@ -230,21 +237,4 @@ public class RegistrationBatchServiceImpl implements RegistrationBatchService{
 
         return response;
     }
-
-    private void adjustRunningNumberOnDelete(Integer batchId, String deletedRunningNumber){
-        List<Student> studentsToAdjusts = this.studentRepository.findStudentsToAdjust(batchId, deletedRunningNumber);
-        RegistrationBatch registrationBatch = this.registrationBatchRepository.findById(batchId).orElseThrow();
-
-        for(Student studentToAdjust : studentsToAdjusts){
-            long newRunningNumber = Long.parseLong(studentToAdjust.getLastInsertedNumber()) - 1;
-            String formattedRunningNumber = String.format("%03d", newRunningNumber);
-            String newFormulirId = this.studentUtils.generateIdStudent(formattedRunningNumber, registrationBatch.getBatchCode());
-
-            studentToAdjust.setLastInsertedNumber(formattedRunningNumber);
-            studentToAdjust.setFormulirId(newFormulirId);
-        }
-
-        this.studentRepository.saveAll(studentsToAdjusts);
-    }
-
 }

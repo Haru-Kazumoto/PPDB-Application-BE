@@ -1,5 +1,6 @@
-package dev.pack.modules.student;
+package dev.pack.modules.registration_batch.dto;
 
+import dev.pack.modules.enums.FormPurchaseType;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -7,14 +8,13 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class GetStudentAchievementDto {
+@Builder
+public class GetStagingStatusDto {
+    @NotNull
+    private Integer stagingId;
 
     @NotNull
-    private String type;
-
-    @NotNull
-    private Integer studentId;
+    private FormPurchaseType type;
 }

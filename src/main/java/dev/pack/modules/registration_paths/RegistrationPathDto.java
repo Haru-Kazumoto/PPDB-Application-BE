@@ -3,7 +3,7 @@ package dev.pack.modules.registration_paths;
 import dev.pack.modules.enums.FormPurchaseType;
 import dev.pack.modules.enums.Grade;
 import dev.pack.modules.registration_batch.RegistrationBatch;
-import dev.pack.modules.registration_batch.RegistrationBatchDto;
+import dev.pack.modules.registration_batch.dto.RegistrationBatchDto;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;

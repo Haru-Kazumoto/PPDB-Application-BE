@@ -10,7 +10,7 @@ import dev.pack.modules.enums.Role;
 import dev.pack.modules.role.RoleRepository;
 import dev.pack.modules.role.Roles;
 import dev.pack.modules.student.Student;
-import dev.pack.modules.student.StudentDto;
+import dev.pack.modules.student.dto.StudentDto;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

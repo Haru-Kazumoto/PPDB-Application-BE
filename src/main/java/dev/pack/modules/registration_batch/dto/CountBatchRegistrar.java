@@ -1,8 +1,4 @@
-package dev.pack.modules.registration_batch;
-
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+package dev.pack.modules.registration_batch.dto;
 
 public class CountBatchRegistrar {
 
