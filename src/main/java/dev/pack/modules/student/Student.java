@@ -77,6 +77,9 @@ public class Student extends Timestamps implements Serializable {
 
     private Date registrationDate;
 
+    @Column(name = "registration_date_purchased_batch")
+    private Date registrationDatePurchasedBatch;
+
     private Integer staging_id;
     private Integer path_id;
     private Integer batch_id;

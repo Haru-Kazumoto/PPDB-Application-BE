@@ -8,6 +8,7 @@ public interface GetAllStudentsByBatch {
     String getPhone();
     String getFormulir_Id();
     Date getRegistration_Date();
+    Date getRegistration_Date_Purchased_Batch();
     String getStatus();
 }
 

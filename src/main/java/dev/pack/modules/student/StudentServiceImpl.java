@@ -182,10 +182,13 @@ public class StudentServiceImpl implements StudentService{
             }
         }
 
-        //kalau type nya pembelian gak update registration datenya.
+        //updated
         if(registrationPaths.getType().equals(FormPurchaseType.PEMBELIAN)){
             student.setRegistrationDate(new Date());
+        } else {
+            student.setRegistrationDatePurchasedBatch(new Date());
         }
+
         student.setBatch_id(batchDto.getBatch_id());
         student.setStatus("REGISTERED");
         student.setPath_id(registrationBatch.getRegistrationPaths().getId());

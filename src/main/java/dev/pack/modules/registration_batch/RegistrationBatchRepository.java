@@ -81,6 +81,7 @@ public interface RegistrationBatchRepository extends JpaRepository<RegistrationB
                   s.name,\s
                   s.phone,\s
                   s.registration_date,\s
+                  s.registration_date_purchased_batch,\s
                   format(
                     '%s-%s-%s',\s
                     date_part('year', s.registration_date),\s
@@ -120,6 +121,7 @@ public interface RegistrationBatchRepository extends JpaRepository<RegistrationB
                   s.name,\s
                   s.phone,\s
                   s.registration_date,\s
+                  s.registration_date_purchased_batch,\s
                   sl.batch_id,\s
                   sl.status\s
                 ORDER BY\s
@@ -147,7 +149,8 @@ public interface RegistrationBatchRepository extends JpaRepository<RegistrationB
                 s.id, 
                 s.name, 
                 s.phone, 
-                s.registration_date, 
+                s.registration_date,
+                s.registration_date_purchased_batch, 
                 sl.status
               
             """,

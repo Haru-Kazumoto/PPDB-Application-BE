@@ -41,9 +41,9 @@ public class LookupSeeder implements ApplicationRunner {
         List<List<String>> lookups = new ArrayList<>();
 
         lookups.add(List.of("Teknik Jaringan dan Komputer Telekomunikasi","TJKT","MAJOR"));
-        lookups.add(List.of("Teknik Kendaraan Ringan","TKR","MAJOR"));
-        lookups.add(List.of("Teknik Audio dan Video","TAV","MAJOR"));
-        lookups.add(List.of("Akuntansi Keuangan Lembaga","AKL","MAJOR"));
+        lookups.add(List.of("Teknik Otomotif","TO","MAJOR"));
+        lookups.add(List.of("Teknik Elektronika","TE","MAJOR"));
+        lookups.add(List.of("Akuntansi Keuangan","AK","MAJOR"));
 
         lookups.add(List.of("Islam","ISLAM","RELIGION"));
         lookups.add(List.of("Kristen","KRISTEN","RELIGION"));

@@ -51,9 +51,7 @@ public class StudentDto {
         private String sub_district;
         private String postal_code;
         private String school_origin;
-
         private String profile_picture;
-
         private String status;
         private String major; //mengambil data type dari lookup
     }

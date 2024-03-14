@@ -36,6 +36,7 @@ import org.springframework.web.client.HttpServerErrorException;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Objects;
+import java.util.Optional;
 
 import static dev.pack.constraint.ErrorMessage.*;
 
@@ -66,13 +67,12 @@ public class AuthenticationService {
     return userRepository.save(user);
   }
 
-  @Transactional(rollbackOn = {
-          DataNotFoundException.class
-  })
+  @Transactional()
   public AuthenticationResponse registerStudent(RegisterRequest.User request){
-    this.userRepository.findByUsername(request.getUsername()).ifPresent((username) -> {
-      throw new DuplicateDataException(NUMBER_ALREADY_EXISTS);
-    });
+    Optional<User> findNumber = this.userRepository.findByUsername(request.getUsername());
+    if(findNumber.isPresent()){
+      throw new DuplicateDataException(("Nomor telah digunakan"));
+    }
 
     Roles role = this.roleRepository.findRolesByName("User").orElseThrow(() -> new DataNotFoundException(ROLE_NOT_FOUND));
 
